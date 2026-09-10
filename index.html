@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- React is served from this origin so the site does not depend on unpkg.com at
+     page load. support.js skips its CDN fetch when window.React already exists.
+     Keep the versions in step with REACT_URL / REACT_DOM_URL inside support.js. -->
+<script src="./assets/vendor/react-18.3.1.production.min.js"></script>
+<script src="./assets/vendor/react-dom-18.3.1.production.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Knight Fitness Morayfield — Coach-led training for men &amp; women 30+</title>
+<meta name="description" content="Coach-led team training in Morayfield for men and women 30 and over. Rated 5.0 from 256 Google reviews. Start with three free sessions — no lock-in, no gym experience needed." />
+<link rel="icon" href="assets/favicon-512.png" />
+<link rel="apple-touch-icon" href="assets/favicon-180.png" />
+<meta name="google-site-verification" content="wPEI4AUmJK-R1IlC3kCtrHCOIJxc0Zu-cQ5fQK8vMT0" />
+<meta name="theme-color" content="#0b0f19" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Knight Fitness Morayfield" />
+<meta property="og:title" content="Knight Fitness Morayfield — Coach-led training for men &amp; women 30+" />
+<meta property="og:description" content="Rated 5.0 from 256 Google reviews. Start with three free coach-led sessions — no lock-in, no gym experience needed." />
+<meta property="og:image" content="https://knightfitness-morayfield.com.au/assets/og-image.jpg" />
+<meta property="og:locale" content="en_AU" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://knightfitness-morayfield.com.au/assets/og-image.jpg" />
+<link rel="canonical" href="https://knightfitness-morayfield.com.au/" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HealthClub",
+  "@id": "https://knightfitness-morayfield.com.au/#gym",
+  "name": "Knight Fitness Morayfield",
+  "description": "Coach-led team training in Morayfield for men and women 30 and over. Every membership starts with three free sessions.",
+  "url": "https://knightfitness-morayfield.com.au/",
+  "telephone": "+61435737238",
+  "image": "https://knightfitness-morayfield.com.au/assets/og-image.jpg",
+  "logo": "https://knightfitness-morayfield.com.au/assets/favicon-512.png",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "125 Morayfield Road",
+    "addressLocality": "Caboolture South",
+    "addressRegion": "QLD",
+    "postalCode": "4506",
+    "addressCountry": "AU"
+  },
+  "hasMap": "https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506",
+  "areaServed": [
+    { "@type": "City", "name": "Morayfield" },
+    { "@type": "City", "name": "Caboolture" },
+    { "@type": "City", "name": "Burpengary" },
+    { "@type": "City", "name": "Narangba" }
+  ],
+  "sameAs": [
+    "https://facebook.com/p/Knight-Fitness-Morayfield-100090367359324/",
+    "https://www.instagram.com/knightfitnessmorayfield/"
+  ],
+  "publicAccess": true,
+  "isAccessibleForFree": false,
+  "availableService": {
+    "@type": "Service",
+    "name": "Coach-led team training",
+    "serviceType": "Group fitness training for adults 30+"
+  }
+}
+</script>
+<template id="__bundler_thumbnail"><svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="400" fill="#0b0f19"/><text x="200" y="215" font-family="system-ui, sans-serif" font-size="130" font-weight="800" fill="#ffffff" text-anchor="middle">KF</text><rect x="120" y="255" width="160" height="16" fill="#dc2834"/></svg></template>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: hsl(220 14% 96%);
+    color: hsl(224 71% 4%);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  a { color: hsl(356 72% 51%); text-decoration: none; }
+  a:hover { color: hsl(354 74% 38%); }
+  h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+  p { margin: 0; text-wrap: pretty; }
+  img { -webkit-user-drag: none; }
+  ::selection { background: hsl(356 72% 51% / 0.25); }
+  @keyframes kfScrollL { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 10px)); } }
+  @keyframes kfScrollR { from { transform: translateX(calc(-50% - 10px)); } to { transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) { [data-marquee] { animation: none !important; } }
+  @keyframes kfUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes kfPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  @keyframes kfMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+</style>
+</helmet>
+
+<div style="width: 100%; overflow-x: hidden; padding-bottom: {{ rootPad }};">
+
+  <header ref="{{ headerRef }}" style="position: sticky; top: 0; z-index: 50; background: hsl(0 0% 100% / 0.92); backdrop-filter: saturate(180%) blur(12px); border-bottom: 1px solid hsl(220 13% 91%); transition: box-shadow .25s;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 13px 24px; display: flex; align-items: center; gap: 20px;">
+      <a href="{{ hHome }}" onClick="{{ goHome }}" style="display: flex; align-items: center; gap: 14px; flex-shrink: 0; padding: 4px 0;">
+        <img src="assets/knight-logo.png" alt="Knight Fitness" style="height: 52px; width: auto; display: block;" />
+        <span style="width: 1px; height: 30px; background: hsl(220 13% 88%); flex-shrink: 0;"></span>
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: hsl(220 9% 46%); white-space: nowrap;">Morayfield</span>
+      </a>
+      <nav style="display: flex; align-items: center; gap: 2px; margin-left: auto; flex-wrap: nowrap; justify-content: flex-end;">
+        <sc-if value="{{ showNavLinks }}" hint-placeholder-val="{{ true }}">
+          <sc-for list="{{ navItems }}" as="item" hint-placeholder-count="6">
+            <a href="{{ item.href }}" onClick="{{ item.go }}" style="font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em; color: hsl(220 9% 46%); padding: 9px 13px; border-radius: 10px; white-space: nowrap; transition: color .15s, background .15s;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">{{ item.label }}</a>
+          </sc-for>
+        </sc-if>
+        <sc-if value="{{ showNavPhone }}" hint-placeholder-val="{{ true }}">
+          <a href="tel:0435737238" style="font-size: 13.5px; font-weight: 700; color: hsl(224 71% 4%); padding: 10px 14px; border-radius: 10px; border: 1px solid hsl(220 13% 91%); margin-left: 6px; white-space: nowrap;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">0435 737 238</a>
+        </sc-if>
+        <sc-if value="{{ showNavPhoneIcon }}" hint-placeholder-val="{{ false }}">
+          <a href="tel:0435737238" aria-label="Call Knight Fitness Morayfield" style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; border-radius: 11px; border: 1px solid hsl(220 13% 91%); color: hsl(224 71% 4%); font-size: 17px; margin-left: 6px;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">✆</a>
+        </sc-if>
+        <a href="{{ hStart }}" onClick="{{ goStart }}" style="margin-left: 8px; font-size: 13.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 12px 17px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; box-shadow: 0 4px 12px -2px hsl(356 72% 51% / 0.45); transition: opacity .15s, transform .15s;" style-hover="color: #fff; opacity: 0.93;">Claim 3-day pass</a>
+        <sc-if value="{{ showMenuButton }}" hint-placeholder-val="{{ false }}">
+          <a href="#" onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; border-radius: 11px; border: 1px solid hsl(220 13% 91%); color: hsl(224 71% 4%); font-size: 17px; margin-left: 8px;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">{{ menuLabel }}</a>
+        </sc-if>
+      </nav>
+    </div>
+    <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="border-top: 1px solid hsl(220 13% 91%); background: #fff; padding: 12px 24px 20px; max-height: calc(100vh - 76px); overflow-y: auto; -webkit-overflow-scrolling: touch;">
+        <div style="max-width: 1200px; margin: 0 auto; display: grid; gap: 4px;">
+          <sc-for list="{{ footerLinks }}" as="item" hint-placeholder-count="8">
+            <a href="{{ item.href }}" onClick="{{ item.go }}" style="min-height: 48px; display: flex; align-items: center; font-size: 16px; font-weight: 600; color: hsl(224 71% 4%); padding: 0 12px; border-radius: 10px; border-bottom: 1px solid hsl(220 13% 94%);" style-hover="background: hsl(220 14% 96%); color: hsl(356 72% 51%);">{{ item.label }}</a>
+          </sc-for>
+          <a href="tel:0435737238" style="min-height: 48px; display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; color: hsl(356 72% 51%); padding: 0 12px; margin-top: 6px;" style-hover="color: hsl(354 74% 38%);">✆ 0435 737 238</a>
+        </div>
+      </div>
+    </sc-if>
+  </header>
+
+  <!-- ============================= HOME ============================= -->
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+  <main data-screen-label="Home">
+
+    <section style="position: relative; background: hsl(224 71% 4%); overflow: hidden;">
+      <div style="position: absolute; top: -220px; right: -160px; width: 760px; height: 760px; border-radius: 9999px; background: radial-gradient(circle, hsl(356 72% 51% / 0.22), transparent 62%); pointer-events: none;"></div>
+      <div style="position: absolute; bottom: -260px; left: -180px; width: 620px; height: 620px; border-radius: 9999px; background: radial-gradient(circle, hsl(32 95% 60% / 0.1), transparent 65%); pointer-events: none;"></div>
+      <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 68px 24px 76px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 56px; align-items: center;">
+        <div style="animation: kfUp 0.6s ease-out both;">
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.12); color: #fff; padding: 8px 15px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">
+              <span style="letter-spacing: 0.06em; color: hsl(45 93% 55%); font-size: 13px;">★★★★★</span> 256 Google reviews
+            </div>
+            <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(160 84% 60%);">
+              <span style="width: 7px; height: 7px; border-radius: 9999px; background: hsl(160 84% 50%); animation: kfPulse 2.2s ease-in-out infinite;"></span> Taking new members
+            </div>
+          </div>
+          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(38px, 5vw, 68px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 24px; color: #fff;">
+            The transformation studio for men &amp; women <span style="background: linear-gradient(120deg, hsl(356 80% 64%), hsl(32 95% 62%)); -webkit-background-clip: text; background-clip: text; color: transparent;">30 and over</span>
+          </h1>
+          <p style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.55; color: hsl(217 10% 72%); margin-top: 22px; max-width: 31em;">
+            Lose weight, build strength and feel confident again — with coach-led sessions, real accountability, and a room full of locals who notice when you're not there.
+          </p>
+          <div style="display: grid; gap: 11px; margin-top: 28px;">
+            <sc-for list="{{ heroChecks }}" as="check" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 500; color: hsl(210 20% 90%);">
+                <span style="width: 22px; height: 22px; flex-shrink: 0; border-radius: 9999px; background: hsl(160 84% 45% / 0.16); color: hsl(160 84% 58%); display: grid; place-items: center; font-size: 11px; font-weight: 800;">✓</span>
+                {{ check }}
+              </div>
+            </sc-for>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px;">
+            <a href="#book" style="font-size: 16px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 18px 32px; border-radius: 13px; box-shadow: 0 14px 30px -8px hsl(356 72% 51% / 0.6); transition: opacity .15s;" style-hover="color: #fff; opacity: 0.93;">Claim your 3-day pass</a>
+            <a href="tel:0435737238" style="font-size: 16px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.06); border: 1px solid hsl(0 0% 100% / 0.16); padding: 18px 28px; border-radius: 13px; transition: background .15s;" style-hover="background: hsl(0 0% 100% / 0.12); color: #fff;">Call the studio</a>
+          </div>
+          <div style="font-size: 12.5px; font-weight: 500; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 16px;">{{ reassure }}</div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; margin-top: 40px; padding-top: 30px; border-top: 1px solid hsl(0 0% 100% / 0.1);">
+            <sc-for list="{{ heroStats }}" as="stat" hint-placeholder-count="3">
+              <div>
+                <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 30px; letter-spacing: -0.035em; color: #fff; line-height: 1;">{{ stat.value }}</div>
+                <div style="font-size: 11px; font-weight: 600; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 8px;">{{ stat.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="position: relative; animation: kfUp 0.7s ease-out both;">
+          <div style="border-radius: 24px; overflow: hidden; border: 1px solid hsl(0 0% 100% / 0.12); box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.8); background: hsl(215 28% 12%); aspect-ratio: 4 / 5;">
+            <video ref="{{ videoRef }}" src="https://assets.cdn.filesafe.space/zLeKXa3ySYvZybX7yQF8/media/69abb00bb003fa7788042749.mp4" poster="assets/img/session-group.jpg" preload="metadata" autoplay="{{ yes }}" muted="{{ yes }}" loop="{{ yes }}" playsInline="{{ yes }}" disablePictureInPicture="{{ yes }}" tabIndex="-1" aria-hidden="true" style="width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;"></video>
+          </div>
+          <div style="position: absolute; bottom: -26px; left: -20px; background: #fff; border-radius: 18px; padding: 18px 22px; box-shadow: 0 20px 40px -16px rgb(0 0 0 / 0.5); display: flex; align-items: center; gap: 14px; max-width: 280px;">
+            <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: linear-gradient(135deg, hsl(45 93% 47%), hsl(36 100% 50%)); display: grid; place-items: center; font-size: 19px;">🏆</span>
+            <div>
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 15px; line-height: 1.2;">Morayfield's highest-rated</div>
+              <div style="font-size: 12px; color: hsl(220 9% 46%); margin-top: 3px;">256 five-star reviews and counting</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <sc-if value="{{ inlineForm }}" hint-placeholder-val="{{ true }}">
+    <section id="book" style="background: #fff; border-bottom: 1px solid hsl(220 13% 91%);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 72px 24px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 44px; align-items: start;">
+          <div>
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">01</span>
+              <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+              <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Claim your pass</span>
+            </div>
+            <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">Three coach-led sessions. On us.</h2>
+            <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 18px; max-width: 32em;">Fill this in and a coach will call you to lock in a time that suits your week. No card details, no lock-in, and no obligation to join afterwards.</p>
+            <div style="display: grid; gap: 12px; margin-top: 26px;">
+              <sc-for list="{{ startPoints }}" as="s" hint-placeholder-count="4">
+                <div style="display: flex; gap: 12px; align-items: baseline; font-size: 15px; font-weight: 500;">
+                  <span style="color: hsl(160 84% 39%); font-weight: 800; font-size: 12px;">✓</span>{{ s }}
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; align-items: center; gap: 14px; background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 16px; padding: 18px 22px; margin-top: 28px;">
+              <span style="color: hsl(45 93% 47%); font-size: 15px; letter-spacing: 0.08em; flex-shrink: 0;">★★★★★</span>
+              <div style="font-size: 13.5px; font-weight: 600; color: hsl(220 9% 46%); line-height: 1.45;">Rated 5.0 by <strong style="color: hsl(224 71% 4%);">256 locals</strong> on Google</div>
+            </div>
+            <div style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 22px;">Would rather talk first? <a href="tel:0435737238" style="font-weight: 700;">Call 0435 737 238</a></div>
+          </div>
+          <div style="background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 20px; padding: 24px;">
+            <iframe src="https://api.leadconnectorhq.com/widget/form/PvrT5GhwQ2LAS8Q4wsnf" id="inline-PvrT5GhwQ2LAS8Q4wsnf" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="PvrT5GhwQ2LAS8Q4wsnf" data-height="480" title="Claim your 3 day pass" scrolling="no" style="width: 100%; height: 480px; border: 0; border-radius: 14px; display: block; background: #fff;"></iframe>
+            <div style="font-size: 12px; font-weight: 500; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 14px; text-align: center;">{{ reassure }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <section style="background: #fff; border-bottom: 1px solid hsl(220 13% 91%);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 64px 24px 68px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 18px;">
+          <sc-for list="{{ counters }}" as="c" hint-placeholder-count="4">
+            <div data-reveal="" style="background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; padding: 30px 24px; border-top: 4px solid {{ c.accent }}; transition: box-shadow .25s, transform .25s;" style-hover="box-shadow: 0 12px 24px -12px rgb(0 0 0 / 0.18);">
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(36px, 3.4vw, 50px); color: {{ c.accent }}; letter-spacing: -0.045em; line-height: 1;">{{ c.value }}</div>
+              <div style="font-size: 13.5px; font-weight: 600; color: hsl(220 9% 46%); margin-top: 14px; line-height: 1.45;">{{ c.label }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width: 1200px; margin: 0 auto; padding: 88px 24px;">
+      <div data-reveal="" style="max-width: 48em;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">02</span>
+          <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+          <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">The real problem</span>
+        </div>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">You don't need more motivation. You need a better system.</h2>
+        <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 20px;">A 24-hour gym gives you access, but no direction. Generic classes give you a workout, but not a plan. Personal training works, until it gets too expensive to keep up. So you start strong, life gets busy, and you're back at square one.</p>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 44px; margin-top: 52px; align-items: start;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px;">
+          <sc-for list="{{ systemPoints }}" as="p" hint-placeholder-count="4">
+            <div data-reveal="" style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; padding: 26px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow .25s, border-color .25s;" style-hover="box-shadow: 0 16px 32px -18px rgb(0 0 0 / 0.25); border-color: hsl(356 72% 51% / 0.3);">
+              <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); color: #fff; display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 13px; box-shadow: 0 8px 16px -8px hsl(356 72% 51% / 0.7);">{{ p.num }}</div>
+              <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 18px; margin-top: 16px; letter-spacing: -0.015em;">{{ p.title }}</h3>
+              <p style="font-size: 14.5px; line-height: 1.55; color: hsl(220 9% 46%); margin-top: 9px;">{{ p.body }}</p>
+            </div>
+          </sc-for>
+        </div>
+        <div data-reveal="">
+          <img src="assets/img/keri-coaching-43.jpg" alt="Coach Keri spotting a member on the bench press" loading="lazy" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 50%; border-radius: 22px; display: block; box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.35);" />
+          <div style="background: hsl(224 71% 4%); border-radius: 20px; padding: 28px; margin-top: 18px; color: #fff;">
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.015em;">Real coaching. Real accountability.</h3>
+            <div style="display: grid; gap: 14px; margin-top: 18px;">
+              <sc-for list="{{ pillars }}" as="pill" hint-placeholder-count="3">
+                <div style="display: flex; gap: 14px; align-items: baseline; padding-bottom: 14px; border-bottom: 1px solid hsl(0 0% 100% / 0.08);">
+                  <div style="font-size: 13.5px; font-weight: 700; min-width: 8.5em; color: #fff;">{{ pill.label }}</div>
+                  <div style="font-size: 13.5px; color: hsl(217 10% 64%);">{{ pill.body }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <sc-if value="{{ showComparison }}" hint-placeholder-val="{{ true }}">
+    <section style="background: hsl(224 71% 4%); position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 50%; left: 50%; width: 900px; height: 500px; transform: translate(-50%, -50%); background: radial-gradient(ellipse, hsl(356 72% 51% / 0.14), transparent 70%); pointer-events: none;"></div>
+      <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 88px 24px;">
+        <div data-reveal="" style="max-width: 46em;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 78% 62%); letter-spacing: 0.08em;">03</span>
+            <span style="width: 34px; height: 1px; background: hsl(0 0% 100% / 0.2);"></span>
+            <span style="font-size: 11.5px; font-weight: 700; color: hsl(217 10% 64%); text-transform: uppercase; letter-spacing: 0.16em;">Why it works better</span>
+          </div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px; color: #fff;">Most options give you pieces. We built the whole system.</h2>
+        </div>
+        <div data-reveal="" style="margin-top: 40px; background: hsl(0 0% 100% / 0.04); border: 1px solid hsl(0 0% 100% / 0.1); border-radius: 22px; overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;">
+          <div style="display: grid; grid-template-columns: minmax(150px, 1.7fr) repeat(4, minmax(78px, 1fr)); min-width: 520px; border-bottom: 1px solid hsl(0 0% 100% / 0.1);">
+            <div style="padding: 18px 22px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(217 10% 60%);">What matters</div>
+            <div style="padding: 18px 10px; text-align: center; background: hsl(356 72% 51% / 0.16); border-bottom: 2px solid hsl(356 72% 51%);">
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 800; color: #fff;">Knight Fitness</div>
+            </div>
+            <div style="padding: 18px 10px; font-size: 12.5px; font-weight: 600; color: hsl(217 10% 60%); text-align: center;">24hr gym</div>
+            <div style="padding: 18px 10px; font-size: 12.5px; font-weight: 600; color: hsl(217 10% 60%); text-align: center;">1-on-1 PT</div>
+            <div style="padding: 18px 10px; font-size: 12.5px; font-weight: 600; color: hsl(217 10% 60%); text-align: center;">Big classes</div>
+          </div>
+          <sc-for list="{{ compareRows }}" as="row" hint-placeholder-count="7">
+            <div style="display: grid; grid-template-columns: minmax(150px, 1.7fr) repeat(4, minmax(78px, 1fr)); min-width: 520px; border-bottom: 1px solid hsl(0 0% 100% / 0.06);">
+              <div style="padding: 17px 22px; font-size: 14px; font-weight: 600; color: hsl(210 20% 92%);">{{ row.label }}</div>
+              <sc-for list="{{ row.cells }}" as="cell" hint-placeholder-count="4">
+                <div style="padding: 17px 8px; text-align: center; background: {{ cell.bg }};">
+                  <span style="font-size: 12.5px; font-weight: 700; letter-spacing: -0.005em; color: {{ cell.color }};">{{ cell.mark }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+        <div data-reveal="" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; margin-top: 32px; background: hsl(0 0% 100% / 0.04); border: 1px solid hsl(0 0% 100% / 0.1); border-radius: 18px; padding: 24px 28px;">
+          <p style="font-size: 16px; font-weight: 600; color: #fff; max-width: 34em;">Try the whole system for three sessions — coach-led, free, no lock-in.</p>
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 15px 26px; border-radius: 12px; white-space: nowrap;" style-hover="color: #fff; opacity: 0.93;">Claim your pass →</a>
+        </div>
+      </div>
+    </section>
+    </sc-if>
+
+    <section style="max-width: 1200px; margin: 0 auto; padding: 88px 24px;">
+      <div data-reveal="" style="max-width: 46em;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">04</span>
+          <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+          <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">No scary gym process</span>
+        </div>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">Starting here is simple</h2>
+        <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 18px;">Haven't trained in years? Nervous about gyms? Not sure what to do? That is exactly who this place is built for.</p>
+        <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px;">
+          <a href="{{ hFirst }}" onClick="{{ goFirst }}" style="font-size: 15px; font-weight: 700;">Read the full first-visit walkthrough →</a>
+          <a href="{{ hChallenge }}" onClick="{{ goChallenge }}" style="font-size: 15px; font-weight: 700;">Or see the 6 Week Challenge →</a>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 24px; margin-top: 48px;">
+        <sc-for list="{{ steps }}" as="step" hint-placeholder-count="3">
+          <div data-reveal="" style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; overflow: hidden; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow .25s, border-color .25s;" style-hover="box-shadow: 0 24px 44px -22px rgb(0 0 0 / 0.28); border-color: hsl(356 72% 51% / 0.3);">
+            <div style="position: relative;">
+              <img src="{{ step.img }}" alt="{{ step.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 3 / 2; object-fit: cover; display: block;" />
+              <div style="position: absolute; bottom: -20px; left: 24px; width: 44px; height: 44px; border-radius: 15px; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); color: #fff; display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 15px; box-shadow: 0 10px 20px -6px rgb(0 0 0 / 0.4);">{{ step.num }}</div>
+            </div>
+            <div style="padding: 36px 26px 28px;">
+              <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 21px; letter-spacing: -0.02em;">{{ step.title }}</h3>
+              <p style="font-size: 14.5px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 11px;">{{ step.body }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="background: hsl(224 71% 4%);">
+      <div style="max-width: 1000px; margin: 0 auto; padding: 84px 24px; text-align: center;">
+        <div data-reveal="">
+          <div style="color: hsl(45 93% 55%); font-size: 20px; letter-spacing: 0.1em;">★★★★★</div>
+          <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(24px, 2.9vw, 40px); line-height: 1.2; letter-spacing: -0.03em; color: #fff; margin-top: 26px;">“I am 55 years young and was terrified returning to a gym. The coaches made me feel comfortable and supported throughout the whole experience.”</p>
+          <div style="display: inline-flex; align-items: center; gap: 13px; margin-top: 30px;">
+            <span style="width: 42px; height: 42px; border-radius: 9999px; background: hsl(356 72% 51% / 0.18); color: hsl(356 80% 66%); display: grid; place-items: center; font-size: 14px; font-weight: 700;">TS</span>
+            <div style="text-align: left;">
+              <div style="font-size: 14.5px; font-weight: 700; color: #fff;">Teresa S</div>
+              <div style="font-size: 12.5px; color: hsl(217 10% 60%);">Google review</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: #fff; border-top: 1px solid hsl(220 13% 91%);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 88px 24px;">
+        <div data-reveal="" style="max-width: 46em;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">05</span>
+            <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+            <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Real member results</span>
+          </div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">Names, numbers, no fine print</h2>
+          <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 18px;">Real Morayfield locals, measured at the start and the end of a six-week block.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 18px; margin-top: 40px;">
+          <sc-for list="{{ wbResults }}" as="w" hint-placeholder-count="10">
+              <div data-reveal="" style="height: 100%; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; overflow: hidden; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow .25s, border-color .25s;" style-hover="box-shadow: 0 24px 44px -22px rgb(0 0 0 / 0.3); border-color: hsl(356 72% 51% / 0.3);">
+                <img src="{{ w.src }}" alt="{{ w.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block;" />
+                <div style="padding: 16px 18px 18px;">
+                  <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.03em; color: hsl(356 72% 51%); line-height: 1;">{{ w.result }}</div>
+                  <div style="font-size: 13.5px; font-weight: 700; margin-top: 7px;">{{ w.name }}</div>
+                  <div style="font-size: 12px; color: hsl(220 9% 46%); margin-top: 2px;">{{ w.period }}</div>
+                </div>
+              </div>
+          </sc-for>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 18px; margin-top: 18px;">
+          <sc-for list="{{ transformations }}" as="t" hint-placeholder-count="4">
+            <a href="#" onClick="{{ t.open }}" data-reveal="" style="position: relative; display: block; border-radius: 20px; overflow: hidden; background: hsl(220 14% 96%); box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow .25s;" style-hover="box-shadow: 0 24px 44px -22px rgb(0 0 0 / 0.3);">
+              <img src="{{ t.src }}" alt="Knight Fitness member transformation" loading="lazy" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block;" />
+              <div style="position: absolute; bottom: 12px; left: 12px; background: hsl(224 71% 4% / 0.82); color: #fff; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; padding: 7px 12px; border-radius: 9999px;">Before &amp; after</div>
+              <div style="position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; border-radius: 9999px; background: hsl(0 0% 100% / 0.9); color: hsl(224 71% 4%); display: grid; place-items: center; font-size: 13px; font-weight: 700;">⤢</div>
+            </a>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ showStories }}" hint-placeholder-val="{{ true }}">
+        <div data-reveal="" style="margin-top: 80px; max-width: 46em;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">06</span>
+            <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+            <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Video testimonials</span>
+          </div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">Member stories</h2>
+          <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 18px;">Hear it from the people behind the results. Tap any story to watch.</p>
+        </div>
+        <div style="margin-top: 34px; overflow: hidden; mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);">
+          <div data-marquee="" style="display: flex; gap: 20px; width: max-content; animation: kfScrollL 64s linear infinite;" style-hover="animation-play-state: paused;">
+            <sc-for list="{{ storyLoop }}" as="s" hint-placeholder-count="8">
+              <a href="#" onClick="{{ s.open }}" style="display: block; width: 218px; flex-shrink: 0; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; overflow: hidden; background: #fff; color: hsl(224 71% 4%); box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow .25s, border-color .25s;" style-hover="box-shadow: 0 20px 40px -22px rgb(0 0 0 / 0.3); border-color: hsl(356 72% 51% / 0.3); color: hsl(224 71% 4%);">
+                <div style="position: relative; aspect-ratio: 4 / 5; background: hsl(224 71% 4%);">
+                  <video data-src="{{ s.video }}" preload="metadata" muted="{{ yes }}" playsInline="{{ yes }}" tabIndex="-1" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;"></video>
+
+                  <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 0 0 / 0.05) 0%, rgb(0 0 0 / 0.22) 44%, rgb(0 0 0 / 0.86) 100%); pointer-events: none;"></div>
+                  <div style="position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; transform: translate(-50%, -50%); border-radius: 9999px; background: hsl(0 0% 100% / 0.92); color: hsl(356 72% 51%); display: grid; place-items: center; font-size: 14px; padding-left: 3px; box-shadow: 0 8px 20px -6px rgb(0 0 0 / 0.5); pointer-events: none;">▶</div>
+                  <div style="position: absolute; left: 13px; right: 13px; bottom: 13px; pointer-events: none;">
+                    <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 13.5px; line-height: 1.25; letter-spacing: -0.015em; color: #fff;">{{ s.quote }}</div>
+                  </div>
+                </div>
+                <div style="padding: 13px 15px 15px;">
+                  <div style="color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.1em;">★★★★★</div>
+                  <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: -0.015em; margin-top: 6px;">{{ s.name }}</div>
+                </div>
+              </a>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <div data-reveal="" style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; margin-top: 80px;">
+          <div style="max-width: 40em;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">07</span>
+              <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+              <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Google reviews</span>
+            </div>
+            <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">What members are saying</h2>
+          </div>
+          <div style="background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 18px; padding: 20px 26px; display: flex; align-items: center; flex-wrap: wrap; gap: 18px;">
+            <div>
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 38px; line-height: 1; letter-spacing: -0.04em;">5.0</div>
+              <div style="color: hsl(45 93% 47%); font-size: 13px; letter-spacing: 0.08em; margin-top: 5px;">★★★★★</div>
+            </div>
+            <div style="width: 1px; height: 46px; background: hsl(220 13% 88%);"></div>
+            <div style="font-size: 13px; font-weight: 600; color: hsl(220 9% 46%); line-height: 1.4;">Based on<br /><strong style="color: hsl(224 71% 4%);">256 Google reviews</strong></div>
+            <a href="{{ hReviews }}" onClick="{{ goReviews }}" style="font-size: 13.5px; font-weight: 700; color: hsl(224 71% 4%); background: #fff; border: 1px solid hsl(220 13% 88%); padding: 12px 18px; border-radius: 11px; white-space: nowrap;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">{{ readAllLabel }}</a>
+          </div>
+        </div>
+        <div style="display: grid; gap: 16px; margin-top: 34px; mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0, #000 6%, #000 94%, transparent 100%);">
+          <div style="overflow: hidden;">
+            <div data-marquee="" style="display: flex; gap: 16px; width: max-content; animation: kfScrollL 72s linear infinite;" style-hover="animation-play-state: paused;">
+                <sc-for list="{{ reviewRowA }}" as="r" hint-placeholder-count="10">
+                  <div style="width: min(322px, 76vw); flex-shrink: 0; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+                    <div style="display: flex; align-items: center; gap: 11px;">
+                      <span style="width: 34px; height: 34px; flex-shrink: 0; border-radius: 9999px; background: hsl(356 72% 51% / 0.1); color: hsl(356 72% 51%); display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700;">{{ r.initials }}</span>
+                      <div style="min-width: 0;">
+                        <div style="font-size: 13.5px; font-weight: 600;">{{ r.name }}</div>
+                        <div style="font-size: 11px; color: hsl(220 9% 46%); margin-top: 1px;">{{ r.ago }}</div>
+                      </div>
+                      <span style="margin-left: auto; color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
+                    </div>
+                    <p style="font-size: 13.5px; line-height: 1.6; color: hsl(224 71% 14%); margin-top: 12px;">{{ r.quote }}</p>
+                  </div>
+                </sc-for>
+            </div>
+          </div>
+          <div style="overflow: hidden;">
+            <div data-marquee="" style="display: flex; gap: 16px; width: max-content; animation: kfScrollR 86s linear infinite;" style-hover="animation-play-state: paused;">
+                <sc-for list="{{ reviewRowB }}" as="r" hint-placeholder-count="10">
+                  <div style="width: min(322px, 76vw); flex-shrink: 0; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+                    <div style="display: flex; align-items: center; gap: 11px;">
+                      <span style="width: 34px; height: 34px; flex-shrink: 0; border-radius: 9999px; background: hsl(356 72% 51% / 0.1); color: hsl(356 72% 51%); display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700;">{{ r.initials }}</span>
+                      <div style="min-width: 0;">
+                        <div style="font-size: 13.5px; font-weight: 600;">{{ r.name }}</div>
+                        <div style="font-size: 11px; color: hsl(220 9% 46%); margin-top: 1px;">{{ r.ago }}</div>
+                      </div>
+                      <span style="margin-left: auto; color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
+                    </div>
+                    <p style="font-size: 13.5px; line-height: 1.6; color: hsl(224 71% 14%); margin-top: 12px;">{{ r.quote }}</p>
+                  </div>
+                </sc-for>
+            </div>
+          </div>
+          <div style="overflow: hidden;">
+            <div data-marquee="" style="display: flex; gap: 16px; width: max-content; animation: kfScrollL 78s linear infinite;" style-hover="animation-play-state: paused;">
+                <sc-for list="{{ reviewRowC }}" as="r" hint-placeholder-count="10">
+                  <div style="width: min(322px, 76vw); flex-shrink: 0; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 16px; padding: 20px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+                    <div style="display: flex; align-items: center; gap: 11px;">
+                      <span style="width: 34px; height: 34px; flex-shrink: 0; border-radius: 9999px; background: hsl(356 72% 51% / 0.1); color: hsl(356 72% 51%); display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700;">{{ r.initials }}</span>
+                      <div style="min-width: 0;">
+                        <div style="font-size: 13.5px; font-weight: 600;">{{ r.name }}</div>
+                        <div style="font-size: 11px; color: hsl(220 9% 46%); margin-top: 1px;">{{ r.ago }}</div>
+                      </div>
+                      <span style="margin-left: auto; color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
+                    </div>
+                    <p style="font-size: 13.5px; line-height: 1.6; color: hsl(224 71% 14%); margin-top: 12px;">{{ r.quote }}</p>
+                  </div>
+                </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width: 1200px; margin: 0 auto; padding: 88px 24px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 44px; align-items: center;">
+        <div data-reveal="">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">08</span>
+            <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+            <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Visit us</span>
+          </div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">On Morayfield Road, with parking at the door</h2>
+          <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 18px;">Easy to find, easy to park, and built for people who want coaching, accountability and real results.</p>
+          <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 28px; margin-top: 28px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); display: grid; gap: 20px;">
+            <sc-for list="{{ visitFacts }}" as="f" hint-placeholder-count="4">
+              <div>
+                <div style="font-size: 10.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.14em;">{{ f.label }}</div>
+                <sc-if value="{{ f.isLink }}" hint-placeholder-val="{{ false }}">
+                  <a href="{{ f.href }}" style="display: block; font-size: 15.5px; font-weight: 600; margin-top: 6px; line-height: 1.45; color: hsl(356 72% 51%);" style-hover="color: hsl(354 74% 38%);">{{ f.value }}</a>
+                </sc-if>
+                <sc-if value="{{ f.isPlain }}" hint-placeholder-val="{{ true }}">
+                  <div style="font-size: 15.5px; font-weight: 600; margin-top: 6px; line-height: 1.45;">{{ f.value }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <a href="https://www.google.com/maps/dir/?api=1&destination=125+Morayfield+Rd+Caboolture+South+QLD+4506" target="_blank" style="font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; opacity: 0.93;">Get directions</a>
+              <a href="tel:0435737238" style="font-size: 14.5px; font-weight: 600; color: hsl(224 71% 4%); background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); padding: 14px 22px; border-radius: 11px;" style-hover="color: hsl(224 71% 4%);">Call now</a>
+            </div>
+          </div>
+        </div>
+        <div data-reveal="" style="display: grid; gap: 16px;">
+          <img src="assets/img/sign.jpg" alt="The Knight Fitness sign above the Morayfield Road entrance" loading="lazy" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 22px; display: block; box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.35);" />
+          <iframe src="https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506&output=embed" title="Map of Knight Fitness Morayfield" loading="lazy" style="width: 100%; height: 250px; border: 1px solid hsl(220 13% 91%); border-radius: 22px; display: block;"></iframe>
+        </div>
+      </div>
+    </section>
+
+    <section style="position: relative; background: hsl(224 71% 4%); overflow: hidden;">
+      <img src="assets/img/community-group.jpg" alt="Around sixty Knight Fitness Morayfield members together in front of the studio sign" loading="lazy" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block;" />
+      <div style="position: absolute; inset: 0; background: linear-gradient(to top, hsl(224 71% 4% / 0.96) 0%, hsl(224 71% 4% / 0.9) 42%, hsl(224 71% 4% / 0.82) 55%, hsl(224 71% 4% / 0.3) 74%, hsl(224 71% 4% / 0.12) 100%);"></div>
+      <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: clamp(280px, 34vw, 460px) 24px 64px;">
+        <div data-reveal="" style="max-width: 30em;">
+          <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(224 71% 4% / 0.82); border: 1px solid hsl(0 0% 100% / 0.22); color: #fff; padding: 9px 16px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">
+            <span style="width: 7px; height: 7px; border-radius: 9999px; background: hsl(356 78% 62%);"></span> The Knight Fitness family
+          </div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 4.2vw, 56px); line-height: 1.02; letter-spacing: -0.04em; color: #fff; margin-top: 18px;">This is the room you're walking into</h2>
+          <p style="font-size: clamp(16px, 1.4vw, 20px); line-height: 1.6; color: hsl(217 15% 90%); margin-top: 18px;">Every age, every starting point, every fitness level — training together in Morayfield. Nobody here was fit when they walked in the first time.</p>
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="display: inline-block; margin-top: 30px; font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 28px; border-radius: 12px; box-shadow: 0 14px 30px -12px hsl(356 72% 51% / 0.6);" style-hover="color: #fff; opacity: 0.93;">Come and meet them →</a>
+        </div>
+      </div>
+    </section>
+
+    <section style="background: #fff; border-top: 1px solid hsl(220 13% 91%);">
+      <div style="max-width: 860px; margin: 0 auto; padding: 84px 24px;">
+        <div data-reveal="" style="text-align: center;">
+          <div style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Still wondering</div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.06; letter-spacing: -0.035em; margin-top: 16px;">The questions everyone asks first</h2>
+        </div>
+        <div style="display: grid; gap: 12px; margin-top: 36px;">
+          <sc-for list="{{ homeFaqs }}" as="f" hint-placeholder-count="6">
+            <details style="background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 14px; padding: 0 20px;">
+              <summary style="list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 0; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 16.5px; letter-spacing: -0.015em;">
+                {{ f.q }}
+                <span style="flex-shrink: 0; width: 26px; height: 26px; border-radius: 9999px; background: hsl(356 72% 51% / 0.12); color: hsl(356 72% 51%); display: grid; place-items: center; font-size: 15px; font-weight: 700;">+</span>
+              </summary>
+              <p style="font-size: 15px; line-height: 1.65; color: hsl(220 13% 34%); padding: 0 0 20px;">{{ f.a }}</p>
+            </details>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <section style="position: relative; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); overflow: hidden;">
+      <div style="position: absolute; top: -180px; left: 50%; width: 700px; height: 700px; transform: translateX(-50%); background: radial-gradient(circle, hsl(0 0% 100% / 0.14), transparent 60%); pointer-events: none;"></div>
+      <div style="position: relative; max-width: 900px; margin: 0 auto; padding: 92px 24px; text-align: center;">
+        <div style="font-size: 11.5px; font-weight: 700; color: #fff; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.16em;">Ready to start?</div>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.9vw, 52px); line-height: 1.04; letter-spacing: -0.04em; color: #fff; margin-top: 16px;">Three sessions on us. Then decide.</h2>
+        <p style="font-size: clamp(16px, 1.3vw, 19px); color: #fff; opacity: 0.9; margin-top: 16px;">Come in, meet the coaches, try the room. No lock-in, no pressure, no judgement.</p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px;">
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 16px; font-weight: 700; color: hsl(354 74% 38%); background: #fff; padding: 18px 34px; border-radius: 13px; box-shadow: 0 18px 34px -14px rgb(0 0 0 / 0.4);" style-hover="color: hsl(354 74% 38%); opacity: 0.94;">Claim your 3-day pass</a>
+          <a href="tel:0435737238" style="font-size: 16px; font-weight: 600; color: #fff; border: 1px solid hsl(0 0% 100% / 0.5); padding: 18px 28px; border-radius: 13px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.14);">Or call 0435 737 238</a>
+        </div>
+        <div style="font-size: 12.5px; font-weight: 500; color: #fff; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.12em; margin-top: 20px;">{{ reassure }}</div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============================= ABOUT ============================= -->
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="About">
+    <section style="position: relative; background: hsl(224 71% 4%); overflow: hidden;">
+      <div style="position: absolute; top: -200px; right: -140px; width: 680px; height: 680px; border-radius: 9999px; background: radial-gradient(circle, hsl(356 72% 51% / 0.2), transparent 62%); pointer-events: none;"></div>
+      <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 76px 24px;">
+        <div style="max-width: 48em;">
+          <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 78% 62%); text-transform: uppercase; letter-spacing: 0.16em;">About us</div>
+          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px; color: #fff;">A coach in the room, and a plan on the board</h1>
+          <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(217 10% 72%); margin-top: 22px;">Knight Fitness Morayfield is a coach-led training studio built for men and women 30 and over. Not a warehouse of machines, and not a bootcamp that leaves you behind — a room where a coach knows your name, your history, and what you're working toward.</p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px;">
+            <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 28px; border-radius: 12px; box-shadow: 0 14px 30px -12px hsl(356 72% 51% / 0.6);" style-hover="color: #fff; opacity: 0.93;">Try three sessions free</a>
+            <a href="{{ hSchedule }}" onClick="{{ goSchedule }}" style="font-size: 15.5px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); padding: 17px 26px; border-radius: 12px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.13);">See the timetable →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width: 1200px; margin: 0 auto; padding: 44px 24px 88px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 18px; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 26px 28px; box-shadow: 0 16px 32px -20px rgb(0 0 0 / 0.3);">
+        <sc-for list="{{ trainingFacts }}" as="f" hint-placeholder-count="4">
+          <div>
+            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(220 9% 46%);">{{ f.label }}</div>
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17px; margin-top: 7px; letter-spacing: -0.015em;">{{ f.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 18px; margin-top: 24px;">
+        <sc-for list="{{ aboutImages }}" as="img" hint-placeholder-count="3">
+          <img src="{{ img.src }}" alt="{{ img.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 20px; display: block; box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.35);" />
+        </sc-for>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 44px; margin-top: 72px; align-items: start;">
+        <div data-reveal="">
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -0.03em;">What we believe</h2>
+          <div style="display: grid; gap: 14px; margin-top: 24px;">
+            <sc-for list="{{ values }}" as="v" hint-placeholder-count="4">
+              <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; padding: 24px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); border-left: 4px solid {{ v.accent }};">
+                <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17.5px; letter-spacing: -0.02em;">{{ v.title }}</h3>
+                <p style="font-size: 14.5px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 9px;">{{ v.body }}</p>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div data-reveal="">
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -0.03em;">Who you'll train with</h2>
+          <p style="font-size: 15.5px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 14px;">Every session is led by a coach — they set the plan, watch your technique, and adjust it to what your body can do today.</p>
+          <div style="display: grid; gap: 13px; margin-top: 24px;">
+            <sc-for list="{{ coaches }}" as="c" hint-placeholder-count="1">
+              <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; padding: 22px; display: flex; gap: 18px; align-items: center; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+                <img src="{{ c.photo }}" alt="{{ c.name }}" loading="lazy" style="width: 78px; height: 78px; flex-shrink: 0; border-radius: 9999px; object-fit: cover; object-position: 50% 22%; display: block; border: 2px solid hsl(356 72% 51% / 0.25);" />
+                <div>
+                  <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 18px; letter-spacing: -0.02em;">{{ c.name }}</div>
+                  <div style="font-size: 14px; color: hsl(220 9% 46%); margin-top: 4px;">{{ c.role }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; overflow: hidden; margin-top: 24px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+            <img src="assets/img/coaches-team.jpg" alt="The four Knight Fitness Morayfield coaches together in the studio" loading="lazy" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; object-position: 50% 20%; display: block;" />
+            <div style="padding: 20px 22px;">
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17px; letter-spacing: -0.02em;">Your coaching team</div>
+              <p style="font-size: 14.5px; line-height: 1.6; color: hsl(220 13% 34%); margin-top: 8px;">These are the people who will know your name, your goals and what your knees can handle on the day.</p>
+            </div>
+          </div>
+          <div style="background: hsl(224 71% 4%); border-radius: 20px; padding: 28px; margin-top: 24px;">
+            <div style="color: hsl(45 93% 55%); font-size: 16px; letter-spacing: 0.1em;">★★★★★</div>
+            <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 19px; line-height: 1.4; letter-spacing: -0.02em; color: #fff; margin-top: 14px;">“I joined 2 years ago and never looked back. I gained strength, confidence and friends I can call family.”</p>
+            <div style="font-size: 13px; color: hsl(217 10% 64%); margin-top: 14px;">Abigail Dela Cruz — Google review</div>
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal="" style="margin-top: 80px;">
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.8vw, 38px); letter-spacing: -0.032em;">What you'll train</h2>
+        <p style="font-size: 16px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 12px; max-width: 46em;">Programming built around progression, not random workouts. Sessions rotate through four formats so you build strength and fitness without ever grinding the same thing into the ground.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 18px; margin-top: 26px;">
+          <sc-for list="{{ sessionTypes }}" as="t" hint-placeholder-count="4">
+            <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; padding: 24px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); border-top: 4px solid {{ t.color }};">
+              <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17.5px; letter-spacing: -0.02em;">{{ t.name }}</h3>
+              <p style="font-size: 14px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 10px;">{{ t.body }}</p>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div data-reveal="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 20px; margin-top: 64px;">
+        <sc-for list="{{ systemPoints }}" as="p" hint-placeholder-count="4">
+          <div style="background: hsl(224 71% 4%); border-radius: 20px; padding: 28px; color: #fff;">
+            <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); color: #fff; display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 13px;">{{ p.num }}</div>
+            <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 18px; margin-top: 16px; letter-spacing: -0.015em; color: #fff;">{{ p.title }}</h3>
+            <p style="font-size: 14.5px; line-height: 1.55; color: hsl(217 10% 68%); margin-top: 9px;">{{ p.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+
+      <div data-reveal="" style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 48px 36px; margin-top: 68px; text-align: center; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.8vw, 38px); letter-spacing: -0.032em;">The best way to understand it is to walk in</h2>
+        <p style="font-size: 16.5px; color: hsl(220 9% 46%); margin-top: 12px;">Three coach-led sessions, no cost. Then you decide.</p>
+        <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px;">
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 30px; border-radius: 12px;" style-hover="color: #fff; opacity: 0.93;">Claim your 3-day pass</a>
+          <a href="{{ hFirst }}" onClick="{{ goFirst }}" style="font-size: 15.5px; font-weight: 600; color: hsl(224 71% 4%); background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); padding: 17px 26px; border-radius: 12px;" style-hover="color: hsl(224 71% 4%);">What happens on day one →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============================= SCHEDULE ============================= -->
+  <sc-if value="{{ isSchedule }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="Schedule">
+    <section style="background: hsl(224 71% 4%);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 76px 24px;">
+        <div style="max-width: 44em;">
+          <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 78% 62%); text-transform: uppercase; letter-spacing: 0.16em;">Timetable</div>
+          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px; color: #fff;">Sessions that fit around real life</h1>
+          <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(217 10% 72%); margin-top: 20px;">Every session is coach-led and scaled to you. Come to whichever times suit your week — no juggling, no pressure to keep up.</p>
+        </div>
+      </div>
+    </section>
+    <section style="max-width: 1200px; margin: 0 auto; padding: 44px 24px 88px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 18px; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 26px 28px; box-shadow: 0 16px 32px -20px rgb(0 0 0 / 0.3);">
+        <sc-for list="{{ scheduleFacts }}" as="f" hint-placeholder-count="3">
+          <div>
+            <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(220 9% 46%);">{{ f.label }}</div>
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17px; margin-top: 7px; letter-spacing: -0.015em;">{{ f.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.8vw, 38px); letter-spacing: -0.032em; margin-top: 48px;">Team training timetable</h2>
+      <p style="font-size: 16px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 18px; max-width: 44em;">Every class is coach-led, runs for 45 minutes, and can be scaled to suit your current level, injuries and limitations.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 20px; margin-top: 24px;">
+        <sc-for list="{{ scheduleDays }}" as="day" hint-placeholder-count="6">
+          <div data-reveal="" style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 24px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid hsl(220 13% 92%);">
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; letter-spacing: -0.025em;">{{ day.name }}</div>
+              <div style="font-size: 11px; font-weight: 600; color: hsl(220 9% 46%);">{{ day.count }}</div>
+            </div>
+            <div style="display: grid; gap: 8px; margin-top: 16px;">
+              <sc-for list="{{ day.slots }}" as="slot" hint-placeholder-count="4">
+                <div style="background: hsl(220 14% 96%); border-left: 3px solid hsl(356 72% 51%); border-radius: 11px; padding: 12px 14px;">
+                  <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.01em;">{{ slot.time }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div data-reveal="" style="margin-top: 64px;">
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.8vw, 38px); letter-spacing: -0.032em;">Session types</h2>
+        <p style="font-size: 16px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 12px; max-width: 46em;">Our programming is built around progression, not random workouts. Progress is measured and tested over time, so you can see real improvement in strength, fitness and performance.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 18px; margin-top: 26px;">
+          <sc-for list="{{ sessionTypes }}" as="t" hint-placeholder-count="4">
+            <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; padding: 24px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); border-top: 4px solid {{ t.color }};">
+              <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17.5px; letter-spacing: -0.02em;">{{ t.name }}</h3>
+              <p style="font-size: 14px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 10px;">{{ t.body }}</p>
+            </div>
+          </sc-for>
+        </div>
+        <p style="font-size: 15px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 22px; max-width: 52em;">Every session runs for 45 minutes and is scaled to meet you where you're at — whether you're returning to training, building confidence, or working around injuries and limitations.</p>
+      </div>
+      <div data-reveal="" style="display: flex; flex-wrap: wrap; gap: 18px; align-items: center; justify-content: space-between; background: hsl(224 71% 4%); border-radius: 20px; padding: 32px; margin-top: 40px;">
+        <div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; color: #fff; letter-spacing: -0.025em;">Not sure which session to start with?</h3>
+          <p style="font-size: 15px; color: hsl(217 10% 68%); margin-top: 8px;">Call the studio and we'll pick the right time for you.</p>
+        </div>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 15px 26px; border-radius: 12px;" style-hover="color: #fff; opacity: 0.93;">Book first session</a>
+          <a href="tel:0435737238" style="font-size: 15px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); padding: 15px 24px; border-radius: 12px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.13);">0435 737 238</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============================= REVIEWS ============================= -->
+  <sc-if value="{{ isReviews }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="Reviews">
+    <section style="background: hsl(224 71% 4%);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 76px 24px 108px;">
+        <div style="max-width: 46em;">
+          <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.12); color: #fff; padding: 8px 15px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">
+            <span style="width: 7px; height: 7px; border-radius: 9999px; background: hsl(160 84% 45%);"></span> Verified Google reviews · Morayfield QLD
+          </div>
+          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 18px; color: #fff;">256 reasons to walk through the door</h1>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px;">
+            <span style="color: hsl(45 93% 55%); font-size: 19px; letter-spacing: 0.1em;">★★★★★</span>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; color: #fff;">5.0</span>
+            <span style="font-size: 14px; color: hsl(217 10% 64%);">from 256 Google reviews</span>
+          </div>
+          <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(217 10% 72%); margin-top: 20px;">Every review below is copied straight from our Google profile — real Morayfield locals, no paid testimonials and no actors. Just your neighbours, telling the truth about what training here did for their life.</p>
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="display: inline-block; margin-top: 28px; font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 28px; border-radius: 12px; box-shadow: 0 14px 30px -12px hsl(356 72% 51% / 0.6);" style-hover="color: #fff; opacity: 0.93;">Start with 3 free sessions →</a>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width: 1200px; margin: 0 auto; padding: 0 24px 80px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 20px; margin-top: -72px;">
+        <sc-for list="{{ reviewStats }}" as="stat" hint-placeholder-count="4">
+          <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 26px 24px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.35); border-top: 5px solid hsl(356 72% 51%);">
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 38px; letter-spacing: -0.045em; line-height: 1;">{{ stat.value }}</div>
+            <div style="font-size: 13px; font-weight: 600; color: hsl(220 9% 46%); margin-top: 10px; line-height: 1.45;">{{ stat.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="margin-top: 72px; max-width: 44em;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">01</span>
+          <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
+          <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">In their words</span>
+        </div>
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">The results speak for themselves</h2>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-top: 30px; padding: 18px 20px; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px;">
+        <input type="search" value="{{ searchValue }}" onChange="{{ onSearch }}" placeholder="Search reviews…" style="flex: 1 1 220px; min-width: 0; font-family: 'Inter', sans-serif; font-size: 14.5px; color: hsl(224 71% 4%); background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 11px; padding: 12px 15px; outline: none;" />
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 10.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.14em;">Sort</span>
+          <sc-for list="{{ sortChips }}" as="chip" hint-placeholder-count="3">
+            <a href="#" onClick="{{ chip.go }}" style="font-size: 13px; font-weight: 700; padding: 10px 15px; border-radius: 9999px; border: 1px solid {{ chip.border }}; background: {{ chip.bg }}; color: {{ chip.fg }};">{{ chip.label }}</a>
+          </sc-for>
+        </div>
+        <div style="font-size: 12.5px; font-weight: 600; color: hsl(220 9% 46%); margin-left: auto;">{{ resultCount }}</div>
+      </div>
+
+      <div style="columns: 3 320px; column-gap: 22px; margin-top: 22px;">
+        <sc-for list="{{ visibleReviews }}" as="r" hint-placeholder-count="9">
+          <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 16px; padding: 24px 26px; box-shadow: 0 3px 10px -6px rgb(0 0 0 / 0.16); transition: box-shadow .2s, border-color .2s; break-inside: avoid; margin-bottom: 22px;" style-hover="box-shadow: 0 16px 34px -20px rgb(0 0 0 / 0.28); border-color: hsl(356 72% 51% / 0.24);">
+            <div style="display: flex; align-items: center; gap: 13px;">
+              <span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 9999px; background: hsl(356 72% 51% / 0.1); color: hsl(356 72% 51%); display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 700;">{{ r.initials }}</span>
+              <div style="min-width: 0;">
+                <div style="font-size: 15.5px; font-weight: 700; color: hsl(224 71% 4%);">{{ r.name }}</div>
+                <div style="font-size: 12px; color: hsl(220 9% 46%); margin-top: 2px;">{{ r.credit }}</div>
+              </div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 9px; margin-top: 14px;">
+              <span style="color: hsl(45 93% 47%); font-size: 13px; letter-spacing: 0.09em;">★★★★★</span>
+              <span style="font-size: 12.5px; color: hsl(220 9% 46%);">{{ r.ago }}</span>
+            </div>
+            <p style="font-size: 15px; line-height: 1.7; color: hsl(224 30% 16%); margin-top: 13px; white-space: pre-line; text-wrap: pretty;">{{ r.shown }}</p>
+            <sc-if value="{{ r.canExpand }}" hint-placeholder-val="{{ false }}">
+              <a href="#" onClick="{{ r.toggle }}" style="display: inline-block; margin-top: 12px; font-size: 14px; font-weight: 700; color: hsl(356 72% 51%);" style-hover="color: hsl(354 74% 38%);">{{ r.moreLabel }} →</a>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+
+      <sc-if value="{{ hasMore }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 8px;">
+          <a href="#" onClick="{{ showMore }}" style="font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 15px 26px; border-radius: 12px; box-shadow: 0 10px 22px -12px hsl(356 72% 51% / 0.6);" style-hover="color: #fff; opacity: 0.93;">{{ moreCount }} →</a>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align: center; padding: 64px 24px; background: #fff; border: 1px dashed hsl(220 13% 84%); border-radius: 20px; margin-top: 22px;">
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 20px;">No reviews match that</h3>
+          <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 8px;">Try a different word, or clear the search to see all of them.</p>
+          <a href="#" onClick="{{ clearSearch }}" style="display: inline-block; margin-top: 18px; font-size: 14px; font-weight: 700; color: hsl(224 71% 4%); background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 88%); padding: 12px 20px; border-radius: 11px;" style-hover="color: hsl(224 71% 4%);">Clear search</a>
+        </div>
+      </sc-if>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 40px; padding: 26px 28px; background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 20px;">
+        <div style="flex: 1 1 260px;">
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 18px;">Already a member?</div>
+          <p style="font-size: 14px; color: hsl(220 9% 46%); margin-top: 6px;">Search “Knight Fitness Morayfield” on Google and tap Write a review — it is how the next nervous local finds us.</p>
+        </div>
+        <a href="{{ googleProfile }}" target="_blank" style="font-size: 13.5px; font-weight: 700; color: hsl(224 71% 4%); background: #fff; border: 1px solid hsl(220 13% 88%); padding: 13px 20px; border-radius: 11px;" style-hover="color: hsl(224 71% 4%);">Find us on Google Maps →</a>
+      </div>
+    </section>
+
+    <section style="background: hsl(224 71% 4%);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 84px 24px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 48px; align-items: start;">
+        <div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.06; letter-spacing: -0.038em; color: #fff;">You've read the reviews. Now it's your turn.</h2>
+          <p style="font-size: 16.5px; line-height: 1.65; color: hsl(217 10% 72%); margin-top: 20px;">These are your neighbours. People who were exactly where you are right now — unsure, a bit nervous, wondering whether it's worth it. Every one of them is glad they walked in.</p>
+          <div style="display: grid; gap: 12px; margin-top: 26px;">
+            <sc-for list="{{ reviewAssurances }}" as="a" hint-placeholder-count="4">
+              <div style="display: flex; gap: 12px; align-items: baseline; font-size: 15px; font-weight: 500; color: #fff;">
+                <span style="color: hsl(160 84% 45%); font-weight: 800; font-size: 12px;">✓</span>{{ a }}
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.5);">
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.025em;">Drop us a message</h3>
+          <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 9px;">A coach will reach out to learn about your goals and find the right program. No pressure, no hard sell.</p>
+          <iframe src="https://api.leadconnectorhq.com/widget/form/v89V3Ku9h7ZgkCdOXHD4" id="inline-reviews-v89V3Ku9h7ZgkCdOXHD4" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="v89V3Ku9h7ZgkCdOXHD4" title="Message Knight Fitness Morayfield" style="width: 100%; height: 560px; border: 0; border-radius: 12px; margin-top: 18px; display: block;"></iframe>
+          <div style="font-size: 12px; font-weight: 500; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 12px; text-align: center;">Secure form · We reply within 1 business day</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============================= GET STARTED ============================= -->
+  <sc-if value="{{ isStart }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="Get Started" style="max-width: 1200px; margin: 0 auto; padding: 64px 24px 88px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 48px; align-items: start;">
+      <div>
+        <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 72% 51%); text-transform: uppercase; letter-spacing: 0.16em;">Get started</div>
+        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px;">Claim your 3-day pass</h1>
+        <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 20px;">Three coach-led sessions, no cost and no lock-in. Meet the coaches, try the room, and see if Knight Fitness is the right fit for you.</p>
+        <div style="display: grid; gap: 13px; margin-top: 30px;">
+          <sc-for list="{{ startPoints }}" as="s" hint-placeholder-count="4">
+            <div style="display: flex; gap: 13px; align-items: baseline; font-size: 15.5px; font-weight: 500;">
+              <span style="color: hsl(160 84% 39%); font-weight: 800; font-size: 12px;">✓</span>{{ s }}
+            </div>
+          </sc-for>
+        </div>
+        <img src="assets/img/keri-coaching-43.jpg" alt="Coach Keri spotting a member on the bench press" loading="lazy" style="width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 22px; margin-top: 30px; display: block; box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.35);" />
+        <div style="background: hsl(224 71% 4%); border-radius: 20px; padding: 28px; margin-top: 18px; color: #fff;">
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.02em;">Would rather just talk to someone?</h2>
+          <p style="font-size: 14.5px; color: hsl(217 10% 68%); margin-top: 9px;">Call the studio and a coach will answer your questions — no sales pitch.</p>
+          <a href="tel:0435737238" style="display: inline-block; margin-top: 18px; font-size: 15px; font-weight: 700; color: #fff; background: hsl(0 0% 100% / 0.08); border: 1px solid hsl(0 0% 100% / 0.18); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.15);">Call 0435 737 238</a>
+        </div>
+      </div>
+      <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.35); position: sticky; top: 92px;">
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.025em;">Book your first session</h2>
+        <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 9px;">Fill this in and we'll be in touch within a few hours.</p>
+        <iframe src="https://api.leadconnectorhq.com/widget/form/PvrT5GhwQ2LAS8Q4wsnf" id="inline-start-PvrT5GhwQ2LAS8Q4wsnf" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="PvrT5GhwQ2LAS8Q4wsnf" data-height="480" title="Claim your 3 day pass" scrolling="no" style="width: 100%; height: 480px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+        <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; font-size: 12.5px; font-weight: 600; color: hsl(220 9% 46%);">
+          <span>✔ Beginner friendly</span><span>✔ Coach-led every session</span><span>✔ No pressure</span>
+        </div>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============================= CONTACT ============================= -->
+  <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="Contact" style="max-width: 1200px; margin: 0 auto; padding: 64px 24px 88px;">
+    <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: center;">
+      <img src="assets/img/coach-keri.jpg" alt="Coach Keri" style="width: 132px; height: 132px; flex-shrink: 0; border-radius: 9999px; object-fit: cover; object-position: 50% 20%; display: block; border: 3px solid hsl(356 72% 51% / 0.22); box-shadow: 0 14px 30px -14px rgb(0 0 0 / 0.35);" />
+      <div style="max-width: 40em; min-width: 0;">
+        <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 72% 51%); text-transform: uppercase; letter-spacing: 0.16em;">Contact</div>
+        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px;">Talk to a coach</h1>
+        <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 20px;">Not sure where to start? Tell Coach Keri your goals and he'll point you in the right direction. We usually reply within a few hours.</p>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 40px; margin-top: 44px; align-items: start;">
+      <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.3);">
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.025em;">Send us a message</h2>
+        <iframe src="https://api.leadconnectorhq.com/widget/form/v89V3Ku9h7ZgkCdOXHD4" id="inline-v89V3Ku9h7ZgkCdOXHD4" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="v89V3Ku9h7ZgkCdOXHD4" data-height="460" title="Contact Knight Fitness Morayfield" scrolling="no" style="width: 100%; height: 460px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+      </div>
+      <div style="display: grid; gap: 18px;">
+        <div style="background: hsl(224 71% 4%); border-radius: 20px; padding: 30px; color: #fff; display: grid; gap: 20px;">
+          <sc-for list="{{ visitFacts }}" as="f" hint-placeholder-count="4">
+            <div>
+              <div style="font-size: 10.5px; font-weight: 700; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.14em;">{{ f.label }}</div>
+              <sc-if value="{{ f.isLink }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ f.href }}" style="display: block; font-size: 15.5px; font-weight: 600; margin-top: 6px; line-height: 1.45; color: hsl(356 78% 66%);" style-hover="color: #fff;">{{ f.value }}</a>
+              </sc-if>
+              <sc-if value="{{ f.isPlain }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size: 15.5px; font-weight: 600; margin-top: 6px; line-height: 1.45; color: #fff;">{{ f.value }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+          <div>
+            <div style="font-size: 10.5px; font-weight: 700; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.14em;">Social</div>
+            <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 14.5px; font-weight: 600;">
+              <a href="https://facebook.com/p/Knight-Fitness-Morayfield-100090367359324/" target="_blank" style="color: hsl(356 80% 66%);">Facebook</a>
+              <a href="https://www.instagram.com/knightfitnessmorayfield/" target="_blank" style="color: hsl(356 80% 66%);">Instagram</a>
+            </div>
+          </div>
+        </div>
+        <div style="border-radius: 22px; overflow: hidden; border: 1px solid hsl(220 13% 91%); box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.3);">
+          <img src="assets/img/sign.jpg" alt="The Knight Fitness sign above the Morayfield Road entrance" loading="lazy" style="width: 100%; height: auto; display: block;" />
+          <div style="padding: 16px 20px; background: #fff; font-size: 13.5px; font-weight: 600; color: hsl(220 9% 46%);">Look for the red Knight Fitness sign — next to Lumus Imaging, with parking right at the door.</div>
+        </div>
+        <iframe src="https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506&output=embed" title="Map of Knight Fitness Morayfield" loading="lazy" style="width: 100%; height: 300px; border: 1px solid hsl(220 13% 91%); border-radius: 22px; display: block;"></iframe>
+      </div>
+    </div>
+  </main>
+  </sc-if>
+
+  <!-- ============================= 6 WEEK CHALLENGE ============================= -->
+  <sc-if value="{{ isChallenge }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="6 Week Challenge">
+    <section style="position: relative; background: hsl(224 71% 4%); overflow: hidden;">
+      <div style="position: absolute; top: -220px; left: -120px; width: 700px; height: 700px; border-radius: 9999px; background: radial-gradient(circle, hsl(356 72% 51% / 0.2), transparent 62%); pointer-events: none;"></div>
+      <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 76px 24px 104px;">
+        <div style="max-width: 46em;">
+          <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(356 72% 51% / 0.16); border: 1px solid hsl(356 72% 51% / 0.35); color: hsl(356 78% 66%); padding: 8px 15px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;">{{ intakeBadge }}</div>
+          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 20px; color: #fff;">The 6 Week Challenge</h1>
+          <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(217 10% 72%); margin-top: 22px;">A short, structured block with a start line and a finish line. We measure you at the beginning, coach you through six weeks of training and nutrition, then measure again — so the result is a number you can see, not a feeling you have to guess at.</p>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px;">
+            <a href="#challenge-enquiry" style="font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 28px; border-radius: 12px; box-shadow: 0 14px 30px -12px hsl(356 72% 51% / 0.6);" style-hover="color: #fff; opacity: 0.93;">{{ intakeCta }}</a>
+            <a href="tel:0435737238" style="font-size: 15.5px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); padding: 17px 26px; border-radius: 12px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.13);">Call the studio</a>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section style="max-width: 1200px; margin: 0 auto; padding: 0 24px 88px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 20px; margin-top: -68px;">
+        <sc-for list="{{ challengeIncludes }}" as="c" hint-placeholder-count="4">
+          <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.35); border-top: 4px solid hsl(356 72% 51%);">
+            <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 17.5px; letter-spacing: -0.02em;">{{ c.title }}</h2>
+            <p style="font-size: 14px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 10px;">{{ c.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+      <div data-reveal="" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 44px; margin-top: 72px; align-items: center;">
+        <div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.8vw, 38px); letter-spacing: -0.032em;">Why six weeks works</h2>
+          <p style="font-size: 16px; line-height: 1.65; color: hsl(220 9% 46%); margin-top: 14px;">We run a new block every month, so you are never more than a few weeks from a start line. Six weeks is long enough for real change and short enough to commit to when your calendar is full. There's a defined finish line, a coach checking in every week, and a group going through it at the same time as you.</p>
+          <p style="font-size: 16px; line-height: 1.65; color: hsl(220 9% 46%); margin-top: 14px;">Most people who finish a block keep training afterwards — not because they signed up for something, but because six weeks was enough to make it a habit.</p>
+          <a href="#challenge-enquiry" style="display: inline-block; margin-top: 24px; font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 16px 26px; border-radius: 12px;" style-hover="color: #fff; opacity: 0.93;">{{ intakeCta }}</a>
+        </div>
+        <img src="assets/img/challenge-group.jpg" alt="A Knight Fitness challenge group" loading="lazy" style="width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 22px; display: block; box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.35);" />
+      </div>
+      <div data-reveal="" style="margin-top: 72px;">
+        <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.8vw, 38px); letter-spacing: -0.032em;">What people actually lost</h2>
+        <p style="font-size: 16px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 12px; max-width: 46em;">Real Morayfield members, real numbers, measured at the start and the end of their block.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 18px; margin-top: 26px;">
+          <sc-for list="{{ wbResults }}" as="w" hint-placeholder-count="8">
+              <div style="height: 100%; background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; overflow: hidden; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);">
+                <img src="{{ w.src }}" alt="{{ w.alt }}" loading="lazy" style="width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block;" />
+                <div style="padding: 16px 18px 18px;">
+                  <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.03em; color: hsl(356 72% 51%);">{{ w.result }}</div>
+                  <div style="font-size: 13.5px; font-weight: 700; margin-top: 5px;">{{ w.name }}</div>
+                  <div style="font-size: 12px; color: hsl(220 9% 46%); margin-top: 2px;">{{ w.period }}</div>
+                </div>
+              </div>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+    <section id="challenge-enquiry" style="background: hsl(224 71% 4%); scroll-margin-top: 84px;">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 76px 24px 88px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 44px; align-items: start;">
+        <div>
+          <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 78% 62%); text-transform: uppercase; letter-spacing: 0.16em;">Next intake</div>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(28px, 3vw, 42px); line-height: 1.05; letter-spacing: -0.035em; margin-top: 16px; color: #fff;">Ask us about the {{ intakeMonth }} block</h2>
+          <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(217 10% 72%); margin-top: 18px; max-width: 34em;">Send a message and a coach will come back to you with the start date, what the block costs and whether it's the right fit for where you're at. No obligation, and no sales pitch.</p>
+          <div style="display: grid; gap: 13px; margin-top: 28px;">
+            <sc-for list="{{ challengeAsk }}" as="a" hint-placeholder-count="4">
+              <div style="display: flex; gap: 12px; align-items: baseline; font-size: 15.5px; font-weight: 500; color: #fff;">
+                <span style="color: hsl(160 84% 45%); font-weight: 800; font-size: 12px;">✓</span>{{ a }}
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-top: 1px solid hsl(0 0% 100% / 0.12); margin-top: 30px; padding-top: 26px;">
+            <p style="font-size: 14.5px; color: hsl(217 10% 68%);">Would rather talk it through?</p>
+            <a href="tel:0435737238" style="display: inline-block; margin-top: 14px; font-size: 15px; font-weight: 700; color: #fff; background: hsl(0 0% 100% / 0.08); border: 1px solid hsl(0 0% 100% / 0.18); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.15);">Call 0435 737 238</a>
+          </div>
+        </div>
+        <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.5);">
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 23px; letter-spacing: -0.025em;">Send us a message</h3>
+          <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 9px;">Tell us your goals and we'll reply within a few hours.</p>
+          <iframe src="https://api.leadconnectorhq.com/widget/form/v89V3Ku9h7ZgkCdOXHD4" id="inline-challenge-v89V3Ku9h7ZgkCdOXHD4" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="v89V3Ku9h7ZgkCdOXHD4" data-height="460" title="Ask about the 6 Week Challenge" scrolling="no" style="width: 100%; height: 460px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+        </div>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <!-- ============================= FIRST VISIT ============================= -->
+  <sc-if value="{{ isFirst }}" hint-placeholder-val="{{ false }}">
+  <main data-screen-label="First Visit">
+    <section style="background: hsl(224 71% 4%);">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 76px 24px;">
+        <div style="max-width: 46em;">
+          <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 78% 62%); text-transform: uppercase; letter-spacing: 0.16em;">Your first visit</div>
+          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px; color: #fff;">Exactly what happens on day one</h1>
+          <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(217 10% 72%); margin-top: 22px;">Most members tell us the hardest part was walking in the first time. So here is the whole thing, start to finish, with no surprises left in it.</p>
+        </div>
+      </div>
+    </section>
+    <section style="max-width: 900px; margin: 0 auto; padding: 60px 24px 88px;">
+      <div style="display: grid; gap: 16px;">
+        <sc-for list="{{ firstVisitSteps }}" as="s" hint-placeholder-count="8">
+          <div data-reveal="" style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 28px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); display: flex; gap: 22px; align-items: flex-start;">
+            <div style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); color: #fff; display: grid; place-items: center; font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 14px; box-shadow: 0 10px 20px -10px hsl(356 72% 51% / 0.8);">{{ s.num }}</div>
+            <div>
+              <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: -0.022em;">{{ s.title }}</h2>
+              <p style="font-size: 15.5px; line-height: 1.6; color: hsl(220 9% 46%); margin-top: 9px;">{{ s.body }}</p>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div data-reveal="" style="background: hsl(224 71% 4%); border-radius: 22px; padding: 40px 32px; margin-top: 32px; text-align: center;">
+        <div style="color: hsl(45 93% 55%); font-size: 17px; letter-spacing: 0.1em;">★★★★★</div>
+        <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: clamp(20px, 2.2vw, 28px); line-height: 1.3; letter-spacing: -0.025em; color: #fff; margin-top: 18px;">“Starting back at the gym after nearly 2 years, I was apprehensive, but there was no need to be. I felt welcomed and supported from day one.”</p>
+        <div style="font-size: 13.5px; color: hsl(217 10% 64%); margin-top: 16px;">Natalie Bridge — Google review</div>
+        <a href="{{ hStart }}" onClick="{{ goStart }}" style="display: inline-block; margin-top: 26px; font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 30px; border-radius: 12px;" style-hover="color: #fff; opacity: 0.93;">Book your first session</a>
+      </div>
+    </section>
+  </main>
+  </sc-if>
+
+  <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeLightbox }}" style="position: fixed; inset: 0; z-index: 100; background: hsl(224 71% 4% / 0.94); display: grid; place-items: center; padding: 32px 20px;">
+      <div style="display: grid; gap: 16px; justify-items: center; max-width: 880px; width: 100%;">
+        <div role="img" aria-label="Knight Fitness member transformation" style="width: min(78vh, 100%); aspect-ratio: 1 / 1; border-radius: 18px; display: block; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.9); background-color: hsl(224 71% 8%); background-image: {{ lightboxCss }}; background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <a href="#" onClick="{{ prevImg }}" style="width: 44px; height: 44px; border-radius: 9999px; background: hsl(0 0% 100% / 0.1); border: 1px solid hsl(0 0% 100% / 0.2); color: #fff; display: grid; place-items: center; font-size: 16px;" style-hover="background: hsl(0 0% 100% / 0.2); color: #fff;">←</a>
+          <span style="font-size: 12px; font-weight: 600; color: hsl(217 10% 64%); text-transform: uppercase; letter-spacing: 0.14em;">{{ lightboxLabel }}</span>
+          <a href="#" onClick="{{ nextImg }}" style="width: 44px; height: 44px; border-radius: 9999px; background: hsl(0 0% 100% / 0.1); border: 1px solid hsl(0 0% 100% / 0.2); color: #fff; display: grid; place-items: center; font-size: 16px;" style-hover="background: hsl(0 0% 100% / 0.2); color: #fff;">→</a>
+        </div>
+        <a href="#" onClick="{{ closeLightbox }}" style="font-size: 13px; font-weight: 600; color: hsl(217 10% 64%);" style-hover="color: #fff;">Close</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ videoOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeVideo }}" style="position: fixed; inset: 0; z-index: 100; background: hsl(224 71% 4% / 0.94); display: grid; place-items: center; padding: 32px 20px;">
+      <div onClick="{{ stopBubble }}" style="display: grid; justify-items: center; gap: 16px; max-width: 100%;">
+        <video data-src="{{ videoSrcSafe }}" data-autoplay="" controls="{{ yes }}" playsInline="{{ yes }}" style="max-height: 76vh; max-width: 100%; width: auto; border-radius: 18px; display: block; background: #000; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.9);"></video>
+        <div style="display: flex; align-items: center; gap: 18px;">
+          <a href="#" onClick="{{ prevVideo }}" style="font-size: 13px; font-weight: 700; color: hsl(217 10% 72%);" style-hover="color: #fff;">← Previous</a>
+          <span style="font-size: 12.5px; color: hsl(217 10% 50%);">{{ videoLabel }}</span>
+          <a href="#" onClick="{{ nextVideo }}" style="font-size: 13px; font-weight: 700; color: hsl(217 10% 72%);" style-hover="color: #fff;">Next →</a>
+        </div>
+        <a href="#" onClick="{{ closeVideo }}" style="font-size: 13px; font-weight: 600; color: hsl(217 10% 64%);" style-hover="color: #fff;">Close</a>
+      </div>
+    </div>
+  </sc-if>
+
+  <footer style="background: hsl(224 71% 4%); color: #fff;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 68px 24px 32px;">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 44px;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 26px;">
+            <img src="assets/knight-logo-reversed.png" alt="Knight Fitness" style="height: 56px; width: auto; display: block;" />
+            <span style="width: 1px; height: 34px; background: hsl(0 0% 100% / 0.2); flex-shrink: 0;"></span>
+            <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: hsl(217 10% 64%); white-space: nowrap;">Morayfield</span>
+          </div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(22px, 2vw, 28px); letter-spacing: -0.03em;">Book your 3 free sessions</div>
+          <p style="font-size: 15px; color: hsl(217 10% 64%); margin-top: 12px; max-width: 26em; line-height: 1.6;">Coach-led team training in Morayfield, built for men and women 30+.</p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 22px;">
+            <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; opacity: 0.93;">Book now</a>
+            <a href="{{ hContact }}" onClick="{{ goContact }}" style="font-size: 14.5px; font-weight: 600; color: #fff; border: 1px solid hsl(0 0% 100% / 0.18); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.09);">Message us</a>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(217 10% 60%);">Pages</div>
+          <div style="display: grid; gap: 2px; margin-top: 10px;">
+            <sc-for list="{{ footerLinks }}" as="item" hint-placeholder-count="8">
+              <a href="{{ item.href }}" onClick="{{ item.go }}" style="font-size: 14.5px; color: #fff; display: flex; align-items: center; min-height: 44px;" style-hover="color: hsl(356 78% 62%);">{{ item.label }}</a>
+            </sc-for>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(217 10% 60%);">Find us</div>
+          <div style="display: grid; gap: 10px; margin-top: 16px; font-size: 14.5px; color: hsl(217 10% 64%); line-height: 1.5;">
+            <span>125 Morayfield Road,<br />Morayfield QLD 4506</span>
+            <a href="tel:0435737238" style="color: #fff; display: flex; align-items: center; min-height: 44px;">0435 737 238</a>
+            <a href="mailto:info@knightfitness.com.au" style="color: #fff; display: flex; align-items: center; min-height: 44px; word-break: break-word;">info@knightfitness.com.au</a>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <a href="https://facebook.com/p/Knight-Fitness-Morayfield-100090367359324/" target="_blank" style="color: #fff; display: flex; align-items: center; min-height: 44px; padding-right: 10px;">Facebook</a>
+              <a href="https://www.instagram.com/knightfitnessmorayfield/" target="_blank" style="color: #fff; display: flex; align-items: center; min-height: 44px;">Instagram</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 48px; padding-top: 22px; border-top: 1px solid hsl(0 0% 100% / 0.08); display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; font-size: 12.5px; color: hsl(217 10% 55%);">
+        <span>© 2026 Knight Fitness Morayfield</span>
+        <span>Coach-led training for men &amp; women 30+</span>
+      </div>
+    </div>
+  </footer>
+
+  <sc-if value="{{ mobileCta }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; background: hsl(224 71% 4% / 0.96); border-top: 1px solid hsl(0 0% 100% / 0.1); padding: 12px 16px; display: flex; gap: 10px; align-items: center; box-shadow: 0 -8px 24px -12px rgb(0 0 0 / 0.5);">
+      <a href="tel:0435737238" style="min-height: 48px; flex: 1; display: grid; place-items: center; font-size: 14.5px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.08); border: 1px solid hsl(0 0% 100% / 0.16); border-radius: 11px;" style-hover="color: #fff;">Call</a>
+      <a href="{{ hStart }}" onClick="{{ goStart }}" style="min-height: 48px; flex: 2; display: grid; place-items: center; font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); border-radius: 11px;" style-hover="color: #fff;">Claim 3 free sessions</a>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;inlineForm&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Conversion&quot;},&quot;mobileCta&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Conversion&quot;},&quot;showComparison&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Homepage sections&quot;},&quot;showStories&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Homepage sections&quot;}}">
+const RED = 'hsl(356 72% 51%)';
+const SLATE = 'hsl(215 16% 47%)';
+const BLUE = 'hsl(356 72% 51%)';
+const GREEN = RED;
+const GOLD = RED;
+const PURPLE = RED;
+const CYAN = RED;
+const PINK = RED;
+
+const YES = { mark: 'Yes', color: 'hsl(160 84% 50%)' };
+const NO = { mark: 'No', color: 'hsl(217 10% 48%)' };
+const cell = (v, hi) => ({ mark: v.mark, color: hi ? 'hsl(160 84% 58%)' : v.color, bg: hi ? 'hsl(356 72% 51% / 0.1)' : 'transparent' });
+const some = (word) => ({ mark: word, color: 'hsl(43 96% 62%)' });
+const pop = (time) => ({ time });
+const TRANSFORMS = [
+  'assets/img/tf-1.jpg',
+  'assets/img/tf-2.jpg',
+  'assets/img/tf-3.jpg',
+  'assets/img/tf-4.jpg'
+];
+const GOOGLE_PROFILE = 'https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506';
+
+const MEDIA_CDN = 'https://assets.cdn.filesafe.space/zLeKXa3ySYvZybX7yQF8/media/';
+
+const STORY_VIDEOS = [
+  MEDIA_CDN + '68ca51529fe3cfcf0f5282b7.mp4',
+  MEDIA_CDN + '68ca512f9fe3cf1e3c527f46.mp4',
+  MEDIA_CDN + '69ae60e080d35931b07583a7.mp4',
+  MEDIA_CDN + '69ae60f26be28aeaf90990a4.mp4',
+  MEDIA_CDN + '69ae552d80d35900e0744df3.mp4',
+  MEDIA_CDN + '69ae63566be28a993d09cc4d.mp4',
+  MEDIA_CDN + '69ae55136be28a7cc608577d.mp4',
+  MEDIA_CDN + '668c694eba223d7dc0f8e834.mp4'
+];
+
+const AVATARS = ['hsl(356 72% 51%)', 'hsl(215 28% 32%)', 'hsl(356 45% 42%)', 'hsl(215 16% 47%)', 'hsl(354 60% 46%)', 'hsl(220 13% 38%)'];
+
+const REVIEWS = [
+      { name: "Alycia Noble", initials: "AN", reviewCount: 4, photoCount: 2, localGuide: false, months: 3, ago: "3 months ago", text: "Knight Fitness Morayfield is the best gym I've ever been too! I'm feeling stronger, fitter and healthier then I have in a long time. Great coaches, great people and great atmosphere it's a great place to work out. I didn't know what to expect when I started but I've found that everyone is friendly and supportive which I haven't experienced before. It feels like a second home and family which is really nice." },
+      { name: "Pawel Piotrowicz", initials: "PP", reviewCount: 3, photoCount: 0, localGuide: false, months: 4, ago: "4 months ago", text: "Joined the gym a couple months before christmas last year. I had never been inside a gym before this and needed a kick in the ass to work on myself. There is a great culture and attitude with the classes and the coaches always work their way around giving healthy advice on all facets of the training. No judgment or discrimination and honestly everyone feels comfortable to work on themselves at their own pace to get the best results for themselves. Highly recommend to anyone looking to start or continue their fitness journey." },
+      { name: "James Horan", initials: "JH", reviewCount: 1, photoCount: 0, localGuide: false, months: 1, ago: "a month ago", text: "Over the past year I've lost 20 kg, and I couldn't be happier with what I've achieved. The two 6-week challenges really helped take things to the next level, and I've learned so much about nutrition, training, and building better habits.\n\nA huge thank you to Kerry, Mark, Hannah, and Zach for all their support, encouragement and knowledge throughout the journey. They've always been there to answer questions, keep me motivated, and help me stay on track.\n\nI'm really happy with the results from the challenge and would highly recommend Knight Fitness to anyone wanting to improve their health and fitness. Never looked and felt so good." },
+      { name: "Elenoa Taukolo", initials: "ET", reviewCount: 8, photoCount: 3, localGuide: false, months: 3, ago: "3 months ago", text: "I was going to a couple of gyms in the area, but about a year ago I got invited by a friend to try this one. From my very first day, I loved it - the atmosphere and community were so positive, with good vibes all around. The trainers are awesome - huge shoutout to Kerry and Hannah!\n\nI highly recommend this gym if you're looking for a supportive, no-judgement environment with great energy." },
+      { name: "Vinay Gosain", initials: "VG", reviewCount: 21, photoCount: 0, localGuide: true, months: 5, ago: "5 months ago", text: "I've been training at Knight Fitness Morayfield since 2024, and it has honestly been an amazing experience. The coach, Keri, is incredibly supportive and helpful. He motivates you constantly and makes sure everyone feels comfortable, no matter their fitness level.\n\nI had never really been consistent with gym training before. I even had to stop for about six months due to some health reasons, but when I came back, Keri's motivation made it easy to start again.\n\nWhat I love most about this place is the atmosphere. If you've never trained before and you come here, you'll honestly feel like you missed something important in your life and wish you had started earlier." },
+      { name: "Teresa Sowter", initials: "TS", reviewCount: 46, photoCount: 70, localGuide: true, months: 12, ago: "a year ago", text: "I am 55yrs young and was terrified returning to a gym. The coaches at Knight Fitness made me feel comfortable and supported throughout the whole experience. After my initial 6 weeks I signed up as part of the Knight Fitness Family." },
+      { name: "Belinda Stewart", initials: "BS", reviewCount: 69, photoCount: 37, localGuide: true, months: 3, ago: "3 months ago", text: "I absolutely love this gym. The community is so welcoming that I was able to bring my mum to train with me today — and she smashed it. The coaches are always happy to modify exercises when needed, and they never make anyone feel like an outsider." },
+      { name: "Natalie Bridge", initials: "NB", reviewCount: 2, photoCount: 0, localGuide: false, months: 11, ago: "11 months ago", text: "Starting back at the gym after nearly 2 years, I was a bit apprehensive, but there was no need to be. From the moment I walked in, I felt welcomed and supported by both the coaches and the community.\n\nThe coaches here are genuinely friendly and approachable, which made a huge difference in my confidence. They take the time to get to know you, your goals, and any concerns you may have. No matter your fitness level, they make you feel like you're exactly where you're meant to be.\n\nI would highly recommend Knight Fitness to all levels of gym goers!" },
+      { name: "Antonio Bonarrigo", initials: "AB", reviewCount: 1, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "I first joined Knight Fitness Morayfield back in February 2025, partly because my brother Ayden was one of the coaches — but I've stayed because of the amazing culture, awesome coaches, and unbeatable community vibe!\n\nFrom the moment you walk in, it doesn't feel like a typical gym. It's friendly, welcoming, and there's zero ego. Whether you're a first-timer or a seasoned lifter, everyone is welcome.\n\nThe coaching is top-notch! They are passionate, knowledgeable, and know how to push you just the right amount. They also make sure every session is structured and safe. Since joining, I've smashed personal bests in my main lifts with their support and motivation." },
+      { name: "Emily Miskell", initials: "EM", reviewCount: 1, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "I joined Knight Fitness about 18 months ago, which shows how fantastic this gym is, because in the past I haven't managed to stay motivated to workout any longer than a few months. And it has been one of the best decisions I've ever made, both physically and mentally. The coaches and members are all so supportive and motivating in a way that gives you a sense of belonging, and gives you the confidence to show up and push yourself, without any stress or pressure.\n\nKnight Fitness is a wonderful community that I'm proud to be a part of. No matter what your fitness level is, every achievement big or small is celebrated and I leave each session happy, and already looking forward to the next." },
+      { name: "Paul Walding", initials: "PW", reviewCount: 3, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "I became part of the Knight Fitness Morayfield family around 8-9 months ago, starting my journey from a pretty unfit place. Since then, with the incredible support and guidance from Keri and Ayden, I've been able to get back on track—physically and mentally. They've not only encouraged me through each step but also helped me make better choices when it comes to food and overall health.\n\nAnd then there's the amazing gym community—more like a second family. From day one, I felt so welcomed. Everyone supports each other, no matter where they're at on their fitness journey." },
+      { name: "Anna Wilson", initials: "AW", reviewCount: 2, photoCount: 0, localGuide: false, months: 11, ago: "11 months ago", text: "This gym is so much more than just a place to work out — it's a community.\n\nFrom the moment I walked in, I felt welcomed and supported. What really sets this gym apart is the sense of kinship they've cultivated among members.\n\nWhether you're just starting your fitness journey or a seasoned gym-goer you'll find a safe, inclusive space here full of friendly faces.\n\nI highly recommend Knight Fitness Morayfield to anyone looking for a gym that truly cares about your health, inside and out." },
+      { name: "lance courtenay", initials: "LC", reviewCount: 7, photoCount: 3, localGuide: false, months: 24, ago: "2 years ago", text: "Knight Fitness is a great gym to be part of for many reasons.\n\nFrom your first consultation, on to your six week introduction period and then all the way through to reaching your fitness goals, the coaches are there for every one of us. You can ask any of them anything at anytime and they give you their undivided attention.\n\nThe things that have kept me coming back for the past six years are the choice of classes — S&C, Tough Enough and now upper and lower push — a great variety which for me is so important in keeping the interest strong. The quality of the coaches, they are all top notch. The equipment and the constant introduction of new gear that allows us all to have what we need even when the classes are 30 people strong or more.\n\nSometimes I wonder what gym I would join should there be no Knight Fitness. My findings are, there is no better option out there in my humble opinion." },
+      { name: "Sharon Baker", initials: "SB", reviewCount: 4, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "When I started with Knight Fitness 6 months ago, I wasn't sure how long I would last, since I was trying it on my own. Keri was so supportive and encouraging, who knew you could have fun going to the gym? I have lost weight, become more fit and strong, and feel great. The atmosphere is great, and everybody makes you feel welcome." },
+      { name: "Lauren Chapman", initials: "LC", reviewCount: 2, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Knight Fitness Morayfield is an awesome place to train. The classes are top-notch and cater to all fitness levels, whether you're just starting out or looking to push yourself further. The trainers are super supportive, and the community vibe makes you actually look forward to your workouts. Highly recommend to anyone looking for a motivating and welcoming gym!" },
+      { name: "Sharon Baker", initials: "SB", reviewCount: 1, photoCount: 0, localGuide: false, months: 11, ago: "11 months ago", text: "I joined Knight Fitness 9 months ago and haven't looked back. When I started I was incredibly unfit and had no idea how to use any of the equipment. Keri and the team are so patient and help you start from wherever you are, work around any injuries, encourage and push you to succeed. This is a place that wants you to turn up, not one of those gyms that just want your fees. I am getting compliments about how fit I'm getting, and I'm so glad I am on this journey with my Knight Fitness family." },
+      { name: "Kelly Klibbe", initials: "KK", reviewCount: 6, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Joined in May after having a gym membership elsewhere that I just wasn't using as I had no real clue of what I was doing. Knight at Morayfield has been just what I needed. The sessions are all well planned and explained and every session the trainers check in and make adjustments and modifications for individuals. This was especially appreciated when I was carrying an injury. I've always wanted to lift and increase my strength training and now I feel confident and safe trying new techniques and increasing my weights. I'm really loving the community and I'm enjoying my training for the first time in a long time. Thanks Kerri, Hannah and the Knight Family x" },
+      { name: "Nic Steele", initials: "NS", reviewCount: 5, photoCount: 0, localGuide: false, months: 3, ago: "3 months ago", text: "Absolutely amazing, 6 months and I definitely feel much different. Amazing support from coaches and other gym members. Would definitely recommend." },
+      { name: "Nicole", initials: "N", reviewCount: 3, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Getting back into fitness after raising kids and not prioritizing myself for way too long was tough. I tried joining a few gyms in the Instagram and mirror selfie era, and honestly, it felt overwhelming. The pressure to look a certain way and the focus on appearance rather than progress made it hard to stay motivated.\n\nBut then I found Knight Fitness, and it has been a complete game-changer! From the moment I walked in, I knew this was different. The trainers are not only incredibly knowledgeable but also real people who are genuinely focused on helping you grow. There's no obsession with looking perfect—just authentic support and encouragement every step of the way.\n\nThey've helped me regain my confidence and truly enjoy my fitness journey again, without feeling judged." },
+      { name: "Jai Spelman", initials: "JS", reviewCount: 2, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Hands down best gym around!! Started with Knight about 6 months ago and I have never looked back. Amazing community, amazing results and most of all best coaches, their dedication is unmatched. Shout out to Ayden and Kerri. If you're looking to start your fitness journey don't look anywhere else!!!" },
+      { name: "Carly Debono", initials: "CD", reviewCount: 2, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "I've been training at Knight Fitness for a little over 2 years now, and I honestly couldn't be happier." },
+      { name: "Annette Delaware", initials: "AD", reviewCount: 6, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "Knight Fitness is all about fitness, fun and community. The coaches, Keri, Josh and Hannah, are awesome people who strengthen that sense of community with their positivity and encouragement. I love that you can work at your individual fitness level alongside others who are like minded and striving towards their own health goals. We are all supporting one another on the journey towards being a better version of ourselves.\n\nThis gym has helped me become fitter and stronger, but also more focused and has built my confidence, which are benefits that I didn't expect, but have made a big difference in my life." },
+      { name: "Ferg/Jo Tearikiaua", initials: "FT", reviewCount: 7, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Knight Fitness Morayfield is awesome! If you are starting your fitness journey this is the place for you — from the everyday people to the fantastic staff you can't go wrong. Kerri is so friendly and approachable, he makes you feel like you can achieve anything. It's been nearly 2 years since I started and I've lost over 20kgs. I found my happy place 😊" },
+      { name: "Jan Thaggard", initials: "JT", reviewCount: 1, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "I have avoided group classes for years and one day I decided to step out of my comfort zone and joined Knight Fitness. I instantly felt at ease and supported. These 5am classes are phenomenal! I am surrounded by such beautiful people and dedicated coaches who make my fitness journey so much fun. It has been such a game changer to my daily routine. If you are looking for a supportive environment and coaches who are committed to helping you achieve your fitness goals then this is definitely the place for you!" },
+      { name: "Ben Kennedy", initials: "BK", reviewCount: 1, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Knight Fitness has become my rock! The staff are AMAZING - if you listen and take on board their advice, you'll crush your goals. The community vibe is on point too - people are always cheering you on and I've made some fantastic friends along the way.\n\nWorking out at Knight Fitness has also been a huge boost for my mental health. The supportive atmosphere helps me manage stress, boosts my mood, and gives me a sense of accomplishment. It's not just about getting fit - it's about feeling empowered mentally too." },
+      { name: "Darin Kingi", initials: "DK", reviewCount: 1, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "I really enjoyed the classes. The coaches were supportive and followed up after, to make sure I had the skills and support I needed to reach my goals long term. There is a great community of people at all levels of fitness and everyone made me feel comfortable. Highly recommended compared to your standard gyms. Thanks Knight Fitness for the great experience." },
+      { name: "Abigail Dela Cruz", initials: "AD", reviewCount: 8, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Joined Knight Fitness Morayfield 2 years ago and never looked back! Not only did I gain strength and confidence but also friends I can call a family! Wonderful community and coaches that will push you to discover and be the best version of yourself. Thanks guys!" },
+      { name: "Jessica Henriques", initials: "JH", reviewCount: 7, photoCount: 1, localGuide: false, months: 11, ago: "11 months ago", text: "Knight Fitness is more than a gym, it is a community. If you want a judgement free gym where everyone knows your name and are all supporting you to achieve your goals this is the place to go. You won't regret coming through the doors and signing up." },
+      { name: "Meaghan Phillips", initials: "MP", reviewCount: 2, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "From the moment I walked through the doors, this place has felt like a second home. The community is incredible — welcoming and supportive, no matter your starting point or goals. As someone who had never been to a gym before, I've achieved more than I ever thought possible, thanks to the encouragement of Coaches Keri and Ayden, along with the amazing members. Along the way, I've met some incredible people I wouldn't have known otherwise. I highly recommend the gym — if you're willing to put in the work, the results will come!" },
+      { name: "Brentan Greggs", initials: "BG", reviewCount: 2, photoCount: 0, localGuide: false, months: 3, ago: "3 months ago", text: "Best gym ever been to, would 100% recommend to my friends because both the coaches and members make you feel so welcome and like you belong there 😁" },
+      { name: "Elizabeth Kennington", initials: "EK", reviewCount: 4, photoCount: 0, localGuide: false, months: 3, ago: "3 months ago", text: "Knight Fitness is truly the place to be. Over the past few years, the coaches and members have consistently pushed me to reach my fitness goals. The coaches are incredible — they know you by name and genuinely care about your progress. The atmosphere is friendly, supportive, and the perfect environment to work out. I can't recommend Knight Fitness highly enough. No matter where you are in your fitness journey, you'll find a community that backs you every step of the way." },
+      { name: "Bryan Christopher De Leon", initials: "BC", reviewCount: 1, photoCount: 0, localGuide: false, months: 36, ago: "3 years ago", text: "I'm thrilled to have discovered the newly opened Knight Fitness Morayfield! As someone who has struggled to find the right gym, my experience at Knight Fitness has been a breath of fresh air.\n\nFrom day one, I was greeted by a warm, friendly, and supportive community that made me feel right at home. The modern and clean facility is a testament to their dedication to providing members with the best possible workout environment. The trainer is incredibly knowledgeable and patient, taking the time to understand my unique goals and limitations while customizing a workout plan tailored just for me.\n\nThe variety of engaging programs, like the 6-week challenge, has helped me stay motivated, achieve my fitness goals, and most importantly, enjoy the process." },
+      { name: "Emma Howarth", initials: "EH", reviewCount: 2, photoCount: 0, localGuide: false, months: 11, ago: "11 months ago", text: "Knight Fitness Morayfield is a great place to train, amazing supportive coaches and awesome people to train with. Perfect for all fitness levels and plenty of classes to choose from. Definitely recommend." },
+      { name: "Liann Tavita", initials: "LT", reviewCount: 6, photoCount: 0, localGuide: false, months: 11, ago: "11 months ago", text: "Knight Fitness is more than a gym!! It will transform how you feel about exercise & more importantly yourself. The secret is amazing coaches who are genuine & motivated to help you achieve your goals!!" },
+      { name: "Malcolm Whiting", initials: "MW", reviewCount: 1, photoCount: 0, localGuide: false, months: 3, ago: "3 months ago", text: "Absolutely the best gym I have ever been to, the trainers are so helpful. After my accident they helped me work myself to the best I can be." },
+      { name: "Christy Brittain", initials: "CB", reviewCount: 4, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "I originally went to check out Knight Fitness at Morayfield for my daughter, next thing I was signing up for a 2 week trial to support my daughter (never expecting to stay longer than the 2 weeks). Not having been inside a gym for about 25 years, I was nervous." },
+      { name: "Robert Woolsey", initials: "RW", reviewCount: 9, photoCount: 41, localGuide: true, months: 24, ago: "2 years ago", text: "I came to Knight Fitness to do the 6 week challenge. Best thing I've done in a long time. The coaches and members are all supportive and respectful which is a good boost to my confidence when I'm training. I'm pumped for my workout every day and I'm fitter, stronger and most importantly my physical and mental health is flourishing. Thank you Keri, Josh and Hannah and thank you Knight Fitness." },
+      { name: "Mary Tarry-Smith", initials: "MT", reviewCount: 6, photoCount: 1, localGuide: false, months: 24, ago: "2 years ago", text: "Knight Fitness Morayfield has definitely provided me with the armour to fight my battle of becoming the best version of me physically, mentally and spiritually.\n\nI am a fifty something year old female that was looking for a safe space to step out of my comfort zone and I have totally found that and more.\n\nKeri and the other trainers provide a fun, easygoing environment tailored to my personal capabilities but by no means easy workouts, which challenges me to continually push myself.\n\nWith plenty of available classes 7 days a week the morning classes I attend are filled with a friendly bunch of like minded members who are always encouraging and supportive of each other." },
+      { name: "Sarah Ray", initials: "SR", reviewCount: 4, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "I've struggled over the last few years trying to get back into my health and fitness journey. I have a fully equipped home gym that's sitting unused, I've tried other gyms and online coaching etc. I shudder to think of the wasted money I've spent.\n\nI'll be honest, it took me a little bit of time to bite the bullet and give Knight Fitness a crack but I'm so so happy I got brave and did something positive for myself.\n\nI'm still a fairly new member but I feel like I've found my home at Knight Fitness. I feel comfortable to get into my training again and trust that I'm professionally guided and looked after by Keri, Hannah and Josh." },
+      { name: "Adam Black", initials: "AB", reviewCount: 8, photoCount: 0, localGuide: false, months: 11, ago: "11 months ago", text: "Awesome gym! Coaches and staff are very welcoming and take a genuine interest in your progress. Suitable for all ages and abilities, no mirrors or egos, just a great community vibe." },
+      { name: "chloe cavanagh", initials: "CC", reviewCount: 8, photoCount: 5, localGuide: false, months: 24, ago: "2 years ago", text: "Knight Fitness is probably the best gym I've ever joined. Of course at first it was scary, I didn't know anyone and it was my first time doing a group fitness kind of thing. Kerri welcomed me with big open arms, very supportive of my dream to get a push up (I got there in the end 💪).\n\nThe 6:30pm class is an absolute favourite, I love everyone in the class, really turned into a big family more than just people you work out with everyday. I couldn't have chosen a better gym, coaches or members to sweat with Monday to Saturday!!" },
+      { name: "Ben Marshall", initials: "BM", reviewCount: 2, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "My wife and daughter joined and said I'd enjoy going to Knight Fitness Morayfield. They were correct, it's an inclusive centre with all types of people all trying to improve their fitness and reach their own goals. I've felt stronger since joining last year and enjoy rocking up, so much so we encouraged our youngest daughter to join, so now the whole family are in giving it a crack." },
+      { name: "Kelly Dohnt", initials: "KD", reviewCount: 3, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "Best thing I have ever done is join Knight Fitness Morayfield. I was never a gym person before this, in fact I joined a gym & went for about 4 weeks before giving up. The community at Knight Fitness is completely different, welcoming, friendly & we laugh a lot when Keri is coaching. I can't recommend them enough! Would give 10 stars if I could." },
+      { name: "ashley nagel", initials: "AN", reviewCount: 3, photoCount: 1, localGuide: false, months: 24, ago: "2 years ago", text: "I highly endorse Knight Fitness Morayfield for their exceptional focus on creating a personalized experience for each individual. Unlike other fitness centers, they prioritize building a strong sense of community where members are more than just numbers. The camaraderie among fellow teammates is unparalleled and serves as a major driving force to stay motivated and committed. Their team of trainers possess extensive expertise, dedication, and warmth, making them the perfect guides to support you on your journey towards better fitness and health." },
+      { name: "Naomi Collins", initials: "NC", reviewCount: 5, photoCount: 5, localGuide: false, months: 24, ago: "2 years ago", text: "Absolutely love this gym, I started out with the 6 week challenge. I have had back injuries in the past that have stopped me going to the gym, afraid I was going to re-injure myself again, but the coaches have helped me along the way, regularly checking in on me to make sure the exercises are okay and aren't causing pain, and if it does hurt or strain my back they change or modify it so I am still working the muscles. And when I have slacked off for whatever reason they check in to make sure I am okay and gently push me into coming back.\n\nIt's such a fun environment to be a part of. I'm glad to call Knight Fitness home." },
+      { name: "Zoe Chapman", initials: "ZC", reviewCount: 4, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Knight Fitness Morayfield is a positive and motivating atmosphere that makes you actually want to show up and work out. The 5am crew has a strong sense of community and enthusiastic work ethic!" },
+      { name: "jodi szafranski", initials: "JS", reviewCount: 1, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Knight Fitness is where you go when you want to change your lifestyle with no pressure. You will meet genuine people and build amazing friendships. YOU will become the best version of YOU!!! 🫶" },
+      { name: "Rhys Taylor", initials: "RT", reviewCount: 3, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "An excellent gym. I never thought I'd use a coached gym, I thought I preferred the solitude and independence of 24 hour gyms. But the community, advice and support from not just the coaches but the other members is great. Keri in particular is an excellent coach." },
+      { name: "Chelsea Swinburne", initials: "CS", reviewCount: 17, photoCount: 8, localGuide: true, months: 36, ago: "3 years ago", text: "I highly recommend joining Knight Fitness Morayfield! Completed the 6 week challenge with my partner and we came out stronger and more confident. Couldn't have done it without Keri to motivate and encourage us along the way. He's super friendly and always has a fiery workout for us to do. It's a good community and is super easy to get along with everyone." },
+      { name: "Angie Simmonds", initials: "AS", reviewCount: 9, photoCount: 1, localGuide: false, months: 24, ago: "2 years ago", text: "If you are someone who wants to get fit, healthy, and improve your mental health but are intimidated by a traditional gym, Knight Fitness Morayfield is the place for you. A non-judgmental, inclusive, fun, welcoming environment for all to hit all your goals and push yourself further than you thought possible. 10/10 highly recommend!" },
+      { name: "Javier Cabrera", initials: "JC", reviewCount: 2, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "I am 56 and have been trying to get fit, get healthier and lose weight for many years with limited success. Thanks to Keri and the supporting environment at Knight Fitness Morayfield, great training sessions, great location and welcoming community, my health and fitness has improved heaps in just 6 months. Sessions are challenging and fun. Thank you Keri and the Knight Fitness family." },
+      { name: "Joseph Tud", initials: "JT", reviewCount: 6, photoCount: 2, localGuide: false, months: 36, ago: "3 years ago", text: "Awesome gym. Very clean. Coaches and staff genuinely care for you and don't treat you like a number. Classes are great. Detailed and tailor-fit for my needs. I highly recommend this gym for anyone, men and women, who want to get their fitness back." },
+      { name: "James Grier", initials: "JG", reviewCount: 1, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "Best body investment I have spent money on. I love the challenges. Training Monday to Friday night to get fitter and reach my personal goals.\n\nI have met some like minded mates here, we push each other along with our trainers who are professional and friendly and always ready to help and give advice for you to reach your personal growth and achieve your goals. Highly recommend Knight Fitness." },
+      { name: "Teresa Datulayta", initials: "TD", reviewCount: 2, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Oooo I love this gym! Great people, great coaches and even better workouts! No egos, great banter and a whole lot of encouragement and support." },
+      { name: "Julia Wallace", initials: "JW", reviewCount: 8, photoCount: 0, localGuide: false, months: 3, ago: "3 months ago", text: "I didn't realise how much I needed this place! The kick in the arse, the supportive community, the challenge to try things I had told myself I couldn't do. No pressure, just reassurance that it's okay to give it a go. 🌟" },
+      { name: "Caroline Moss", initials: "CM", reviewCount: 53, photoCount: 25, localGuide: true, months: 24, ago: "2 years ago", text: "If you're looking to improve your fitness, or drop some kgs and you're too shy or self conscious, look no further!! Keri and his team at Morayfield really do make you feel welcome, at ease and there is no judgement!! I've never felt more comfortable and it's a family feel here!! Highly recommend!!!" },
+      { name: "Maria Hauga", initials: "MH", reviewCount: 113, photoCount: 54, localGuide: true, months: 24, ago: "2 years ago", text: "I had a go 4 years ago and now I'm back. Very effective workout and nutrition guidance for your health & wellness. Good spacious workout area with modern gym equipment and great coaches that keep you accountable, with excellent workout buddies. ✌️" },
+      { name: "Alison", initials: "A", reviewCount: 30, photoCount: 3, localGuide: true, months: 24, ago: "2 years ago", text: "Great little gym with a fantastic fitness community. Good mix of strength and conditioning each workout. All the coaches love to push you just that little bit further than you think you're able." },
+      { name: "Melissa Ferguson", initials: "MF", reviewCount: 7, photoCount: 0, localGuide: true, months: 36, ago: "3 years ago", text: "From the first time I walked in you feel welcome and encouraged. The classes are motivating and coaches modify an exercise to your needs if needed (not just a number). The coaches and members are supportive and encouraging of everyone. The best decision I have made for myself." },
+      { name: "Rod Flynn", initials: "RF", reviewCount: 4, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Awesome team & environment. I recently completed a 4-week challenge they had on offer, and after the 4 weeks ended up signing up for a membership. I have not been one for group classes in the past, but these guys made you feel welcome & part of the team from day 1. Looking forward to my fitness journey with Knight Fitness. Cheers guys 👌" },
+      { name: "Darren Houston", initials: "DH", reviewCount: 4, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "I can't recommend Knight Fitness enough, they have great coaches who motivate and encourage you. Now only after three months of going I'm starting to see the benefits of my time there. My clothes fit me again." },
+      { name: "Jenelle Newbery", initials: "JN", reviewCount: 2, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "I highly recommend Knight Fitness Morayfield or Brendale, as the coaches are amazing & very supportive. Everyone at the gym are very friendly also." },
+      { name: "Adele Connal", initials: "AC", reviewCount: 7, photoCount: 10, localGuide: false, months: 24, ago: "2 years ago", text: "The community is unreal. You walk in and instantly feel like you belong. The team are so inviting. It makes working out and going to the gym fun. Love love love the vibe and community." },
+      { name: "Georgie Cogzell", initials: "GC", reviewCount: 3, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Great trainers, motivational, welcoming. Class sizes are not over crowded. Warm and welcoming team." },
+      { name: "Julianne Byrne", initials: "JB", reviewCount: 3, photoCount: 1, localGuide: false, months: 24, ago: "2 years ago", text: "I highly recommend this gym, I love it! This gym community is welcoming, supportive with zero judgement. Our coaches are professional, fun and always accessible! Love it!" },
+      { name: "Mark Enever", initials: "ME", reviewCount: 3, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Fun and friendly vibe, with a great gym family community. Don't waste time waiting for 'the right time', get on board and you won't regret it." },
+      { name: "Natalie Creighton", initials: "NC", reviewCount: 4, photoCount: 2, localGuide: false, months: 24, ago: "2 years ago", text: "At Knight Fitness I feel I am surrounded by real people from all walks of life and the trainers are supportive of your goals no matter your fitness level." },
+      { name: "Shenal Barrett", initials: "SB", reviewCount: 2, photoCount: 0, localGuide: false, months: 3, ago: "3 months ago", text: "Great place to work out 🙂 very friendly environment." },
+      { name: "Anthony Lavea", initials: "AL", reviewCount: 19, photoCount: 42, localGuide: true, months: 24, ago: "2 years ago", text: "Awesome environment and all great equipment. Trainers are all friendly and welcoming. Very knowledgeable and extremely energetic team." },
+      { name: "Kim Kennedy", initials: "KK", reviewCount: 2, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "Never thought I would enjoy going to the gym as much as I do. My fitness and confidence has improved with the support from coaches and other members." },
+      { name: "Jo Raymond", initials: "JR", reviewCount: 3, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Great atmosphere, quality equipment, super friendly staff & plenty of space to workout without feeling crowded." },
+      { name: "Toni Spence", initials: "TS", reviewCount: 2, photoCount: 6, localGuide: false, months: 36, ago: "3 years ago", text: "I have started to love to workout again. Thank you for being a great coach and helping me to start to love myself again." },
+      { name: "Chris Fanner", initials: "CF", reviewCount: 4, photoCount: 0, localGuide: false, months: 24, ago: "2 years ago", text: "Fun friendly environment with awesome trainers that make you feel like a big family." },
+      { name: "B Saccu", initials: "BS", reviewCount: 8, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "Awesome gym and incredible coaches!" },
+      { name: "kionasina magele", initials: "KM", reviewCount: 2, photoCount: 0, localGuide: false, months: 12, ago: "a year ago", text: "The best of the best. Letzzz Go. Morayfield rocks 💯 😘" }
+];
+
+const ROUTES = [
+  { page: 'home', slug: '', title: 'Knight Fitness Morayfield — Coach-led training for men & women 30+', desc: 'Coach-led team training in Morayfield for men and women 30 and over. Rated 5.0 from 256 Google reviews. Start with three free sessions — no lock-in, no gym experience needed.' },
+  { page: 'about', slug: 'about', title: 'About & Team Training — Knight Fitness Morayfield', desc: 'Meet the coaches and see how team training works at Knight Fitness Morayfield. Coach-led sessions scaled to every fitness level.' },
+  { page: 'schedule', slug: 'schedule', title: 'Timetable — Knight Fitness Morayfield', desc: 'Session times at Knight Fitness Morayfield. Coach-led team training mornings, afternoons and Saturdays.' },
+  { page: 'reviews', slug: 'reviews', title: 'Reviews — Knight Fitness Morayfield', desc: 'Read what Morayfield locals say about training at Knight Fitness. Rated 5.0 from 256 Google reviews.' },
+  { page: 'challenge', slug: '6-week-challenge', title: '6 Week Challenge — Knight Fitness Morayfield', desc: 'A six-week reset with measurements, nutrition guidance and weekly accountability at Knight Fitness Morayfield.' },
+  { page: 'first', slug: 'your-first-visit', title: 'Your First Visit — Knight Fitness Morayfield', desc: 'Exactly what happens on your first visit to Knight Fitness Morayfield, so nothing about walking in is a surprise.' },
+  { page: 'start', slug: 'get-started', title: 'Claim Your 3-Day Pass — Knight Fitness Morayfield', desc: 'Three free coach-led sessions at Knight Fitness Morayfield. No lock-in, no gym experience needed.' },
+  { page: 'contact', slug: 'contact', title: 'Contact — Knight Fitness Morayfield', desc: 'Find Knight Fitness Morayfield at 125 Morayfield Road. Call 0435 737 238 or message a coach.' }
+];
+
+const pageFromSlug = (slug) => {
+  const clean = String(slug || '').replace(/^#\/?/, '').replace(/^\/+|\/+$/g, '').toLowerCase();
+  const hit = ROUTES.find((r) => r.slug === clean);
+  return hit ? hit.page : 'home';
+};
+
+const routeFor = (page) => ROUTES.find((r) => r.page === page) || ROUTES[0];
+
+// Change SITE if the live domain differs. Used by canonical tags and sitemap.xml.
+const SITE = 'https://knightfitness-morayfield.com.au';
+
+// Deployed at a domain root we use real paths (/about). Opened as a bare .html
+// file — the design preview, or a local double-click — there is no server to
+// rewrite them, so fall back to hash routing and keep relative asset paths intact.
+const FILE_MODE = window.location.protocol === 'file:' || /\.html?$/i.test(window.location.pathname);
+const hrefFor = (page) => {
+  const r = routeFor(page);
+  if (FILE_MODE) return r.slug ? '#/' + r.slug : '#/';
+  return r.slug ? '/' + r.slug : '/';
+};
+const currentLocation = () => FILE_MODE ? (window.location.hash || '#/') : window.location.pathname;
+const canonicalFor = (page) => { const r = routeFor(page); return SITE + (r.slug ? '/' + r.slug : '/'); };
+
+class Component extends DCLogic {
+  state = { page: 'home', reviewCount: 0, lightbox: null, video: null, narrow: false, compactNav: false, menu: false, reviewQuery: '', reviewSort: 'newest', expanded: {}, reviewsShown: 20 };
+  videoRef = React.createRef();
+  headerRef = React.createRef();
+
+  componentDidMount() {
+    this.applyRoute(pageFromSlug(currentLocation()), { replace: true });
+    this.onHash = () => {
+      // In-page fragments (#challenge-enquiry) also fire hashchange. Only treat a
+      // fragment as navigation when it actually matches a route, otherwise the
+      // router would default to home and unmount the section being linked to.
+      const frag = String(currentLocation() || '').replace(/^#\/?/, '').replace(/^\/+|\/+$/g, '').toLowerCase();
+      if (!ROUTES.some((r) => r.slug === frag)) return;
+      const p = pageFromSlug(currentLocation());
+      if (p !== this.state.page) this.setState({ page: p, lightbox: null, video: null, menu: false });
+      this.setMeta(p);
+    };
+    window.addEventListener('popstate', this.onHash);
+    window.addEventListener('hashchange', this.onHash);
+    // The helmet re-applies its static <title> asynchronously, outside React's render
+    // cycle, so componentDidUpdate alone can't catch it. Watch the element instead.
+    const titleEl = document.querySelector('title');
+    if (titleEl && window.MutationObserver) {
+      this.titleObserver = new MutationObserver(() => {
+        const want = routeFor(this.state.page).title;
+        if (titleEl.textContent !== want) titleEl.textContent = want;
+      });
+      this.titleObserver.observe(titleEl, { childList: true, characterData: true, subtree: true });
+    }
+    this.hydrateStoryVideos();
+    const v = this.videoRef.current;
+    if (v) { v.muted = true; v.loop = true; v.playsInline = true; const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }
+    this.countUp();
+    this.onScroll = () => {
+      const h = this.headerRef.current;
+      if (h) h.style.boxShadow = window.scrollY > 12 ? '0 8px 24px -14px rgb(0 0 0 / 0.35)' : 'none';
+    };
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    this.mqNarrow = window.matchMedia('(max-width: 760px)');
+    this.mqNav = window.matchMedia('(max-width: 1040px)');
+    this.syncMedia = () => this.setState((s) => ({
+      narrow: this.mqNarrow.matches,
+      compactNav: this.mqNav.matches,
+      menu: this.mqNav.matches ? s.menu : false
+    }));
+    this.mqNarrow.addEventListener('change', this.syncMedia);
+    this.mqNav.addEventListener('change', this.syncMedia);
+    this.syncMedia();
+    this.reveal();
+    this.mountFormResizer();
+  }
+
+  // LeadConnector forms post their rendered height to the parent. Without a listener
+  // the iframe stays at its authored height and shows empty space below the fields.
+  mountFormResizer() {
+    const isFormFrame = (el) => el && el.tagName === 'IFRAME' && /widget\/form/.test(el.src || '');
+    this.onFormMessage = (e) => {
+      if (!/msgsndr|leadconnector|gohighlevel/.test(e.origin)) return;
+      let d = e.data;
+      if (typeof d === 'string') { try { d = JSON.parse(d); } catch (_) { return; } }
+      if (!d || typeof d !== 'object') return;
+      const h = parseInt(d.height ?? d.frameHeight ?? (d.payload && d.payload.height), 10);
+      if (!h || h < 120 || h > 4000) return;
+      const frames = Array.from(document.querySelectorAll('iframe')).filter(isFormFrame);
+      const target = frames.find((f) => f.contentWindow === e.source) || frames[0];
+      if (target) target.style.height = h + 'px';
+    };
+    window.addEventListener('message', this.onFormMessage);
+
+    if (!document.getElementById('lc-form-embed')) {
+      const sc = document.createElement('script');
+      sc.id = 'lc-form-embed';
+      sc.src = 'https://link.msgsndr.com/js/form_embed.js';
+      sc.async = true;
+      document.body.appendChild(sc);
+    }
+  }
+
+  componentDidUpdate(prev) { if (prev !== this.props || true) this.reveal(); this.hydrateStoryVideos(); }
+
+  // src is deliberately absent from the authored markup: an unresolved "{{ s.video }}" in a
+  // real src attribute is fetched by the parser before the runtime can evaluate anything,
+  // which is a failed request on every page load. sc-if cannot prevent it — the parser walks
+  // straight through unknown elements — so the attribute itself must never hold a hole.
+  hydrateStoryVideos() {
+    if (typeof document === 'undefined') return;
+    document.querySelectorAll('video[data-src]').forEach((v) => {
+      const url = v.getAttribute('data-src');
+      if (!url || url.indexOf('{{') !== -1) return;
+      if (v.getAttribute('src') === url) return;
+      v.setAttribute('src', url);
+      if (v.hasAttribute('data-autoplay')) {
+        v.load();
+        const pr = v.play();
+        if (pr && pr.catch) pr.catch(() => {});
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    if (this.raf) cancelAnimationFrame(this.raf);
+    if (this.snap) clearTimeout(this.snap);
+    if (this.io) this.io.disconnect();
+    window.removeEventListener('scroll', this.onScroll);
+    if (this.mqNarrow) this.mqNarrow.removeEventListener('change', this.syncMedia);
+    if (this.mqNav) this.mqNav.removeEventListener('change', this.syncMedia);
+    if (this.onFormMessage) window.removeEventListener('message', this.onFormMessage);
+    if (this.onHash) { window.removeEventListener('popstate', this.onHash); window.removeEventListener('hashchange', this.onHash); }
+    if (this.titleObserver) this.titleObserver.disconnect();
+  }
+
+  countUp() {
+    const target = 256;
+    const start = performance.now();
+    this.snap = setTimeout(() => this.setState({ reviewCount: target }), 2200);
+    const tick = () => {
+      const t = Math.min(1, (performance.now() - start) / 1300);
+      this.setState({ reviewCount: Math.round(target * (1 - Math.pow(1 - t, 3))) });
+      if (t < 1) this.raf = requestAnimationFrame(tick);
+    };
+    this.raf = requestAnimationFrame(tick);
+  }
+
+  // Progressive enhancement: hide only what is off-screen, then fade it in on entry.
+  reveal() {
+    if (typeof window === 'undefined') return;
+    const nodes = Array.from(document.querySelectorAll('[data-reveal]'));
+    if (!nodes.length) return;
+    const show = (el) => { el.style.opacity = '1'; el.style.transform = 'none'; };
+    if (!('IntersectionObserver' in window)) { nodes.forEach(show); return; }
+    if (!this.io) {
+      this.io = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.style.transition = 'opacity .6s ease-out, transform .6s ease-out';
+            show(e.target);
+            this.io.unobserve(e.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    }
+    nodes.forEach((el) => {
+      if (el.dataset.revealed) return;
+      el.dataset.revealed = '1';
+      const box = el.getBoundingClientRect();
+      if (box.top > window.innerHeight * 0.92) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(14px)';
+        el.style.willChange = 'opacity, transform';
+        this.io.observe(el);
+      }
+    });
+    clearTimeout(this.failsafe);
+    this.failsafe = setTimeout(() => nodes.forEach((el) => { if (el.style.opacity === '0') show(el); }), 4000);
+  }
+
+  intake() {
+    const now = new Date();
+    // Past the 20th the current month's block is already underway, so point at the next one.
+    const target = new Date(now.getFullYear(), now.getMonth() + (now.getDate() > 20 ? 1 : 0), 1);
+    const month = target.toLocaleString('en-AU', { month: 'long' });
+    return {
+      intakeBadge: 'Spots open for ' + month,
+      intakeCta: 'Join the ' + month + ' intake →',
+      intakeUnit: 'per block',
+      intakeMonth: month
+    };
+  }
+
+  setMeta(page) {
+    const r = routeFor(page);
+    const t = document.querySelector('title');
+    if (t) t.textContent = r.title;
+    document.title = r.title;
+    const set = (sel, attr, val) => { const el = document.querySelector(sel); if (el) el.setAttribute(attr, val); };
+    set('meta[name="description"]', 'content', r.desc);
+    set('meta[property="og:title"]', 'content', r.title);
+    set('meta[property="og:description"]', 'content', r.desc);
+    const canon = document.querySelector('link[rel="canonical"]');
+    if (canon) canon.setAttribute('href', canonicalFor(page));
+  }
+
+  componentDidUpdate() {
+    const want = routeFor(this.state.page).title;
+    if (document.title !== want) {
+      const t = document.querySelector('title');
+      if (t) t.textContent = want;
+      document.title = want;
+    }
+  }
+
+  applyRoute(page, opts) {
+    const r = routeFor(page);
+    const url = hrefFor(page);
+    if (currentLocation() !== url) {
+      if (opts && opts.replace) history.replaceState(null, '', url);
+      else history.pushState(null, '', url);
+    }
+    this.setState({ page, lightbox: null, video: null, menu: false });
+    this.setMeta(page);
+  }
+
+  nav(page) {
+    return (e) => {
+      if (e) e.preventDefault();
+      this.applyRoute(page);
+      if (typeof window !== 'undefined') window.scrollTo(0, 0);
+    };
+  }
+
+  shiftLightbox(delta) {
+    return (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      const n = TRANSFORMS.length;
+      this.setState((s) => ({ lightbox: ((s.lightbox + delta) % n + n) % n }));
+    };
+  }
+
+  storyData() {
+    return [
+        { quote: '“I finally stuck to training”', body: 'Real accountability and coaching made training finally stick.', name: 'Consistency that finally clicked', accent: RED, video: MEDIA_CDN + '68ca51529fe3cfcf0f5282b7.mp4' },
+        { quote: '“I got my energy back”', body: 'For many members, the biggest win is feeling better every day.', name: 'More energy day to day', accent: RED, video: MEDIA_CDN + '68ca512f9fe3cf1e3c527f46.mp4' },
+        { quote: '“A couple who work out together stay strong together”', body: 'Training together built strength, consistency and momentum.', name: 'Harvey & Linda', accent: RED, video: MEDIA_CDN + '69ae60e080d35931b07583a7.mp4' },
+        { quote: '“It feels like medicine”', body: 'Ruby started for her mental health and found something that truly helped.', name: 'Ruby', accent: RED, video: MEDIA_CDN + '69ae60f26be28aeaf90990a4.mp4' },
+        { quote: '“Group fitness isn’t what I thought it would be”', body: 'Group coaching turned out better than he expected.', name: 'Steve Pretsel', accent: RED, video: MEDIA_CDN + '69ae552d80d35900e0744df3.mp4' },
+        { quote: '“The hardest part was picking up the phone”', body: 'For anyone still on the fence, this is the story to hear.', name: 'Jo', accent: RED, video: MEDIA_CDN + '69ae63566be28a993d09cc4d.mp4' },
+        { quote: '“I’m feeling like myself 10 years back”', body: 'Getting energy and confidence back, in his own words.', name: 'Vinay Gosain', accent: RED, video: MEDIA_CDN + '69ae55136be28a7cc608577d.mp4' },
+        { quote: '“Best decision I made”', body: 'A reminder of what can happen when you finally commit.', name: 'Best decision I made', accent: RED, video: MEDIA_CDN + '668c694eba223d7dc0f8e834.mp4' }
+      ].map((s) => ({
+      ...s,
+      hasVideo: !!s.video,
+      hasName: !!s.name,
+      open: (e) => { if (e) e.preventDefault(); if (s.video) this.setState({ video: s.video }); }
+    }));
+  }
+
+  storyLoop() {
+    const base = this.storyData();
+    return [...base, ...base];
+  }
+
+  reviewRow(which) {
+    if (!this._rows) {
+      const CAP = 150;
+      // Longest reviews first would unbalance the rows, so deal them round-robin by length.
+      const pool = [...REVIEWS].filter((r) => r.text.length > 60);
+      const rows = [[], [], []];
+      pool.forEach((r, i) => rows[i % 3].push(r));
+      this._rows = rows.map((row) => {
+        const shaped = row.slice(0, 10).map((r) => {
+          const flat = r.text.replace(/\s*\n+\s*/g, ' ').trim();
+          const cut = flat.length > CAP ? flat.slice(0, CAP).replace(/\s+\S*$/, '') + '…' : flat;
+          return { ...r, quote: '\u201C' + cut + '\u201D' };
+        });
+        return [...shaped, ...shaped];
+      });
+    }
+    return this._rows[which];
+  }
+
+  homeReviews() {
+    const pick = ['Anna Wilson', 'Kelly Dohnt', 'Adam Black', 'Emily Miskell', 'Nicole', 'Elizabeth Kennington'];
+    const CAP = 190;
+    return pick.map((name) => {
+      const r = REVIEWS.find((x) => x.name === name);
+      const flat = r.text.replace(/\s*\n+\s*/g, ' ').trim();
+      const cut = flat.length > CAP ? flat.slice(0, CAP).replace(/\s+\S*$/, '') + '…' : flat;
+      return { ...r, quote: '\u201C' + cut + '\u201D' };
+    });
+  }
+
+  reviewList() {
+    return REVIEWS;
+  }
+
+  reviewsPage() {
+    const q = this.state.reviewQuery.trim().toLowerCase();
+    const sort = this.state.reviewSort;
+    const open = this.state.expanded || {};
+    let list = REVIEWS;
+    if (q) list = list.filter((r) => (r.text + ' ' + r.name).toLowerCase().includes(q));
+    if (sort === 'newest') list = [...list].sort((a, b) => a.months - b.months);
+    if (sort === 'longest') list = [...list].sort((a, b) => b.text.length - a.text.length);
+    if (sort === 'shortest') list = [...list].sort((a, b) => a.text.length - b.text.length);
+
+    const shaped = list.map((r, i) => {
+      const key = r.name + '|' + r.months + '|' + r.text.length;
+      const isOpen = !!open[key];
+      const long = r.text.length > 340;
+      const shown = (long && !isOpen) ? r.text.slice(0, 340).replace(/\s+\S*$/, '') + '…' : r.text;
+      const credit = (r.localGuide ? 'Local Guide · ' : '') + r.reviewCount + (r.reviewCount === 1 ? ' review' : ' reviews') + (r.photoCount ? ' · ' + r.photoCount + ' photos' : '');
+      return {
+        ...r, shown, credit,
+        canExpand: long,
+        moreLabel: isOpen ? 'Less' : 'More',
+        toggle: (e) => {
+          if (e) e.preventDefault();
+          this.setState((st) => ({ expanded: { ...(st.expanded || {}), [key]: !(st.expanded || {})[key] } }));
+        }
+      };
+    });
+
+    const total = shaped.length;
+    const cap = this.state.reviewsShown;
+    const capped = q ? shaped : shaped.slice(0, cap);
+    const n = capped.length;
+    const chip = (key, label) => {
+      const on = sort === key;
+      return {
+        label, key,
+        bg: on ? 'hsl(356 72% 51%)' : '#fff',
+        fg: on ? '#fff' : 'hsl(220 9% 46%)',
+        border: on ? 'hsl(356 72% 51%)' : 'hsl(220 13% 88%)',
+        go: (e) => { if (e) e.preventDefault(); this.setState({ reviewSort: key, reviewsShown: 20 }); }
+      };
+    };
+    return {
+      visibleReviews: capped,
+      hasMore: !q && total > cap,
+      moreCount: 'Show ' + Math.max(0, total - cap) + ' more five-star reviews',
+      showMore: (e) => { if (e) e.preventDefault(); this.setState({ reviewsShown: 999 }); },
+      noResults: n === 0,
+      resultCount: q ? (n === 1 ? '1 matching review' : n + ' matching reviews') : 'Showing ' + n + ' of ' + total + ' reviews',
+      searchValue: this.state.reviewQuery,
+      onSearch: (e) => this.setState({ reviewQuery: e.target.value }),
+      clearSearch: (e) => { if (e) e.preventDefault(); this.setState({ reviewQuery: '' }); },
+      sortChips: [chip('newest', 'Newest'), chip('longest', 'Longest'), chip('shortest', 'Shortest')],
+      reviewStats: [
+        { value: '5.0', label: 'Average Google rating' },
+        { value: '256', label: 'Five-star reviews' },
+        { value: '4 yrs', label: 'Coaching Morayfield locals' },
+        { value: '100%', label: 'Sessions led by a coach' }
+      ],
+      reviewAssurances: [
+        'No lock-in contracts',
+        'No gym experience needed',
+        'Coach-led every single session',
+        'We reply within 1 business day'
+      ]
+    };
+  }
+
+  shiftVideo(delta) {
+    return (e) => {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      const n = STORY_VIDEOS.length;
+      this.setState((st) => {
+        const at = STORY_VIDEOS.indexOf(st.video);
+        if (at < 0) return null;
+        return { video: STORY_VIDEOS[((at + delta) % n + n) % n] };
+      });
+    };
+  }
+
+  renderVals() {
+    const p = this.state.page;
+    return {
+      isHome: p === 'home', isAbout: p === 'about', isSchedule: p === 'schedule',
+      isContact: p === 'contact', isStart: p === 'start',
+      isChallenge: p === 'challenge', isFirst: p === 'first',
+      isReviews: p === 'reviews', goReviews: this.nav('reviews'),
+      ...this.intake(),
+      readAllLabel: 'Read all ' + REVIEWS.length + ' reviews \u2192',
+      ...this.reviewsPage(),
+      goHome: this.nav('home'), goStart: this.nav('start'), goContact: this.nav('contact'),
+      goTraining: this.nav('about'), goChallenge: this.nav('challenge'), goFirst: this.nav('first'),
+      goSchedule: this.nav('schedule'),
+      hStart: hrefFor('start'), hContact: hrefFor('contact'), hFirst: hrefFor('first'),
+      hHome: hrefFor('home'), hChallenge: hrefFor('challenge'),
+      hReviews: hrefFor('reviews'), hSchedule: hrefFor('schedule'),
+      googleProfile: GOOGLE_PROFILE,
+      lightboxOpen: this.state.lightbox !== null,
+      lightboxSrc: this.state.lightbox === null ? '' : TRANSFORMS[this.state.lightbox],
+      // Carried as a CSS value, not an img src: an unresolved hole during streaming
+      // yields an invalid url() that the browser ignores, rather than fetching
+      // "{{ lightboxSrc }}" as a URL and throwing a resource error on every load.
+      lightboxCss: this.state.lightbox === null ? 'none' : 'url("' + TRANSFORMS[this.state.lightbox] + '")',
+      videoSrcSafe: this.state.video || '',
+      lightboxLabel: this.state.lightbox === null ? '' : 'Real member result ' + (this.state.lightbox + 1) + ' of ' + TRANSFORMS.length,
+      closeLightbox: (e) => { if (e) e.preventDefault(); this.setState({ lightbox: null }); },
+      nextImg: this.shiftLightbox(1),
+      prevImg: this.shiftLightbox(-1),
+      videoOpen: !!this.state.video,
+      videoSrc: this.state.video || '',
+      closeVideo: (e) => { if (e) e.preventDefault(); this.setState({ video: null }); },
+      stopBubble: (e) => { if (e) e.stopPropagation(); },
+      videoLabel: this.state.video ? 'Story ' + (STORY_VIDEOS.indexOf(this.state.video) + 1) + ' of ' + STORY_VIDEOS.length : '',
+      prevVideo: this.shiftVideo(-1),
+      nextVideo: this.shiftVideo(1),
+      yes: true, videoRef: this.videoRef, headerRef: this.headerRef,
+      showComparison: this.props.showComparison ?? true,
+      showStories: this.props.showStories ?? true,
+      mobileCta: (this.props.mobileCta ?? true) && this.state.narrow,
+      showNavLinks: !this.state.compactNav,
+      showNavPhone: !this.state.narrow,
+      showMenuButton: this.state.compactNav,
+      showNavPhoneIcon: this.state.narrow,
+      menuOpen: this.state.menu,
+      menuLabel: this.state.menu ? '✕' : '☰',
+      toggleMenu: (e) => { if (e) e.preventDefault(); this.setState((s) => ({ menu: !s.menu })); },
+      closeMenu: (e) => { if (e) e.preventDefault(); this.setState({ menu: false }); },
+      rootPad: ((this.props.mobileCta ?? true) && this.state.narrow) ? '84px' : '0px',
+      inlineForm: this.props.inlineForm ?? true,
+      reassure: 'Takes 30 seconds · No card details · No lock-in',
+
+      navItems: [
+        { label: 'Home', href: hrefFor('home'), go: this.nav('home') },
+        { label: 'About', href: hrefFor('about'), go: this.nav('about') },
+        { label: 'Schedule', href: hrefFor('schedule'), go: this.nav('schedule') },
+        { label: 'Reviews', href: hrefFor('reviews'), go: this.nav('reviews') },
+        { label: 'Contact', href: hrefFor('contact'), go: this.nav('contact') }
+      ],
+
+      footerLinks: [
+        { label: 'Home', href: hrefFor('home'), go: this.nav('home') },
+        { label: 'About', href: hrefFor('about'), go: this.nav('about') },
+        { label: '6 week challenge', href: hrefFor('challenge'), go: this.nav('challenge') },
+        { label: 'Your first visit', href: hrefFor('first'), go: this.nav('first') },
+        { label: 'Schedule', href: hrefFor('schedule'), go: this.nav('schedule') },
+        { label: 'Reviews', href: hrefFor('reviews'), go: this.nav('reviews') },
+        { label: 'Contact', href: hrefFor('contact'), go: this.nav('contact') }
+      ],
+
+      heroChecks: [
+        'No intimidating gym culture',
+        'No guesswork on what to do',
+        'No getting left on your own',
+        'Support, structure and real coaching'
+      ],
+
+      heroStats: [
+        { value: '256', label: '5-star reviews' },
+        { value: '30+', label: 'Who we train' },
+        { value: '3 day', label: 'Free trial pass' }
+      ],
+
+      counters: [
+        { value: this.state.reviewCount + '+', label: '5-star Google reviews', accent: RED },
+        { value: '100%', label: 'Sessions led by a coach', accent: RED },
+        { value: '4 yrs', label: 'Coaching Morayfield locals', accent: RED },
+        { value: 'Zero', label: 'Lock-in contracts', accent: RED }
+      ],
+
+      systemPoints: [
+        { num: '01', title: 'Real coaching', body: "So you're never guessing what to do when you walk in." },
+        { num: '02', title: 'Clear structure', body: 'So fitness fits your life instead of falling apart when life gets busy.' },
+        { num: '03', title: 'Accountability', body: 'Motivation comes and goes. Systems keep you moving.' },
+        { num: '04', title: 'The right room', body: 'A place where you feel supported, not judged or left behind.' }
+      ],
+
+      pillars: [
+        { label: 'Coach-led', body: 'Every single session is guided.' },
+        { label: 'Beginner friendly', body: 'No gym confidence needed.' },
+        { label: 'Built for real life', body: 'Designed for consistency, not heroics.' }
+      ],
+
+      compareRows: [
+        { label: 'Coach-led sessions', cells: [cell(YES, true), cell(NO), cell(YES), cell(some('Sometimes'))] },
+        { label: 'Clear plan & structure', cells: [cell(YES, true), cell(NO), cell(YES), cell(some('Partial'))] },
+        { label: 'Built for beginners & 30+', cells: [cell(YES, true), cell(NO), cell(some('Depends')), cell(some('Rarely'))] },
+        { label: 'Accountability', cells: [cell(YES, true), cell(NO), cell(some('Some')), cell(NO)] },
+        { label: 'Supportive environment', cells: [cell(YES, true), cell(some('Rarely')), cell(some('Partial')), cell(some('Some'))] },
+        { label: 'Affordable long term', cells: [cell(YES, true), cell(YES), cell(NO), cell(YES)] },
+        { label: 'Consistency over years', cells: [cell(YES, true), cell(NO), cell(some('If it lasts')), cell(some('Rarely'))] }
+      ],
+
+      homeFaqs: [
+        { q: 'I haven\u2019t trained in years \u2014 am I too unfit to start?', a: 'That describes most people who walk in. Every movement is scaled to what you can do today, and a coach is beside you the whole session. Several of our members had never set foot in a gym before joining.' },
+        { q: 'Am I too old for this?', a: 'The studio is built for men and women 30 and over, and plenty of members are in their 50s and 60s. Sessions are scaled per person, so a first-timer and a five-year member train in the same room.' },
+        { q: 'Is there a lock-in contract?', a: 'No. Memberships are week to week, and you start with three free coach-led sessions before deciding anything.' },
+        { q: 'What if I have an injury?', a: 'Tell your coach before the session and they will modify around it. Working around backs, knees and shoulders is routine here, not an exception.' },
+        { q: 'What do I need to bring?', a: 'Training clothes, runners, a water bottle and a towel. That is genuinely it \u2014 no special gear and no gym experience.' },
+        { q: 'How long is a session?', a: 'About 45 minutes, coach-led from warm-up to cool-down, so it fits either side of work.' }
+      ],
+
+      steps: [
+        { num: '01', title: 'Reach out', body: 'Send a message or claim your pass. We talk through where you are, what you want, and answer your questions before you walk in.', img: 'assets/img/coaches-team.jpg', alt: 'The Knight Fitness Morayfield coaching team' },
+        { num: '02', title: 'Your first session', body: "A coach guides you through everything, step by step. You're never thrown into a random class or left wondering what to do.", img: 'assets/img/session-group.jpg', alt: 'A coach-led team training session in progress' },
+        { num: '03', title: 'Build momentum', body: 'Coaching, structure and community make it easier to keep showing up. Most members say the hardest part was walking in the first time.', img: 'assets/img/community.jpg', alt: 'Knight Fitness members together after a session' }
+      ],
+
+      wbResults: [
+        { src: 'assets/img/wb-grant.jpg', name: 'Grant Piper', result: '−7 kg', period: 'in 6 weeks', alt: 'Grant Piper holding a sign reading I lost 7 kgs in 6 weeks' },
+        { src: 'assets/img/wb-renee.jpg', name: 'Renee Price', result: '−6 kg', period: 'in 6 weeks', alt: 'Renee Price holding a sign reading I lost 6 kgs in 6 weeks' },
+        { src: 'assets/img/wb-jan.jpg', name: 'Jan Thaggard', result: '−6 kg', period: 'in 6 weeks', alt: 'Jan Thaggard holding a sign reading I lost 6 kgs in 6 weeks' },
+        { src: 'assets/img/wb-leah.jpg', name: 'Leah Henshaw', result: '−6 kg', period: 'in 6 weeks', alt: 'Leah Henshaw holding a sign reading I lost 6 kgs in 6 weeks' },
+        { src: 'assets/img/member-sandra.jpg', name: 'Sandra Miller', result: '−12 kg', period: 'in 6 weeks', alt: 'Sandra Miller holding a sign reading I lost 12 kgs in 6 weeks' },
+        { src: 'assets/img/member-mick.jpg', name: 'Mick Taylor', result: '−8 kg', period: 'in 6 weeks', alt: 'Mick Taylor holding a sign reading I lost 8 kgs in 6 weeks' },
+        { src: 'assets/img/member-daniel.jpg', name: 'Daniel Smith', result: '−10 kg', period: 'in 6 weeks', alt: 'Daniel Smith holding a sign reading I lost 10 kgs in 6 weeks' },
+        { src: 'assets/img/member-ben.jpg', name: 'Ben Cooper', result: '−10 kg', period: 'in 6 weeks', alt: 'Ben Cooper holding a sign reading I lost 10 kgs in 6 weeks' },
+        { src: 'assets/img/member-sarah.jpg', name: 'Sarah Thompson', result: '−9 kg', period: 'in 6 weeks', alt: 'Sarah Thompson holding a sign reading I lost 9 kgs in 6 weeks' },
+        { src: 'assets/img/member-kylie.jpg', name: 'Kylie Thompson', result: '−8 kg', period: 'in 6 weeks', alt: 'Kylie Thompson holding a sign reading I lost 8 kgs in 6 weeks' }
+      ].map((w) => ({ ...w, hasPhoto: true, noPhoto: false, quote: '', hasQuote: false, isSlot: false, notSlot: true })),
+
+      transformations: TRANSFORMS.map((src, i) => ({
+        src,
+        open: (e) => { if (e) e.preventDefault(); this.setState({ lightbox: i }); }
+      })),
+
+      firstVisitSteps: [
+        { num: '01', title: 'Before you arrive', body: 'Claim your pass or call the studio. We confirm a session time that suits you and answer anything you want to ask first — so nothing is a surprise.' },
+        { num: '02', title: 'What to bring', body: 'Comfortable training clothes, runners, a water bottle and a towel. That is genuinely it. No special gear, no gym experience.' },
+        { num: '03', title: 'Getting here', body: 'We are at 125 Morayfield Rd with on-site parking right at the door. Come 10 minutes early and a coach will meet you at the front.' },
+        { num: '04', title: 'Your first session', body: 'Forty-five minutes, coach-led start to finish. The coach walks you through every movement and scales anything that needs scaling.' },
+        { num: '05', title: 'Afterwards', body: 'A quick chat about how it felt, what you want to work toward, and which times suit your week. No pressure to sign anything.' }
+      ],
+
+      trainingFacts: [
+        { label: 'Session length', value: '45 minutes' },
+        { label: 'Format', value: 'Coach-led small group' },
+        { label: 'Scaling', value: 'Every movement, every session' },
+        { label: 'Progress', value: 'Measured and re-tested' }
+      ],
+
+      challengeIncludes: [
+        { title: 'Start and finish measurements', body: 'We measure where you begin so the change at the end is a number, not a guess.' },
+        { title: 'Nutrition guidance', body: 'Simple, liveable guidance that fits around work, family and the food you actually eat.' },
+        { title: 'Weekly accountability', body: 'A coach checking in on you every week — the part most people are missing.' },
+        { title: 'Unlimited coached sessions', body: 'Train as often as the timetable allows for the whole six weeks.' }
+      ],
+
+      stories: this.storyData(),
+      storyLoop: this.storyLoop(),
+      reviewRowA: this.reviewRow(0),
+      reviewRowB: this.reviewRow(1),
+      reviewRowC: this.reviewRow(2),
+
+      visitFacts: (this.visitFactRows || (this.visitFactRows = [
+        { label: 'Address', value: '125 Morayfield Rd, Caboolture South QLD 4506', href: '' },
+        { label: 'Phone', value: '0435 737 238', href: 'tel:0435737238' },
+        { label: 'Email', value: 'info@knightfitness.com.au', href: 'mailto:info@knightfitness.com.au' },
+        { label: 'Parking', value: 'Plenty of on-site parking, right at the door', href: '' }
+      ])).map((f) => ({ ...f, isLink: !!f.href, isPlain: !f.href })),
+
+      aboutImages: [
+        { src: 'assets/img/challenge-group.jpg', alt: 'A Knight Fitness challenge group after a session' },
+        { src: 'assets/img/community.jpg', alt: 'Knight Fitness members together after a session' },
+        { src: 'assets/img/bikes.jpg', alt: 'The conditioning bikes at Knight Fitness Morayfield' }
+      ],
+
+      values: [
+        { title: 'Coaching, not supervision', body: 'A coach sets the plan, watches your form and scales the session to you — every time you train.', accent: RED },
+        { title: 'Nobody gets left behind', body: 'Sessions are scaled for the person, so a first-timer and a five-year member train in the same room.', accent: RED },
+        { title: 'Consistency beats intensity', body: 'We build routines that survive busy weeks, sore knees and school holidays.', accent: RED },
+        { title: 'You should feel welcome', body: 'No ego, no mirrors-and-grunting culture. Just locals who show up for each other.', accent: RED }
+      ],
+
+      coaches: [
+        { initials: 'K', photo: 'assets/img/coach-keri.jpg', name: 'Coach Keri', role: 'Head coach — programming, technique and member support' }
+      ],
+
+      scheduleFacts: [
+        { label: 'Session length', value: '45 minutes' },
+        { label: 'Training style', value: 'Coach-led small group' },
+        { label: 'Designed for', value: 'Getting back into training' }
+      ],
+
+      scheduleDays: [
+        { name: 'Monday', count: '6 sessions', slots: [pop('5:00am'), pop('6:00am'), pop('9:30am'), pop('4:30pm'), pop('5:20pm'), pop('6:10pm')]},
+        { name: 'Tuesday', count: '4 sessions', slots: [pop('5:00am'), pop('6:00am'), pop('5:20pm'), pop('6:10pm')]},
+        { name: 'Wednesday', count: '6 sessions', slots: [pop('5:00am'), pop('6:00am'), pop('9:30am'), pop('4:30pm'), pop('5:20pm'), pop('6:10pm')]},
+        { name: 'Thursday', count: '4 sessions', slots: [pop('5:00am'), pop('6:00am'), pop('5:20pm'), pop('6:10pm')]},
+        { name: 'Friday', count: '4 sessions', slots: [pop('5:00am'), pop('6:00am'), pop('9:30am'), pop('4:30pm')]},
+        { name: 'Saturday', count: '2 sessions', slots: [pop('6:00am'), pop('7:00am')]}
+      ],
+
+      sessionTypes: [
+        { name: 'Strength & Conditioning', color: RED, body: 'Structured strength work paired with conditioning to help you build strength, improve fitness and move better over time.' },
+        { name: 'Fusion', color: RED, body: 'A balanced blend of resistance training, cardio and full-body work designed to keep sessions varied, effective and enjoyable.' },
+        { name: "Coach's Choice", color: RED, body: 'Sessions programmed by the coach to focus on what the group needs most, while still fitting the bigger training plan.' },
+        { name: 'Tough Enough', color: RED, body: 'A tougher session for people who want an extra challenge. Still fully coached and still scalable to your level.' }
+      ],
+
+      challengeAsk: [
+        'Start date for the next block',
+        'What the block costs',
+        'What the measurements involve',
+        'An honest answer on whether it suits you'
+      ],
+
+      startPoints: [
+        'Three coach-led sessions, completely free',
+        'A chat about your goals before you train',
+        'Everything scaled to your body and history',
+        'No lock-in contract and no pressure to join'
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

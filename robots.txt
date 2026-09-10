@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://knightfitness-morayfield.com.au/sitemap.xml
