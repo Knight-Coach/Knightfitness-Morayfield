@@ -4,21 +4,23 @@ import assert from 'node:assert/strict';
 import { access, readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
-import { ROOT, SITE, read, routesFromIndex } from './helpers.mjs';
+import { ROOT, SITE, read, routesFromIndex, ENTRY_POINTS } from './helpers.mjs';
 
 const exists = (rel) => access(resolve(ROOT, rel)).then(() => true, () => false);
 
-test('every asset referenced by index.html exists on disk', async () => {
-  const html = await read('index.html');
-  const refs = new Set(html.match(/assets\/[A-Za-z0-9_./@-]+/g));
-  assert.ok(refs.size >= 28, `expected at least 28 asset references, found ${refs.size}`);
-  const missing = [];
-  for (const ref of refs) if (!(await exists(ref))) missing.push(ref);
-  assert.deepEqual(missing, []);
+test('every asset referenced by an HTML entry point exists on disk', async () => {
+  for (const entry of ENTRY_POINTS) {
+    const html = await read(entry);
+    const refs = new Set(html.match(/assets\/[A-Za-z0-9_./@-]+/g));
+    assert.ok(refs.size > 0, `${entry} references no assets`);
+    const missing = [];
+    for (const ref of refs) if (!(await exists(ref))) missing.push(ref);
+    assert.deepEqual(missing, [], `missing assets referenced by ${entry}`);
+  }
 });
 
-test('every file under assets/ is referenced by index.html', async () => {
-  const html = await read('index.html');
+test('every file under assets/ is referenced by an HTML entry point', async () => {
+  const html = (await Promise.all(ENTRY_POINTS.map(read))).join('\n');
   const walk = async (dir) => {
     const out = [];
     for (const e of await readdir(join(ROOT, dir), { withFileTypes: true })) {
@@ -47,11 +49,16 @@ test('robots.txt allows crawling and points at the sitemap', async () => {
   assert.match(txt, new RegExp(`^Sitemap: ${SITE.replace(/\./g, '\\.')}/sitemap\\.xml$`, 'm'));
 });
 
-test('vercel.json rewrites every path to index.html and redirects only to real routes', async () => {
+test('vercel.json routes the standalone pages before the catch-all, and redirects only to real routes', async () => {
   const cfg = JSON.parse(await read('vercel.json'));
   const routes = await routesFromIndex();
   const slugs = new Set(routes.map((r) => (r.slug ? `/${r.slug}` : '/')));
-  assert.deepEqual(cfg.rewrites, [{ source: '/(.*)', destination: '/index.html' }]);
+  // Order matters: Vercel takes the first matching rewrite, so the catch-all
+  // that feeds the single-page app has to come last or it swallows /thank-you.
+  assert.deepEqual(cfg.rewrites, [
+    { source: '/thank-you', destination: '/thank-you.html' },
+    { source: '/(.*)', destination: '/index.html' }
+  ]);
   assert.equal(cfg.framework, null, 'framework must be the Other preset');
   assert.equal(cfg.installCommand, '', 'installs must be skipped so the dev package.json never runs on Vercel');
   for (const r of cfg.redirects) {
@@ -100,4 +107,52 @@ test('vendored React matches the SRI hashes support.js expects from unpkg', asyn
 test('index.html does not import JSX modules that would pull Babel from unpkg at runtime', async () => {
   const html = await read('index.html');
   assert.doesNotMatch(html, /<x-import/);
+});
+
+// ---------------------------------------------------------------------------
+// The thank-you page. Served as its own file rather than as a route of the
+// single-page app, so it needs its own checks.
+// ---------------------------------------------------------------------------
+
+test('thank-you.html is excluded from search, and stays out of the sitemap', async () => {
+  const html = await read('thank-you.html');
+  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+  const xml = await read('sitemap.xml');
+  assert.ok(!xml.includes('thank-you'), 'a noindex confirmation page must not be in the sitemap');
+});
+
+test('thank-you.html reuses the shared runtime instead of bundling its own', async () => {
+  const html = await read('thank-you.html');
+  const head = html.slice(0, html.indexOf('</head>'));
+  const order = [
+    'src="./assets/vendor/react-18.3.1.production.min.js"',
+    'src="./assets/vendor/react-dom-18.3.1.production.min.js"',
+    'src="./support.js"'
+  ].map((s) => head.indexOf(s));
+  assert.ok(order.every((i) => i !== -1), 'React, ReactDOM and support.js must all be loaded');
+  assert.ok(order[0] < order[1] && order[1] < order[2], 'React, then ReactDOM, then support.js');
+});
+
+test('thank-you.html carries no leftover bundler payload', async () => {
+  const html = await read('thank-you.html');
+  // The page came from a self-extracting export that inlined React, the fonts
+  // and every photo. All of those already exist in this repo, so none of it
+  // should have survived the import.
+  assert.doesNotMatch(html, /base64,/, 'an inlined data URI survived');
+  assert.doesNotMatch(html, /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, 'a bundler resource id survived');
+  assert.doesNotMatch(html, /__bundler/, 'bundler scaffolding survived');
+  assert.doesNotMatch(html, /\/\/unpkg\.com\//, 'a CDN script URL survived');
+  assert.ok(html.length < 40000, `page should stay small, is ${html.length} bytes`);
+});
+
+test('every internal link on thank-you.html points at a route that exists', async () => {
+  const html = await read('thank-you.html');
+  const routes = await routesFromIndex();
+  const known = new Set(routes.map((r) => (r.slug ? `/${r.slug}` : '/')));
+  const prefix = SITE.replace(/[.]/g, '\\.');
+  const internal = [...html.matchAll(new RegExp(`href="${prefix}([^"]*)"`, 'g'))]
+    .map((m) => m[1] || '/');
+  assert.ok(internal.length >= 3, `expected internal links, found ${internal.length}`);
+  const broken = internal.filter((p) => !known.has(p));
+  assert.deepEqual(broken, [], 'thank-you page links to routes the site does not have');
 });

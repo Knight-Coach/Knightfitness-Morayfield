@@ -32,7 +32,7 @@ after(async () => {
   server?.close();
 });
 
-async function open(url, { width = 1280, height = 900 } = {}) {
+async function open(url, { width = 1280, height = 900, waitFor = ['#dc-root header nav', '#dc-root h1'] } = {}) {
   const page = await browser.newPage({ viewport: { width, height } });
   await blockExternal(page);
   const errors = [];
@@ -48,9 +48,8 @@ async function open(url, { width = 1280, height = 900 } = {}) {
   page.on('requestfailed', (r) => failed.push(r.url()));
   page.on('response', (r) => { if (r.status() >= 400) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(url, { waitUntil: 'domcontentloaded' });
-  // support.js boots React after DOMContentLoaded; wait for the app shell.
-  await page.waitForSelector('#dc-root header nav', { timeout: 15000 });
-  await page.waitForSelector('#dc-root h1', { timeout: 15000 });
+  // support.js boots React after DOMContentLoaded; wait for the rendered page.
+  for (const sel of waitFor) await page.waitForSelector(sel, { timeout: 15000 });
   return { page, errors, failed };
 }
 
@@ -160,4 +159,82 @@ test('opened as a bare file it falls back to hash routing (design preview and do
   assert.match(href, /^#\//, 'nav links must be hash links in file mode');
   assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
   await page.close();
+});
+
+// ---------------------------------------------------------------------------
+// The thank-you page. Where the 3-day pass form sends people after submitting,
+// so it has to render on its own, without the single-page app around it.
+// ---------------------------------------------------------------------------
+
+const TY = { waitFor: ['#dc-root h1'] };
+
+test('/thank-you renders the confirmation page and keeps itself out of search', async () => {
+  const { page, errors, failed } = await open(base + '/thank-you', TY);
+  assert.equal(await page.title(), "You're booked in — Knight Fitness Morayfield");
+  assert.equal(await page.getAttribute('meta[name="robots"]', 'content'), 'noindex, nofollow');
+  const h1 = (await page.locator('#dc-root h1').first().innerText()).trim();
+  assert.equal(h1, 'Your 3 free sessions are reserved');
+  const holes = await page.evaluate(() => {
+    const root = document.querySelector('#dc-root');
+    return {
+      unresolved: root.querySelectorAll('.sc-missing, .sc-unresolved, .sc-placeholder-error, .sc-logic-error').length,
+      braces: (root.innerText.match(/\{\{/g) || []).length
+    };
+  });
+  assert.deepEqual(holes, { unresolved: 0, braces: 0 });
+  assert.deepEqual(firstParty(failed), []);
+  assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
+  if (shots) await page.screenshot({ path: join(shots, 'thank-you-desktop.png'), fullPage: true });
+  await page.close();
+});
+
+test('/thank-you loads every member photo it shows', async () => {
+  const { page } = await open(base + '/thank-you', TY);
+  const broken = await page.evaluate(() =>
+    Array.from(document.images)
+      .filter((i) => !i.complete || i.naturalWidth === 0)
+      .map((i) => i.getAttribute('src'))
+  );
+  assert.deepEqual(broken, [], 'images failed to load');
+  const count = await page.evaluate(() => document.images.length);
+  assert.ok(count >= 5, `expected the logo and four member photos, found ${count}`);
+  await page.close();
+});
+
+test('/thank-you is served as its own file, not swallowed by the app router', async () => {
+  const res = await fetch(base + '/thank-you');
+  const html = await res.text();
+  assert.equal(res.status, 200);
+  assert.ok(html.includes('noindex, nofollow'), 'served the app shell instead of the thank-you page');
+  assert.ok(html.length < 40000, `expected the small standalone page, got ${html.length} bytes`);
+});
+
+test('/thank-you does not scroll sideways on a phone', async () => {
+  const { page, errors } = await open(base + '/thank-you', { ...TY, width: 390, height: 844 });
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  assert.ok(overflow <= 0, `page scrolls sideways by ${overflow}px at 390px wide`);
+  assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
+  if (shots) await page.screenshot({ path: join(shots, 'thank-you-mobile.png'), fullPage: true });
+  await page.close();
+});
+
+test('/thank-you header does not collide at any phone width', async () => {
+  // The header is logo, wordmark and phone number on one flex row. Without
+  // flex-shrink on the logo the row squeezes it and the wordmark slides under
+  // the phone number, which is unreadable and was the state this page arrived in.
+  for (const width of [320, 360, 390, 430]) {
+    const { page } = await open(base + '/thank-you', { ...TY, width, height: 800 });
+    const collision = await page.evaluate(() => {
+      const boxes = [...document.querySelectorAll('#dc-root header *')]
+        .filter((e) => e.children.length === 0 && e.getBoundingClientRect().width > 0)
+        .map((e) => { const r = e.getBoundingClientRect();
+          return { text: (e.textContent || 'image').trim().slice(0, 20) || 'image', x: r.x, right: r.right }; });
+      for (let i = 0; i < boxes.length - 1; i++) {
+        if (boxes[i].right > boxes[i + 1].x + 1) return `"${boxes[i].text}" overlaps "${boxes[i + 1].text}"`;
+      }
+      return null;
+    });
+    assert.equal(collision, null, `header collides at ${width}px`);
+    await page.close();
+  }
 });

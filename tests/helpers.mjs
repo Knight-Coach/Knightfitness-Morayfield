@@ -7,6 +7,9 @@ export const SITE = 'https://knightfitness-morayfield.com.au';
 
 export const read = (rel) => readFile(resolve(ROOT, rel), 'utf8');
 
+/** The HTML files served directly, as opposed to rendered by the router. */
+export const ENTRY_POINTS = ['index.html', 'thank-you.html'];
+
 /** The route table lives in index.html. Parse it instead of duplicating it here. */
 export async function routesFromIndex() {
   const html = await read('index.html');

@@ -10,6 +10,7 @@ repository root as-is.
 | Path | What it is |
 |---|---|
 | `index.html` | The whole site. Exported from the design project (see [DEPLOY.md](DEPLOY.md#editing)) |
+| `thank-you.html` | The confirmation page the 3-day pass form redirects to. Served at `/thank-you` |
 | `support.js` | The runtime `index.html` depends on. Generated; do not edit or rename |
 | `assets/` | Images, favicons, the social-share card, and the vendored React build |
 | `vercel.json` | Rewrites, 301s from the old site, cache headers, and the "no install, no build" settings |
@@ -47,6 +48,7 @@ npm test
 - the Search Console verification tag, canonical URL, absolute social image
   URLs and the schema.org markup are present
 - the vendored React files are byte-for-byte the builds `support.js` pins
+- `thank-you.html` is `noindex`, absent from the sitemap, free of leftover bundler payload, and links only to routes that exist
 
 `npm run test:browser` renders the site in headless Chromium against the
 local server and checks, for every route: title, description and canonical
@@ -54,7 +56,10 @@ tag; a non-empty, unique `h1`; no unresolved template holes; no first-party
 request failures or console errors. It also covers client-side navigation and
 back/forward, the LeadConnector form embeds, the unknown-path fallback, an
 old-site redirect, the mobile menu, horizontal overflow at 390px, and the
-file-mode hash router. Third-party hosts are never contacted during the run.
+file-mode hash router. It also covers `/thank-you`: that it renders standalone
+rather than being swallowed by the app router, loads its photos, stays out of
+search, and that its header does not collide at phone widths. Third-party hosts
+are never contacted during the run.
 
 Set `KEEP_SCREENSHOTS=1` to save a screenshot per route into `test-results/`.
 
@@ -75,6 +80,27 @@ UMD builds into `assets/vendor/` with the version in the file name and update
 the two `<script>` tags at the top of `index.html`. The version is in the
 file name so the one-year immutable cache on `/assets/` never serves a stale
 build.
+
+## The thank-you page
+
+`thank-you.html` is where the 3-day pass form sends people after they submit.
+Set that redirect on the form in LeadConnector, to
+`https://knightfitness-morayfield.com.au/thank-you`.
+
+It is a plain page rather than a route of the single-page app, so it renders
+immediately and does not depend on the router. `vercel.json` maps `/thank-you`
+to the file with a rewrite that sits **before** the catch-all, which would
+otherwise hand the URL to the app and show the home page instead.
+
+It arrived as a self-extracting export that inlined its own copy of React, the
+runtime, the fonts and four member photos, at 969KB. All of that was already in
+this repo and byte-identical, so the import swapped each one for the shared
+file. The page is now around 16KB and shares the browser cache of the main
+site. A test fails if any of that payload reappears.
+
+It is deliberately `noindex, nofollow` and deliberately absent from
+`sitemap.xml`. A confirmation page in the search results is both useless to
+searchers and a corruption of your conversion numbers.
 
 ## Deploying
 

@@ -37,6 +37,7 @@ function sourceToRegExp(source) {
   return new RegExp('^' + escaped + '$');
 }
 const redirects = config.redirects.map((r) => ({ ...r, re: sourceToRegExp(r.source) }));
+const rewrites = config.rewrites.map((r) => ({ ...r, re: sourceToRegExp(r.source) }));
 const headerRules = config.headers.map((h) => ({ ...h, re: sourceToRegExp(h.source) }));
 
 function headersFor(pathname) {
@@ -77,9 +78,16 @@ export function createSiteServer() {
 
     let file = await fileAt(pathname);
     if (!file) {
-      // The rewrite rule: anything that is not a real file becomes index.html.
-      file = join(ROOT, 'index.html');
-      pathname = '/index.html';
+      // Rewrites apply only to paths that are not real files, and Vercel takes
+      // the first matching rule, so /thank-you resolves before the catch-all
+      // hands everything else to the single-page app.
+      const rule = rewrites.find((r) => r.re.test(pathname));
+      file = rule ? await fileAt(rule.destination) : null;
+      if (!file) {
+        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+        return res.end('404');
+      }
+      pathname = rule.destination;
     }
     const body = await readFile(file);
     res.writeHead(200, {
