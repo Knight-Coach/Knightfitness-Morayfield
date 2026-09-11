@@ -7,7 +7,7 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 import { listen } from '../scripts/serve.js';
-import { ROOT, routesFromIndex } from './helpers.mjs';
+import { ROOT, routesFromIndex, CONFIRMATION_PAGES } from './helpers.mjs';
 
 // Third-party hosts the page talks to: Google Fonts, the LeadConnector form embed
 // and media library, Google Maps. Their availability is not something this
@@ -162,79 +162,70 @@ test('opened as a bare file it falls back to hash routing (design preview and do
 });
 
 // ---------------------------------------------------------------------------
-// The thank-you page. Where the 3-day pass form sends people after submitting,
-// so it has to render on its own, without the single-page app around it.
+// The confirmation pages. Where the forms send people after they submit, so
+// each has to render on its own, without the single-page app around it.
 // ---------------------------------------------------------------------------
 
-const TY = { waitFor: ['#dc-root h1'] };
+const STANDALONE = { waitFor: ['#dc-root h1'] };
 
-test('/thank-you renders the confirmation page and keeps itself out of search', async () => {
-  const { page, errors, failed } = await open(base + '/thank-you', TY);
-  assert.equal(await page.title(), "You're booked in — Knight Fitness Morayfield");
-  assert.equal(await page.getAttribute('meta[name="robots"]', 'content'), 'noindex, nofollow');
-  const h1 = (await page.locator('#dc-root h1').first().innerText()).trim();
-  assert.equal(h1, 'Your 3 free sessions are reserved');
-  const holes = await page.evaluate(() => {
-    const root = document.querySelector('#dc-root');
-    return {
-      unresolved: root.querySelectorAll('.sc-missing, .sc-unresolved, .sc-placeholder-error, .sc-logic-error').length,
-      braces: (root.innerText.match(/\{\{/g) || []).length
-    };
-  });
-  assert.deepEqual(holes, { unresolved: 0, braces: 0 });
-  assert.deepEqual(firstParty(failed), []);
-  assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
-  if (shots) await page.screenshot({ path: join(shots, 'thank-you-desktop.png'), fullPage: true });
-  await page.close();
-});
-
-test('/thank-you loads every member photo it shows', async () => {
-  const { page } = await open(base + '/thank-you', TY);
-  const broken = await page.evaluate(() =>
-    Array.from(document.images)
-      .filter((i) => !i.complete || i.naturalWidth === 0)
-      .map((i) => i.getAttribute('src'))
-  );
-  assert.deepEqual(broken, [], 'images failed to load');
-  const count = await page.evaluate(() => document.images.length);
-  assert.ok(count >= 5, `expected the logo and four member photos, found ${count}`);
-  await page.close();
-});
-
-test('/thank-you is served as its own file, not swallowed by the app router', async () => {
-  const res = await fetch(base + '/thank-you');
-  const html = await res.text();
-  assert.equal(res.status, 200);
-  assert.ok(html.includes('noindex, nofollow'), 'served the app shell instead of the thank-you page');
-  assert.ok(html.length < 40000, `expected the small standalone page, got ${html.length} bytes`);
-});
-
-test('/thank-you does not scroll sideways on a phone', async () => {
-  const { page, errors } = await open(base + '/thank-you', { ...TY, width: 390, height: 844 });
-  const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
-  assert.ok(overflow <= 0, `page scrolls sideways by ${overflow}px at 390px wide`);
-  assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
-  if (shots) await page.screenshot({ path: join(shots, 'thank-you-mobile.png'), fullPage: true });
-  await page.close();
-});
-
-test('/thank-you header does not collide at any phone width', async () => {
-  // The header is logo, wordmark and phone number on one flex row. Without
-  // flex-shrink on the logo the row squeezes it and the wordmark slides under
-  // the phone number, which is unreadable and was the state this page arrived in.
-  for (const width of [320, 360, 390, 430]) {
-    const { page } = await open(base + '/thank-you', { ...TY, width, height: 800 });
-    const collision = await page.evaluate(() => {
-      const boxes = [...document.querySelectorAll('#dc-root header *')]
-        .filter((e) => e.children.length === 0 && e.getBoundingClientRect().width > 0)
-        .map((e) => { const r = e.getBoundingClientRect();
-          return { text: (e.textContent || 'image').trim().slice(0, 20) || 'image', x: r.x, right: r.right }; });
-      for (let i = 0; i < boxes.length - 1; i++) {
-        if (boxes[i].right > boxes[i + 1].x + 1) return `"${boxes[i].text}" overlaps "${boxes[i + 1].text}"`;
-      }
-      return null;
+for (const page of CONFIRMATION_PAGES) {
+  test(`${page.path} renders the ${page.form} confirmation and stays out of search`, async () => {
+    const { page: pg, errors, failed } = await open(base + page.path, STANDALONE);
+    assert.equal(await pg.title(), page.title);
+    assert.equal(await pg.getAttribute('meta[name="robots"]', 'content'), 'noindex, nofollow');
+    assert.equal((await pg.locator('#dc-root h1').first().innerText()).trim(), page.h1);
+    const holes = await pg.evaluate(() => {
+      const root = document.querySelector('#dc-root');
+      return {
+        unresolved: root.querySelectorAll('.sc-missing, .sc-unresolved, .sc-placeholder-error, .sc-logic-error').length,
+        braces: (root.innerText.match(/\{\{/g) || []).length
+      };
     });
-    assert.equal(collision, null, `header collides at ${width}px`);
-    await page.close();
-  }
-});
+    assert.deepEqual(holes, { unresolved: 0, braces: 0 });
+    assert.deepEqual(firstParty(failed), []);
+    assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
+    if (shots) await pg.screenshot({ path: join(shots, `${page.path.slice(1)}-desktop.png`), fullPage: true });
+    await pg.close();
+  });
+
+  test(`${page.path} loads every image it shows`, async () => {
+    const { page: pg } = await open(base + page.path, STANDALONE);
+    const state = await pg.evaluate(() => ({
+      broken: Array.from(document.images).filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.getAttribute('src')),
+      total: document.images.length
+    }));
+    assert.deepEqual(state.broken, [], 'images failed to load');
+    assert.ok(state.total >= 2, `expected the logo and at least one photo, found ${state.total}`);
+    await pg.close();
+  });
+
+  test(`${page.path} is served as its own file, not swallowed by the app router`, async () => {
+    const res = await fetch(base + page.path);
+    const html = await res.text();
+    assert.equal(res.status, 200);
+    assert.ok(html.includes('noindex, nofollow'), 'served the app shell instead of the confirmation page');
+    assert.ok(html.length < 40000, `expected the small standalone page, got ${html.length} bytes`);
+  });
+
+  test(`${page.path} header does not collide at any phone width`, async () => {
+    // Both pages arrived with a logo anchor missing flex-shrink, so the header
+    // row squeezed it and the wordmark slid under the phone number.
+    for (const width of [320, 360, 390, 430]) {
+      const { page: pg } = await open(base + page.path, { ...STANDALONE, width, height: 800 });
+      const problem = await pg.evaluate(() => {
+        const boxes = [...document.querySelectorAll('#dc-root header *')]
+          .filter((e) => e.children.length === 0 && e.getBoundingClientRect().width > 0)
+          .map((e) => { const r = e.getBoundingClientRect();
+            return { text: (e.textContent || 'image').trim().slice(0, 20) || 'image', x: r.x, right: r.right }; });
+        for (let i = 0; i < boxes.length - 1; i++) {
+          if (boxes[i].right > boxes[i + 1].x + 1) return `"${boxes[i].text}" overlaps "${boxes[i + 1].text}"`;
+        }
+        const scroll = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+        return scroll > 0 ? `page scrolls sideways by ${scroll}px` : null;
+      });
+      assert.equal(problem, null, `${page.path} at ${width}px: ${problem}`);
+      if (shots && width === 390) await pg.screenshot({ path: join(shots, `${page.path.slice(1)}-mobile.png`), fullPage: true });
+      await pg.close();
+    }
+  });
+}

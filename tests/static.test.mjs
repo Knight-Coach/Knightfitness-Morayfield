@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { access, readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
-import { ROOT, SITE, read, routesFromIndex, ENTRY_POINTS } from './helpers.mjs';
+import { ROOT, SITE, read, routesFromIndex, ENTRY_POINTS, CONFIRMATION_PAGES } from './helpers.mjs';
 
 const exists = (rel) => access(resolve(ROOT, rel)).then(() => true, () => false);
 
@@ -54,11 +54,18 @@ test('vercel.json routes the standalone pages before the catch-all, and redirect
   const routes = await routesFromIndex();
   const slugs = new Set(routes.map((r) => (r.slug ? `/${r.slug}` : '/')));
   // Order matters: Vercel takes the first matching rewrite, so the catch-all
-  // that feeds the single-page app has to come last or it swallows /thank-you.
+  // that feeds the single-page app has to come last or it swallows the
+  // confirmation pages and every form submission lands on the home page.
   assert.deepEqual(cfg.rewrites, [
-    { source: '/thank-you', destination: '/thank-you.html' },
+    ...CONFIRMATION_PAGES.map((p) => ({ source: p.path, destination: `/${p.file}` })),
     { source: '/(.*)', destination: '/index.html' }
   ]);
+  for (const page of CONFIRMATION_PAGES) {
+    assert.ok(
+      cfg.headers.some((h) => h.source === `/${page.file}`),
+      `${page.file} needs a revalidate cache header like index.html`
+    );
+  }
   assert.equal(cfg.framework, null, 'framework must be the Other preset');
   assert.equal(cfg.installCommand, '', 'installs must be skipped so the dev package.json never runs on Vercel');
   for (const r of cfg.redirects) {
@@ -110,49 +117,70 @@ test('index.html does not import JSX modules that would pull Babel from unpkg at
 });
 
 // ---------------------------------------------------------------------------
-// The thank-you page. Served as its own file rather than as a route of the
-// single-page app, so it needs its own checks.
+// The confirmation pages. Each is served as its own file rather than as a
+// route of the single-page app, so each needs its own checks.
 // ---------------------------------------------------------------------------
 
-test('thank-you.html is excluded from search, and stays out of the sitemap', async () => {
-  const html = await read('thank-you.html');
-  assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
-  const xml = await read('sitemap.xml');
-  assert.ok(!xml.includes('thank-you'), 'a noindex confirmation page must not be in the sitemap');
-});
+for (const page of CONFIRMATION_PAGES) {
+  test(`${page.file} is excluded from search, and stays out of the sitemap`, async () => {
+    const html = await read(page.file);
+    assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+    const xml = await read('sitemap.xml');
+    const slug = page.path.slice(1);
+    assert.ok(!xml.includes(slug), `a noindex confirmation page must not be in the sitemap`);
+  });
 
-test('thank-you.html reuses the shared runtime instead of bundling its own', async () => {
-  const html = await read('thank-you.html');
-  const head = html.slice(0, html.indexOf('</head>'));
-  const order = [
-    'src="./assets/vendor/react-18.3.1.production.min.js"',
-    'src="./assets/vendor/react-dom-18.3.1.production.min.js"',
-    'src="./support.js"'
-  ].map((s) => head.indexOf(s));
-  assert.ok(order.every((i) => i !== -1), 'React, ReactDOM and support.js must all be loaded');
-  assert.ok(order[0] < order[1] && order[1] < order[2], 'React, then ReactDOM, then support.js');
-});
+  test(`${page.file} reuses the shared runtime instead of bundling its own`, async () => {
+    const html = await read(page.file);
+    const head = html.slice(0, html.indexOf('</head>'));
+    const order = [
+      'src="./assets/vendor/react-18.3.1.production.min.js"',
+      'src="./assets/vendor/react-dom-18.3.1.production.min.js"',
+      'src="./support.js"'
+    ].map((s) => head.indexOf(s));
+    assert.ok(order.every((i) => i !== -1), 'React, ReactDOM and support.js must all be loaded');
+    assert.ok(order[0] < order[1] && order[1] < order[2], 'React, then ReactDOM, then support.js');
+  });
 
-test('thank-you.html carries no leftover bundler payload', async () => {
-  const html = await read('thank-you.html');
-  // The page came from a self-extracting export that inlined React, the fonts
-  // and every photo. All of those already exist in this repo, so none of it
-  // should have survived the import.
-  assert.doesNotMatch(html, /base64,/, 'an inlined data URI survived');
-  assert.doesNotMatch(html, /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, 'a bundler resource id survived');
-  assert.doesNotMatch(html, /__bundler/, 'bundler scaffolding survived');
-  assert.doesNotMatch(html, /\/\/unpkg\.com\//, 'a CDN script URL survived');
-  assert.ok(html.length < 40000, `page should stay small, is ${html.length} bytes`);
-});
+  test(`${page.file} carries no leftover bundler payload`, async () => {
+    const html = await read(page.file);
+    // These pages arrive as self-extracting exports that inline React, the
+    // runtime, the fonts and every photo. All of it is already in this repo, so
+    // none of it should survive the import.
+    assert.doesNotMatch(html, /base64,/, 'an inlined data URI survived');
+    assert.doesNotMatch(html, /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, 'a bundler resource id survived');
+    assert.doesNotMatch(html, /__bundler/, 'bundler scaffolding survived');
+    assert.doesNotMatch(html, /\/\/unpkg\.com\//, 'a CDN script URL survived');
+    assert.ok(html.length < 40000, `page should stay small, is ${html.length} bytes`);
+  });
 
-test('every internal link on thank-you.html points at a route that exists', async () => {
-  const html = await read('thank-you.html');
-  const routes = await routesFromIndex();
-  const known = new Set(routes.map((r) => (r.slug ? `/${r.slug}` : '/')));
-  const prefix = SITE.replace(/[.]/g, '\\.');
-  const internal = [...html.matchAll(new RegExp(`href="${prefix}([^"]*)"`, 'g'))]
-    .map((m) => m[1] || '/');
-  assert.ok(internal.length >= 3, `expected internal links, found ${internal.length}`);
-  const broken = internal.filter((p) => !known.has(p));
-  assert.deepEqual(broken, [], 'thank-you page links to routes the site does not have');
+  test(`every internal link on ${page.file} points at a route that exists`, async () => {
+    const html = await read(page.file);
+    const routes = await routesFromIndex();
+    const known = new Set(routes.map((r) => (r.slug ? `/${r.slug}` : '/')));
+    const prefix = SITE.replace(/[.]/g, '\\.');
+    const internal = [...html.matchAll(new RegExp(`href="${prefix}([^"]*)"`, 'g'))].map((m) => m[1] || '/');
+    assert.ok(internal.length >= 3, `expected internal links, found ${internal.length}`);
+    assert.deepEqual(internal.filter((p) => !known.has(p)), [], 'links to routes the site does not have');
+  });
+
+  test(`${page.file} keeps the header fix that stops the wordmark colliding`, async () => {
+    const html = await read(page.file);
+    // Both pages arrived with a logo anchor that had no flex-shrink, so the
+    // header row squeezed it and the wordmark slid under the phone number.
+    const anchor = html.match(/<a href="https:\/\/knightfitness-morayfield\.com\.au\/" style="([^"]*)"\s*>/);
+    assert.ok(anchor, 'logo anchor not found');
+    assert.match(anchor[1], /flex-shrink:\s*0/, 'logo anchor must not shrink');
+    assert.match(html, /@media \(max-width: 560px\) \{ \.ty-wordmark \{ display: none; \} \}/);
+  });
+}
+
+test('no page has CSS declarations leaking out of a style attribute', async () => {
+  // A malformed edit can turn `style="a; b"` into `style="a" b;` which parses as
+  // stray attributes and silently drops the properties.
+  for (const entry of ENTRY_POINTS) {
+    const html = await read(entry);
+    const stray = [...html.matchAll(/<[a-z]+[^>]*"\s+[a-z-]+:\s*[^>]*>/gi)].map((m) => m[0].slice(0, 90));
+    assert.deepEqual(stray, [], `${entry} has CSS outside a style attribute`);
+  }
 });

@@ -51,6 +51,10 @@
       "destination": "/thank-you.html"
     },
     {
+      "source": "/message-received",
+      "destination": "/message-received.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -85,6 +89,15 @@
     },
     {
       "source": "/thank-you.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/message-received.html",
       "headers": [
         {
           "key": "Cache-Control",
