@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Same runtime and React build as the rest of the site. Serving them from
+     this origin keeps the page off any CDN and reuses the browser cache of
+     anyone who arrived here from the main site. -->
+<script src="./assets/vendor/react-18.3.1.production.min.js"></script>
+<script src="./assets/vendor/react-dom-18.3.1.production.min.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>42 Hard Challenge — Knight Fitness Morayfield</title>
+<meta name="description" content="42 days, no days off. The final 6 Week Challenge of the year at Knight Fitness Morayfield — Mon 26 Oct to Sat 5 Dec, finishing at the Christmas party.">
+<link rel="icon" href="assets/favicon-512.png">
+<link rel="apple-touch-icon" href="assets/favicon-180.png">
+<meta name="theme-color" content="#0b0f19">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Knight Fitness Morayfield">
+<meta property="og:title" content="42 Hard Challenge — Knight Fitness Morayfield">
+<meta property="og:description" content="42 days, no days off. The final 6 Week Challenge of the year — Mon 26 Oct to Sat 5 Dec, finishing at the Christmas party.">
+<meta property="og:image" content="https://knightfitness-morayfield.com.au/assets/og-image.jpg">
+<meta property="og:url" content="https://knightfitness-morayfield.com.au/42-hard">
+<meta property="og:locale" content="en_AU">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://knightfitness-morayfield.com.au/assets/og-image.jpg">
+<link rel="canonical" href="https://knightfitness-morayfield.com.au/42-hard">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "42 Hard — Knight Fitness Morayfield 6 Week Challenge",
+  "description": "A six-week transformation challenge at Knight Fitness Morayfield. 42 days of training, daily habits and weekly accountability coaching, with before-and-after body scans and an exclusive challenge shirt. Finishes on the day of the Knight Fitness Christmas party.",
+  "url": "https://knightfitness-morayfield.com.au/42-hard",
+  "image": "https://knightfitness-morayfield.com.au/assets/og-image.jpg",
+  "startDate": "2026-10-26T06:00:00+10:00",
+  "endDate": "2026-12-05T23:59:00+10:00",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "organizer": {
+    "@type": "Organization",
+    "name": "Knight Fitness Morayfield",
+    "url": "https://knightfitness-morayfield.com.au/"
+  },
+  "location": {
+    "@type": "Place",
+    "name": "Knight Fitness Morayfield",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "125 Morayfield Road",
+      "addressLocality": "Caboolture South",
+      "addressRegion": "QLD",
+      "postalCode": "4506",
+      "addressCountry": "AU"
+    }
+  },
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Knight Fitness member",
+      "price": "350",
+      "priceCurrency": "AUD",
+      "url": "https://knightfitness-morayfield.com.au/42-hard",
+      "availability": "https://schema.org/InStock",
+      "validThrough": "2026-10-21T23:59:00+10:00"
+    },
+    {
+      "@type": "Offer",
+      "name": "Non-member",
+      "price": "700",
+      "priceCurrency": "AUD",
+      "url": "https://knightfitness-morayfield.com.au/42-hard",
+      "availability": "https://schema.org/InStock",
+      "validThrough": "2026-10-21T23:59:00+10:00"
+    }
+  ]
+}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: hsl(224 71% 4%); color: hsl(224 71% 4%); -webkit-font-smoothing: antialiased; }
+  a { color: hsl(356 73% 51%); text-decoration: none; }
+  a:hover { color: hsl(356 80% 64%); }
+  h1, h2, h3 { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; margin: 0; letter-spacing: -0.025em; }
+  p { margin: 0; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: .3; } }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  /* The sticky header carries the logo, the start date and the CTA. Below this
+     width the three do not fit, and the date pushes the button off the screen.
+     The hero states the date immediately underneath, so the header drops it. */
+  @media (max-width: 560px) { .kf-header-date { display: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</helmet>
+
+
+<div style="font-family: 'Inter', system-ui, sans-serif; background: hsl(220 14% 96%); width: 100%; overflow-x: hidden;">
+
+  <header style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 24px; background: hsl(224 71% 4%); border-bottom: 1px solid hsl(0 0% 100% / 0.08); position: sticky; top: 0; z-index: 20;">
+    <a href="https://knightfitness-morayfield.com.au/" style="display: block; flex-shrink: 0; min-width: 0;">
+      <img src="assets/knight-logo-reversed.png" alt="Knight Fitness Morayfield" style="height: 44px; width: auto; display: block; filter: drop-shadow(0 0 22px hsl(356 73% 51% / 0.55));">
+    </a>
+    <div style="display: flex; align-items: center; gap: 18px;">
+      <span class="kf-header-date" style="font-size: 12px; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; white-space: nowrap;">Starts Mon 26 Oct</span>
+      <button sc-camel-on-click="{{ scrollToForm }}" style="font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 800; color: #fff; background: hsl(356 73% 51%); border: none; border-radius: 10px; padding: 12px 20px; cursor: pointer; box-shadow: 0 6px 18px -6px hsl(356 73% 51%); transition: background .2s;" style-hover="background: hsl(356 73% 44%);">Claim your spot</button>
+    </div>
+  </header>
+
+  <section style="position: relative; background: hsl(224 71% 4%); background-image: radial-gradient(900px 520px at 82% -14%, hsl(356 73% 51% / 0.3), transparent 68%), radial-gradient(700px 420px at 6% 112%, hsl(217 91% 60% / 0.16), transparent 70%); padding: 56px 24px 68px; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(115deg, hsl(0 0% 100% / 0.03) 0 2px, transparent 2px 34px); pointer-events: none;"></div>
+    <div style="position: absolute; left: -3vw; bottom: -10vw; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 46vw; font-weight: 800; line-height: 0.7; color: transparent; -webkit-text-stroke: 2px hsl(0 0% 100% / 0.05); letter-spacing: -0.06em; pointer-events: none; user-select: none;">42</div>
+    <div style="position: relative; max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 46px; align-items: start;">
+
+      <div style="animation: slideUp .45s ease-out both;">
+        <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(356 73% 51% / 0.16); border: 1px solid hsl(356 73% 51% / 0.5); color: hsl(356 90% 80%); border-radius: 9999px; padding: 7px 15px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em;">
+          <span style="width: 7px; height: 7px; border-radius: 9999px; background: hsl(356 80% 58%); animation: pulseDot 1.8s ease-in-out infinite;"></span>
+          Final challenge of the year · limited spots
+        </div>
+
+        <img src="assets/knight-logo-reversed.png" alt="Knight Fitness Morayfield" style="height: 64px; width: auto; display: block; margin-top: 26px; filter: drop-shadow(0 0 40px hsl(356 73% 51% / 0.6));">
+
+        <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(14px, 1.9vw, 20px); font-weight: 800; text-transform: uppercase; letter-spacing: 0.3em; color: hsl(356 80% 62%); margin-top: 22px;">Morayfield · final challenge of the year</div>
+
+        <h1 style="font-size: clamp(58px, 11vw, 120px); line-height: 0.84; font-weight: 800; color: #fff; margin: 10px 0 0; letter-spacing: -0.05em;">42<span style="color: hsl(356 73% 51%);">&nbsp;HARD</span></h1>
+
+        <div style="display: flex; align-items: stretch; gap: 0; margin-top: 24px; border: 1px solid hsl(0 0% 100% / 0.14); border-radius: 14px; overflow: hidden; max-width: 520px; background: hsl(224 40% 8%);">
+          <div style="flex: 1; padding: 14px 18px; border-left: 4px solid hsl(356 73% 51%);">
+            <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.18em; color: hsl(356 85% 74%);">Starts</div>
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: #fff; margin-top: 3px; letter-spacing: -0.02em;">Mon 26 Oct</div>
+          </div>
+          <div style="width: 1px; background: hsl(0 0% 100% / 0.12);"></div>
+          <div style="flex: 1; padding: 14px 18px;">
+            <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.18em; color: hsl(220 14% 62%);">Finishes</div>
+            <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(20px, 3vw, 26px); font-weight: 800; color: #fff; margin-top: 3px; letter-spacing: -0.02em;">Sat 5 Dec</div>
+          </div>
+        </div>
+
+        <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(21px, 2.9vw, 30px); font-weight: 800; line-height: 1.16; color: #fff; margin-top: 24px; max-width: 16em; letter-spacing: -0.025em;">42 days. No days off. Walk into the Christmas party as a different human.</p>
+
+        <p style="font-size: 16.5px; line-height: 1.6; color: hsl(220 14% 76%); margin-top: 18px; max-width: 33em; text-wrap: pretty;">Six weeks, finishing on the day of the <strong style="color: #fff; font-weight: 700;">Knight Fitness Christmas party</strong>. You already train here — this is the six weeks where it actually shows. Weekly check-ins with your own accountability coach, before-and-after scans, and an exclusive challenge shirt.</p>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px;">
+          <button sc-camel-on-click="{{ scrollToForm }}" style="font-family: 'Inter', sans-serif; font-size: 16.5px; font-weight: 800; color: #fff; background: hsl(356 73% 51%); border: none; border-radius: 12px; padding: 18px 34px; white-space: nowrap; cursor: pointer; box-shadow: 0 16px 34px -12px hsl(356 73% 51%); transition: background .2s;" style-hover="background: hsl(356 73% 44%);">Sign me up</button>
+          <button sc-camel-on-click="{{ scrollToDates }}" style="font-family: 'Inter', sans-serif; font-size: 16.5px; font-weight: 700; color: #fff; background: transparent; border: 1px solid hsl(0 0% 100% / 0.24); border-radius: 12px; padding: 18px 28px; white-space: nowrap; cursor: pointer; transition: background .2s;" style-hover="background: hsl(0 0% 100% / 0.08);">See the dates →</button>
+        </div>
+
+        <sc-if value="{{ showCountdown }}" hint-placeholder-val="{{ true }}">
+          <div style="margin-top: 36px; padding-top: 28px; border-top: 1px solid hsl(0 0% 100% / 0.12);">
+            <div style="font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; color: hsl(356 85% 72%);">Kickoff in</div>
+            <!-- Four equal columns rather than flex-wrap: at 390px the wrapped
+                 version dropped "Secs" onto a second row on its own. -->
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-top: 13px; max-width: 420px;">
+              <sc-for list="{{ countdown }}" as="unit" hint-placeholder-count="4">
+                <div style="background: hsl(224 40% 9%); border: 1px solid hsl(0 0% 100% / 0.1); border-top: 3px solid hsl(356 73% 51%); border-radius: 12px; padding: 13px 8px; text-align: center;">
+                  <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 32px; font-weight: 800; color: #fff; line-height: 1; font-variant-numeric: tabular-nums;">{{ unit.value }}</div>
+                  <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; color: hsl(220 14% 62%); margin-top: 8px;">{{ unit.label }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+
+      <div id="signup" style="background: #fff; border-radius: 18px; box-shadow: 0 26px 50px -18px rgb(0 0 0 / 0.6); overflow: hidden; animation: slideUp .45s ease-out .06s both;">
+        <div style="background: hsl(356 73% 51%); padding: 18px 26px;">
+          <div style="font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; color: hsl(356 100% 92%);">Registration</div>
+          <h2 style="font-size: 25px; font-weight: 800; color: #fff; margin-top: 4px;">Lock in your spot</h2>
+        </div>
+
+        <div style="padding: 22px 26px 26px;">
+          <div style="display: flex; gap: 10px;">
+            <div style="flex: 1; background: hsl(356 73% 51% / 0.07); border: 1px solid hsl(356 73% 51% / 0.25); border-radius: 12px; padding: 12px 14px;">
+              <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(356 73% 43%);">Members</div>
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 28px; font-weight: 800; margin-top: 2px;">$350</div>
+            </div>
+            <div style="flex: 1; background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 12px; padding: 12px 14px;">
+              <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(220 9% 46%);">Non-members</div>
+              <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 28px; font-weight: 800; margin-top: 2px;">$700</div>
+            </div>
+          </div>
+
+          <iframe src="https://api.leadconnectorhq.com/widget/form/F6YrDPqkBDSVHapalvQF" id="inline-F6YrDPqkBDSVHapalvQF" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-trigger-type="alwaysShow" data-activation-type="alwaysActivated" data-deactivation-type="neverDeactivate" data-form-name="In House 6 Week Challenge Registration Form Morayfield" data-height="715" data-layout-iframe-id="inline-F6YrDPqkBDSVHapalvQF" data-form-id="F6YrDPqkBDSVHapalvQF" data-cookie-consent="true" data-cookie-consent-provider="auto" title="In House 6 Week Challenge Registration Form Morayfield" style="width: 100%; height: 760px; border: none; border-radius: 12px; margin-top: 16px; display: block;"></iframe>
+
+          <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(220 13% 91%);">
+            <span style="width: 8px; height: 8px; border-radius: 9999px; background: hsl(43 96% 50%); flex: none; animation: pulseDot 1.8s ease-in-out infinite;"></span>
+            <p style="font-size: 12.5px; line-height: 1.5; color: hsl(220 9% 46%);"><strong style="color: hsl(224 71% 4%);">{{ spotsLeftLabel }} of {{ spotsTotalLabel }} spots left.</strong> Registration closes {{ closeDate }} — or when the spots are gone.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div style="background: hsl(356 73% 51%); overflow: hidden; padding: 16px 0; white-space: nowrap; box-shadow: 0 10px 30px -10px hsl(356 73% 51% / 0.8);">
+    <div data-marquee="" style="display: inline-flex; gap: 52px; animation: ticker 26s linear infinite; padding-right: 52px;">
+      <sc-for list="{{ ticker }}" as="t" hint-placeholder-count="12">
+        <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 17px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em; color: #fff;">{{ t.text }}</span>
+      </sc-for>
+    </div>
+  </div>
+
+  <section id="dates" style="background: #fff; border-bottom: 1px solid hsl(220 13% 91%); padding: 26px 24px;">
+    <div style="max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr)); gap: 22px;">
+      <sc-for list="{{ facts }}" as="fact" hint-placeholder-count="4">
+        <div style="border-left: 4px solid hsl(356 73% 51%); padding-left: 16px;">
+          <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.18em; color: hsl(356 73% 45%);">{{ fact.label }}</div>
+          <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(22px, 2.4vw, 28px); font-weight: 800; margin-top: 5px; letter-spacing: -0.03em; line-height: 1.05;">{{ fact.value }}</div>
+          <div style="font-size: 12px; font-weight: 600; color: hsl(220 9% 46%); margin-top: 4px;">{{ fact.sub }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <section style="position: relative; background: hsl(356 73% 48%); background-image: radial-gradient(700px 340px at 50% -20%, hsl(356 80% 58%), transparent 70%); padding: 88px 24px; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background-image: repeating-linear-gradient(115deg, hsl(0 0% 100% / 0.05) 0 2px, transparent 2px 30px); pointer-events: none;"></div>
+    <div style="position: absolute; right: -4vw; top: -8vw; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 38vw; font-weight: 800; line-height: 0.7; color: transparent; -webkit-text-stroke: 2px hsl(0 0% 100% / 0.13); letter-spacing: -0.06em; pointer-events: none; user-select: none;">42</div>
+    <div style="position: relative; max-width: 840px; margin: 0 auto; text-align: center;">
+      <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(224 71% 4% / 0.28); border: 1px solid hsl(0 0% 100% / 0.35); color: #fff; border-radius: 9999px; padding: 8px 16px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em;">
+        <span style="width: 7px; height: 7px; border-radius: 9999px; background: #fff; animation: pulseDot 1.8s ease-in-out infinite;"></span>
+        Only {{ spotsLeftLabel }} spots left
+      </div>
+      <h2 style="font-size: clamp(34px, 6.2vw, 62px); font-weight: 800; color: #fff; margin-top: 24px; line-height: 0.98; letter-spacing: -0.04em;">Six weeks from now you've either done it, or you're explaining why you didn't.</h2>
+      <p style="font-size: 17.5px; line-height: 1.6; color: hsl(356 100% 93%); margin-top: 20px;">Registration closes {{ closeDate }} — or when the spots are gone. Kickoff is Monday 26 October, 6:00 AM.</p>
+      <button sc-camel-on-click="{{ scrollToForm }}" style="margin-top: 32px; font-family: 'Inter', sans-serif; font-size: 18.5px; font-weight: 800; color: hsl(356 73% 42%); background: #fff; border: none; border-radius: 12px; padding: 21px 50px; cursor: pointer; box-shadow: 0 22px 44px -16px hsl(224 71% 4% / 0.65); transition: background .2s;" style-hover="background: hsl(356 100% 97%);">Sign up for 42 Hard</button>
+    </div>
+  </section>
+
+  <footer style="background: hsl(224 71% 3%); border-top: 1px solid hsl(0 0% 100% / 0.08); padding: 28px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px;">
+    <a href="https://knightfitness-morayfield.com.au/" style="display: block; flex-shrink: 0;">
+      <img src="assets/knight-logo-reversed.png" alt="Knight Fitness Morayfield" style="height: 24px; width: auto; display: block;">
+    </a>
+    <p style="font-size: 12px; color: hsl(220 14% 56%);">42 Hard · 26 Oct – 5 Dec · Knight Fitness Morayfield</p>
+  </footer>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;spotsTotal&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:30,&quot;min&quot;:10,&quot;max&quot;:200,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scarcity&quot;},&quot;spotsLeft&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:18,&quot;min&quot;:0,&quot;max&quot;:200,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scarcity&quot;},&quot;closeDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Wednesday 21 October&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Scarcity&quot;},&quot;showCountdown&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Scarcity&quot;}}">
+// Day one, 6:00 AM, at the gym. Queensland does not observe daylight saving, so
+// the kickoff is a fixed UTC+10 instant. Pinning the offset rather than building
+// the date in the visitor's local time keeps the countdown honest for anyone
+// reading the page from another timezone.
+const KICKOFF = Date.parse('2026-10-26T06:00:00+10:00');
+
+// Registration closes when the form stops taking entries, not when the challenge
+// starts. Both are copy on the page, so they live together.
+const CLOSE_LABEL = 'Wednesday 21 October';
+
+// The spots counter. Edit these two numbers as registrations come in; nothing
+// else on the page has to change.
+const SPOTS_TOTAL = 30;
+const SPOTS_LEFT = 18;
+
+class Component extends DCLogic {
+  state = { now: Date.now() };
+
+  componentDidMount() {
+    this.timer = setInterval(() => this.setState({ now: Date.now() }), 1000);
+    this.mountFormResizer();
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+    if (this.onFormMessage) window.removeEventListener('message', this.onFormMessage);
+  }
+
+  // LeadConnector forms post their rendered height to the parent. Without a listener
+  // the iframe stays at its authored height and shows empty space below the fields.
+  // The same pair — height listener plus the embed script — is in index.html; this
+  // page is served as its own file, so it cannot borrow that copy.
+  mountFormResizer() {
+    const isFormFrame = (el) => el && el.tagName === 'IFRAME' && /widget\/form/.test(el.src || '');
+    this.onFormMessage = (e) => {
+      if (!/msgsndr|leadconnector|gohighlevel/.test(e.origin)) return;
+      let d = e.data;
+      if (typeof d === 'string') { try { d = JSON.parse(d); } catch (_) { return; } }
+      if (!d || typeof d !== 'object') return;
+      const h = parseInt(d.height ?? d.frameHeight ?? (d.payload && d.payload.height), 10);
+      if (!h || h < 120 || h > 4000) return;
+      const frames = Array.from(document.querySelectorAll('iframe')).filter(isFormFrame);
+      const target = frames.find((f) => f.contentWindow === e.source) || frames[0];
+      if (target) target.style.height = h + 'px';
+    };
+    window.addEventListener('message', this.onFormMessage);
+
+    if (!document.getElementById('lc-form-embed')) {
+      const sc = document.createElement('script');
+      sc.id = 'lc-form-embed';
+      sc.src = 'https://link.msgsndr.com/js/form_embed.js';
+      sc.async = true;
+      document.body.appendChild(sc);
+    }
+  }
+
+  scrollTo(id) {
+    const el = document.getElementById(id);
+    if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 80, behavior: 'smooth' });
+  }
+
+  renderVals() {
+    const diff = Math.max(0, KICKOFF - this.state.now);
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor(diff / 3600000) % 24;
+    const m = Math.floor(diff / 60000) % 60;
+    const s = Math.floor(diff / 1000) % 60;
+    const pad = (n) => String(n).padStart(2, '0');
+
+    const spotsTotal = this.props.spotsTotal ?? SPOTS_TOTAL;
+    const spotsLeft = this.props.spotsLeft ?? SPOTS_LEFT;
+    const closeDate = this.props.closeDate ?? CLOSE_LABEL;
+
+    const tickerItems = ['Final challenge of the year', '42 days', 'No days off', 'Exclusive challenge shirt', 'Starts Mon 26 Oct', 'Limited spots'];
+
+    return {
+      // The countdown is hidden once the challenge has started rather than
+      // counting down to a date that has been and gone.
+      showCountdown: (this.props.showCountdown ?? true) && diff > 0,
+      spotsLeftLabel: String(spotsLeft),
+      spotsTotalLabel: String(spotsTotal),
+      closeDate,
+      countdown: [
+        { label: 'Days', value: String(d) },
+        { label: 'Hours', value: pad(h) },
+        { label: 'Mins', value: pad(m) },
+        { label: 'Secs', value: pad(s) },
+      ],
+      ticker: [...tickerItems, ...tickerItems].map((text, i) => ({ text: '★ ' + text, key: i })),
+      facts: [
+        { label: 'Starts', value: 'Mon 26 Oct', sub: '6:00 AM kickoff session' },
+        { label: 'Finishes', value: 'Sat 5 Dec', sub: 'Final scans in the morning' },
+        { label: 'Length', value: '6 weeks', sub: '42 days, no days off' },
+        { label: 'Finale', value: 'Christmas party', sub: 'Winners announced on the night' },
+      ],
+      scrollToForm: () => this.scrollTo('signup'),
+      scrollToDates: () => this.scrollTo('dates'),
+    };
+  }
+}
+</script>
+
+
+</body></html>

@@ -55,6 +55,10 @@
       "destination": "/message-received.html"
     },
     {
+      "source": "/42-hard",
+      "destination": "/42-hard.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -98,6 +102,15 @@
     },
     {
       "source": "/message-received.html",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/42-hard.html",
       "headers": [
         {
           "key": "Cache-Control",

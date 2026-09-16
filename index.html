@@ -986,6 +986,10 @@
             <a href="#challenge-enquiry" style="font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 28px; border-radius: 12px; box-shadow: 0 14px 30px -12px hsl(356 72% 51% / 0.6);" style-hover="color: #fff; opacity: 0.93;">{{ intakeCta }}</a>
             <a href="tel:0435737238" style="font-size: 15.5px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); padding: 17px 26px; border-radius: 12px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.13);">Call the studio</a>
           </div>
+          <!-- The named block currently taking registrations. /42-hard is a real
+               file rather than a route, so this is an ordinary full page load and
+               not a router link. Remove this line when the challenge is over. -->
+          <p style="font-size: 15px; line-height: 1.6; color: hsl(217 10% 72%); margin-top: 22px;">The block now taking registrations is <a href="{{ h42Hard }}" style="font-weight: 700; color: hsl(356 78% 66%);" style-hover="color: hsl(356 85% 75%);">42 Hard</a> — 42 days, starting Monday 26 October and finishing at the Christmas party.</p>
         </div>
       </div>
     </section>
@@ -1316,6 +1320,13 @@ const hrefFor = (page) => {
 };
 const currentLocation = () => FILE_MODE ? (window.location.hash || '#/') : window.location.pathname;
 const canonicalFor = (page) => { const r = routeFor(page); return SITE + (r.slug ? '/' + r.slug : '/'); };
+
+// Pages served as their own file rather than rendered by the router: the
+// confirmation pages, and the campaign landing pages linked from the site. A
+// real path when a server is rewriting URLs; opened as a bare .html file there
+// is nothing to rewrite, so fall back to the deployed URL rather than a link
+// that would resolve against the local filesystem.
+const fileHrefFor = (path) => (FILE_MODE ? SITE + path : path);
 
 class Component extends DCLogic {
   state = { page: 'home', reviewCount: 0, lightbox: null, video: null, narrow: false, compactNav: false, menu: false, reviewQuery: '', reviewSort: 'newest', expanded: {}, reviewsShown: 20 };
@@ -1687,6 +1698,7 @@ class Component extends DCLogic {
       hStart: hrefFor('start'), hContact: hrefFor('contact'), hFirst: hrefFor('first'),
       hHome: hrefFor('home'), hChallenge: hrefFor('challenge'),
       hReviews: hrefFor('reviews'), hSchedule: hrefFor('schedule'),
+      h42Hard: fileHrefFor('/42-hard'),
       googleProfile: GOOGLE_PROFILE,
       lightboxOpen: this.state.lightbox !== null,
       lightboxSrc: this.state.lightbox === null ? '' : TRANSFORMS[this.state.lightbox],

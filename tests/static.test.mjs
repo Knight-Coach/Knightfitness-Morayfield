@@ -4,7 +4,10 @@ import assert from 'node:assert/strict';
 import { access, readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
-import { ROOT, SITE, read, routesFromIndex, ENTRY_POINTS, CONFIRMATION_PAGES } from './helpers.mjs';
+import {
+  ROOT, SITE, read, routesFromIndex, indexableUrls, knownPaths,
+  ENTRY_POINTS, CONFIRMATION_PAGES, LANDING_PAGES, STANDALONE_PAGES
+} from './helpers.mjs';
 
 const exists = (rel) => access(resolve(ROOT, rel)).then(() => true, () => false);
 
@@ -35,12 +38,10 @@ test('every file under assets/ is referenced by an HTML entry point', async () =
   assert.deepEqual(unused, []);
 });
 
-test('sitemap.xml lists exactly the routes in index.html', async () => {
-  const routes = await routesFromIndex();
+test('sitemap.xml lists exactly the routes in index.html plus the landing pages', async () => {
   const xml = await read('sitemap.xml');
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]).sort();
-  const expected = routes.map((r) => (r.slug ? `${SITE}/${r.slug}` : `${SITE}/`)).sort();
-  assert.deepEqual(locs, expected);
+  assert.deepEqual(locs, (await indexableUrls()).sort());
 });
 
 test('robots.txt allows crawling and points at the sitemap', async () => {
@@ -51,16 +52,15 @@ test('robots.txt allows crawling and points at the sitemap', async () => {
 
 test('vercel.json routes the standalone pages before the catch-all, and redirects only to real routes', async () => {
   const cfg = JSON.parse(await read('vercel.json'));
-  const routes = await routesFromIndex();
-  const slugs = new Set(routes.map((r) => (r.slug ? `/${r.slug}` : '/')));
+  const slugs = await knownPaths();
   // Order matters: Vercel takes the first matching rewrite, so the catch-all
   // that feeds the single-page app has to come last or it swallows the
   // confirmation pages and every form submission lands on the home page.
   assert.deepEqual(cfg.rewrites, [
-    ...CONFIRMATION_PAGES.map((p) => ({ source: p.path, destination: `/${p.file}` })),
+    ...STANDALONE_PAGES.map((p) => ({ source: p.path, destination: `/${p.file}` })),
     { source: '/(.*)', destination: '/index.html' }
   ]);
-  for (const page of CONFIRMATION_PAGES) {
+  for (const page of STANDALONE_PAGES) {
     assert.ok(
       cfg.headers.some((h) => h.source === `/${page.file}`),
       `${page.file} needs a revalidate cache header like index.html`
@@ -117,19 +117,13 @@ test('index.html does not import JSX modules that would pull Babel from unpkg at
 });
 
 // ---------------------------------------------------------------------------
-// The confirmation pages. Each is served as its own file rather than as a
-// route of the single-page app, so each needs its own checks.
+// The standalone pages. Each is served as its own file rather than as a route
+// of the single-page app, so each needs its own checks. They all arrive as
+// self-extracting exports that inline React, the runtime, the fonts and every
+// image, and every one of them has to be stripped back to the shared files.
 // ---------------------------------------------------------------------------
 
-for (const page of CONFIRMATION_PAGES) {
-  test(`${page.file} is excluded from search, and stays out of the sitemap`, async () => {
-    const html = await read(page.file);
-    assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
-    const xml = await read('sitemap.xml');
-    const slug = page.path.slice(1);
-    assert.ok(!xml.includes(slug), `a noindex confirmation page must not be in the sitemap`);
-  });
-
+for (const page of STANDALONE_PAGES) {
   test(`${page.file} reuses the shared runtime instead of bundling its own`, async () => {
     const html = await read(page.file);
     const head = html.slice(0, html.indexOf('</head>'));
@@ -144,9 +138,7 @@ for (const page of CONFIRMATION_PAGES) {
 
   test(`${page.file} carries no leftover bundler payload`, async () => {
     const html = await read(page.file);
-    // These pages arrive as self-extracting exports that inline React, the
-    // runtime, the fonts and every photo. All of it is already in this repo, so
-    // none of it should survive the import.
+    // All of it is already in this repo, so none of it should survive the import.
     assert.doesNotMatch(html, /base64,/, 'an inlined data URI survived');
     assert.doesNotMatch(html, /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/, 'a bundler resource id survived');
     assert.doesNotMatch(html, /__bundler/, 'bundler scaffolding survived');
@@ -154,14 +146,53 @@ for (const page of CONFIRMATION_PAGES) {
     assert.ok(html.length < 40000, `page should stay small, is ${html.length} bytes`);
   });
 
-  test(`every internal link on ${page.file} points at a route that exists`, async () => {
+  test(`${page.file} loads the shared webfonts from Google rather than inlining them`, async () => {
     const html = await read(page.file);
-    const routes = await routesFromIndex();
-    const known = new Set(routes.map((r) => (r.slug ? `/${r.slug}` : '/')));
+    // The export ships eleven woff2 subsets inline, about 300KB. The rest of the
+    // site links the same two families from Google Fonts, so the pages share a
+    // cache entry instead of each carrying their own copy.
+    assert.doesNotMatch(html, /@font-face/, 'inlined webfonts survived the import');
+    assert.match(html, /fonts\.googleapis\.com\/css2\?family=Inter[^"]*Plus\+Jakarta\+Sans/);
+  });
+
+  test(`${page.file} never leaves a template hole in a src the parser fetches`, async () => {
+    const html = await read(page.file);
+    // The parser fetches a src as it reads the tag, before the runtime can
+    // substitute anything, so `src="{{ x }}"` is a wasted request on every page
+    // load. Deferring the fetch with loading="lazy" is what buys the runtime the
+    // time to fill the hole in; anything eager needs a real URL in the markup,
+    // or the data-src hydration index.html uses for <video>.
+    const eager = [...html.matchAll(/<[a-z]+[^>]*\ssrc="[^"]*\{\{[^>]*>/gi)]
+      .map((m) => m[0])
+      .filter((tag) => !/loading="lazy"/.test(tag))
+      .map((tag) => tag.slice(0, 90));
+    assert.deepEqual(eager, [], 'an eagerly fetched src still holds an unresolved template hole');
+  });
+
+  test(`every internal link on ${page.file} points at a path that exists`, async () => {
+    const html = await read(page.file);
+    const known = await knownPaths();
     const prefix = SITE.replace(/[.]/g, '\\.');
-    const internal = [...html.matchAll(new RegExp(`href="${prefix}([^"]*)"`, 'g'))].map((m) => m[1] || '/');
-    assert.ok(internal.length >= 3, `expected internal links, found ${internal.length}`);
-    assert.deepEqual(internal.filter((p) => !known.has(p)), [], 'links to routes the site does not have');
+    const internal = [...html.matchAll(new RegExp(`href="${prefix}([^"]*)"`, 'g'))]
+      .map((m) => m[1] || '/')
+      .filter((p) => !p.startsWith('#'));
+    assert.ok(internal.length >= 1, `expected internal links, found ${internal.length}`);
+    assert.deepEqual(internal.filter((p) => !known.has(p)), [], 'links to paths the site does not have');
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Confirmation pages only. They exist to be landed on after a form submission,
+// never to be found in a search result.
+// ---------------------------------------------------------------------------
+
+for (const page of CONFIRMATION_PAGES) {
+  test(`${page.file} is excluded from search, and stays out of the sitemap`, async () => {
+    const html = await read(page.file);
+    assert.match(html, /<meta name="robots" content="noindex, nofollow">/);
+    const xml = await read('sitemap.xml');
+    const slug = page.path.slice(1);
+    assert.ok(!xml.includes(slug), `a noindex confirmation page must not be in the sitemap`);
   });
 
   test(`${page.file} keeps the header fix that stops the wordmark colliding`, async () => {
@@ -172,6 +203,81 @@ for (const page of CONFIRMATION_PAGES) {
     assert.ok(anchor, 'logo anchor not found');
     assert.match(anchor[1], /flex-shrink:\s*0/, 'logo anchor must not shrink');
     assert.match(html, /@media \(max-width: 560px\) \{ \.ty-wordmark \{ display: none; \} \}/);
+  });
+
+  test(`every internal link on ${page.file} reaches the rest of the site`, async () => {
+    const html = await read(page.file);
+    const prefix = SITE.replace(/[.]/g, '\\.');
+    const internal = [...html.matchAll(new RegExp(`href="${prefix}([^"]*)"`, 'g'))];
+    assert.ok(internal.length >= 3, `a confirmation page is a dead end with ${internal.length} links out`);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// The campaign landing pages. Public, indexed, and each one carries its own
+// canonical, social card and structured data because the router's copy of that
+// machinery never runs for them.
+// ---------------------------------------------------------------------------
+
+for (const page of LANDING_PAGES) {
+  test(`${page.file} is indexable and listed in the sitemap`, async () => {
+    const html = await read(page.file);
+    assert.doesNotMatch(html, /noindex/, 'a campaign landing page must be indexable');
+    const xml = await read('sitemap.xml');
+    assert.ok(xml.includes(`${SITE}${page.path}</loc>`), `${page.path} is missing from the sitemap`);
+  });
+
+  test(`${page.file} carries its own canonical, title and social card`, async () => {
+    const html = await read(page.file);
+    assert.match(html, new RegExp(`<link rel="canonical" href="${SITE}${page.path}">`));
+    assert.ok(html.includes(`<title>${page.title}</title>`), `title should be "${page.title}"`);
+    const desc = html.match(/<meta name="description" content="([^"]+)">/);
+    assert.ok(desc && desc[1].length > 60 && desc[1].length <= 165, 'description should be a usable search snippet');
+    // Social scrapers do not execute JavaScript and do not resolve relative
+    // image paths, so these two have to be absolute in the static HTML.
+    assert.match(html, new RegExp(`<meta property="og:image" content="${SITE}/assets/og-image.jpg">`));
+    assert.match(html, new RegExp(`<meta name="twitter:image" content="${SITE}/assets/og-image.jpg">`));
+  });
+
+  test(`${page.file} has valid structured data`, async () => {
+    const html = await read(page.file);
+    const block = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    assert.ok(block, 'no structured data');
+    const data = JSON.parse(block[1]);
+    assert.equal(data['@type'], 'Event');
+    assert.ok(Date.parse(data.startDate) < Date.parse(data.endDate), 'the event ends before it starts');
+    assert.ok(data.offers.length > 0 && data.offers.every((o) => o.priceCurrency === 'AUD'));
+  });
+
+  test(`${page.file} is reachable from the site rather than orphaned`, async () => {
+    const html = await read('index.html');
+    // A campaign page nothing links to is invisible to anyone who did not click
+    // the ad, and to Google's crawl of the site's internal links.
+    assert.ok(
+      html.includes(`fileHrefFor('${page.path}')`),
+      `nothing in index.html links to ${page.path}`
+    );
+  });
+
+  test(`${page.file} embeds its registration form with a real URL`, async () => {
+    const html = await read(page.file);
+    assert.match(html, new RegExp(`src="https://api\\.leadconnectorhq\\.com/widget/form/${page.formId}"`));
+    // The embed script that resizes the iframe is injected at runtime, the same
+    // way index.html does it, rather than bundled into the page.
+    assert.match(html, /link\.msgsndr\.com\/js\/form_embed\.js/);
+    assert.doesNotMatch(html, /ghl_embed/, 'the inlined LeadConnector embed script survived');
+  });
+
+  test(`${page.file} pins its countdown to a real, timezone-explicit instant`, async () => {
+    const html = await read(page.file);
+    // Built from local date parts the countdown is wrong by hours for anyone
+    // outside Queensland. Queensland has no daylight saving, so +10:00 is exact.
+    const kickoff = html.match(/const KICKOFF = Date\.parse\('([^']+)'\);/);
+    assert.ok(kickoff, 'KICKOFF not found');
+    assert.match(kickoff[1], /\+10:00$/, 'the kickoff instant must carry the Queensland offset');
+    assert.ok(Number.isFinite(Date.parse(kickoff[1])), 'KICKOFF is not a parseable date');
+    const data = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
+    assert.equal(Date.parse(kickoff[1]), Date.parse(data.startDate), 'the countdown and the structured data disagree');
   });
 }
 

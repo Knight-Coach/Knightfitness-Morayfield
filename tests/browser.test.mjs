@@ -7,7 +7,7 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 import { listen } from '../scripts/serve.js';
-import { ROOT, routesFromIndex, CONFIRMATION_PAGES } from './helpers.mjs';
+import { ROOT, routesFromIndex, CONFIRMATION_PAGES, LANDING_PAGES } from './helpers.mjs';
 
 // Third-party hosts the page talks to: Google Fonts, the LeadConnector form embed
 // and media library, Google Maps. Their availability is not something this
@@ -212,6 +212,129 @@ for (const page of CONFIRMATION_PAGES) {
     // row squeezed it and the wordmark slid under the phone number.
     for (const width of [320, 360, 390, 430]) {
       const { page: pg } = await open(base + page.path, { ...STANDALONE, width, height: 800 });
+      const problem = await pg.evaluate(() => {
+        const boxes = [...document.querySelectorAll('#dc-root header *')]
+          .filter((e) => e.children.length === 0 && e.getBoundingClientRect().width > 0)
+          .map((e) => { const r = e.getBoundingClientRect();
+            return { text: (e.textContent || 'image').trim().slice(0, 20) || 'image', x: r.x, right: r.right }; });
+        for (let i = 0; i < boxes.length - 1; i++) {
+          if (boxes[i].right > boxes[i + 1].x + 1) return `"${boxes[i].text}" overlaps "${boxes[i + 1].text}"`;
+        }
+        const scroll = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+        return scroll > 0 ? `page scrolls sideways by ${scroll}px` : null;
+      });
+      assert.equal(problem, null, `${page.path} at ${width}px: ${problem}`);
+      if (shots && width === 390) await pg.screenshot({ path: join(shots, `${page.path.slice(1)}-mobile.png`), fullPage: true });
+      await pg.close();
+    }
+  });
+}
+
+// ---------------------------------------------------------------------------
+// The campaign landing pages. Public, indexed, and served as their own files,
+// so each has to render, embed its form and behave on a phone on its own.
+// ---------------------------------------------------------------------------
+
+for (const page of LANDING_PAGES) {
+  test(`${page.path} renders, is indexable and carries its own canonical`, async () => {
+    const { page: pg, errors, failed } = await open(base + page.path, STANDALONE);
+    assert.equal(await pg.title(), page.title);
+    assert.equal(await pg.locator('meta[name="robots"]').count(), 0, 'a campaign page must not be noindex');
+    assert.equal(
+      await pg.getAttribute('link[rel="canonical"]', 'href'),
+      `https://knightfitness-morayfield.com.au${page.path}`
+    );
+    assert.equal((await pg.locator('#dc-root h1').first().innerText()).replace(/\s+/g, ' ').trim(), page.h1);
+    const holes = await pg.evaluate(() => {
+      const root = document.querySelector('#dc-root');
+      return {
+        unresolved: root.querySelectorAll('.sc-missing, .sc-unresolved, .sc-placeholder-error, .sc-logic-error').length,
+        braces: (root.innerText.match(/\{\{/g) || []).length
+      };
+    });
+    assert.deepEqual(holes, { unresolved: 0, braces: 0 });
+    assert.deepEqual(firstParty(failed), []);
+    assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
+    if (shots) await pg.screenshot({ path: join(shots, `${page.path.slice(1)}-desktop.png`), fullPage: true });
+    await pg.close();
+  });
+
+  test(`${page.path} is served as its own file, not swallowed by the app router`, async () => {
+    const res = await fetch(base + page.path);
+    const html = await res.text();
+    assert.equal(res.status, 200);
+    assert.ok(html.includes(`<link rel="canonical" href="https://knightfitness-morayfield.com.au${page.path}">`),
+      'served the app shell instead of the landing page');
+    assert.ok(html.length < 40000, `expected the small standalone page, got ${html.length} bytes`);
+  });
+
+  test(`${page.path} loads its images and embeds the registration form`, async () => {
+    const { page: pg } = await open(base + page.path, STANDALONE);
+    const broken = await pg.evaluate(() => Array.from(document.images)
+      .filter((i) => !i.complete || i.naturalWidth === 0)
+      .map((i) => i.getAttribute('src')));
+    assert.deepEqual(broken, [], 'images failed to load');
+    const src = await pg.locator(`iframe[src*="widget/form/${page.formId}"]`).first().getAttribute('src');
+    assert.ok(src, `form ${page.formId} not embedded`);
+    // The embed script is injected rather than bundled, so it has to actually appear.
+    await pg.waitForSelector('script#lc-form-embed', { state: 'attached', timeout: 5000 });
+    await pg.close();
+  });
+
+  test(`${page.path} counts down to the kickoff and scrolls to the form`, async () => {
+    const { page: pg } = await open(base + page.path, STANDALONE);
+    // The four counter values are the only tabular-nums text on the page, which
+    // is a sturdier handle than the labels around them.
+    const readCounter = () => pg.evaluate(() => [...document.querySelectorAll('#dc-root div')]
+      .filter((d) => getComputedStyle(d).fontVariantNumeric === 'tabular-nums')
+      .map((d) => d.textContent.trim()));
+    const first = await readCounter();
+    assert.equal(first.length, 4, `the countdown should show four units, showed ${first.length}`);
+    assert.ok(first.every((v) => /^\d+$/.test(v)), `countdown values should be numbers, got ${first.join(':')}`);
+    await pg.waitForTimeout(1200);
+    assert.notDeepEqual(await readCounter(), first, 'the countdown is frozen');
+
+    // The header CTA scrolls the registration card up under the sticky header
+    // rather than navigating anywhere, so check where the card ends up.
+    await pg.locator('#dc-root header button').first().click();
+    await pg.waitForFunction(
+      () => Math.abs(document.getElementById('signup').getBoundingClientRect().top - 80) < 12,
+      undefined,
+      { timeout: 5000 }
+    );
+    await pg.close();
+  });
+
+  test(`${page.path} is reachable by clicking through from the site`, async () => {
+    const { page: pg } = await open(base + '/6-week-challenge');
+    const link = pg.locator(`#dc-root a[href="${page.path}"]`).first();
+    assert.ok(await link.count(), `no link to ${page.path} on /6-week-challenge`);
+    await link.click();
+    await pg.waitForURL(base + page.path);
+    await pg.waitForFunction((t) => document.title === t, page.title, { timeout: 15000 });
+    await pg.close();
+  });
+
+  test(`${page.path} does not collide, clip or scroll sideways at any phone width`, async () => {
+    for (const width of [320, 360, 390, 430]) {
+      const { page: pg } = await open(base + page.path, { ...STANDALONE, width, height: 800 });
+      // The page wrapper sets overflow-x: hidden, so a column that cannot shrink
+      // — a bare minmax(330px, 1fr), say — is silently cropped instead of
+      // producing a sideways scrollbar. Measure the content, not the scrollbar.
+      const clipped = await pg.evaluate(() => {
+        const vw = document.documentElement.clientWidth;
+        return [...document.querySelectorAll('#dc-root *')]
+          .filter((el) => el.children.length === 0 && (el.textContent.trim() || el.tagName === 'IMG'))
+          // The oversized "42" watermarks and the marquee run off-screen by design.
+          .filter((el) => getComputedStyle(el).position !== 'absolute' && !el.closest('[data-marquee]'))
+          .filter((el) => {
+            const r = el.getBoundingClientRect();
+            return r.width > 0 && (r.right > vw + 1 || r.left < -1);
+          })
+          .map((el) => `"${(el.textContent.trim() || el.getAttribute('alt') || 'image').slice(0, 30)}"`);
+      });
+      assert.deepEqual(clipped, [], `${page.path} at ${width}px: content is cut off`);
+
       const problem = await pg.evaluate(() => {
         const boxes = [...document.querySelectorAll('#dc-root header *')]
           .filter((e) => e.children.length === 0 && e.getBoundingClientRect().width > 0)

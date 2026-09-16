@@ -29,8 +29,26 @@ export const CONFIRMATION_PAGES = [
   }
 ];
 
+/**
+ * Campaign landing pages. Also real files outside the router, but unlike the
+ * confirmation pages these are public: they are indexed, they are in the
+ * sitemap, and they carry their own canonical and social tags.
+ */
+export const LANDING_PAGES = [
+  {
+    file: '42-hard.html',
+    path: '/42-hard',
+    title: '42 Hard Challenge — Knight Fitness Morayfield',
+    h1: '42 HARD',
+    formId: 'F6YrDPqkBDSVHapalvQF'
+  }
+];
+
+/** Every page served as its own file rather than rendered by the router. */
+export const STANDALONE_PAGES = [...CONFIRMATION_PAGES, ...LANDING_PAGES];
+
 /** The HTML files served directly, as opposed to rendered by the router. */
-export const ENTRY_POINTS = ['index.html', ...CONFIRMATION_PAGES.map((p) => p.file)];
+export const ENTRY_POINTS = ['index.html', ...STANDALONE_PAGES.map((p) => p.file)];
 
 /** The route table lives in index.html. Parse it instead of duplicating it here. */
 export async function routesFromIndex() {
@@ -45,4 +63,25 @@ export async function routesFromIndex() {
   }
   if (routes.length === 0) throw new Error('ROUTES table parsed to zero rows');
   return routes;
+}
+
+/**
+ * Every URL that belongs in sitemap.xml: the router's routes plus the landing
+ * pages. Confirmation pages are deliberately absent — see the tests.
+ */
+export async function indexableUrls() {
+  const routes = await routesFromIndex();
+  return [
+    ...routes.map((r) => (r.slug ? `${SITE}/${r.slug}` : `${SITE}/`)),
+    ...LANDING_PAGES.map((p) => `${SITE}${p.path}`)
+  ];
+}
+
+/** Paths a link on any page is allowed to point at. */
+export async function knownPaths() {
+  const routes = await routesFromIndex();
+  return new Set([
+    ...routes.map((r) => (r.slug ? `/${r.slug}` : '/')),
+    ...STANDALONE_PAGES.map((p) => p.path)
+  ]);
 }

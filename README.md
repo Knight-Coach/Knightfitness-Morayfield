@@ -12,10 +12,11 @@ repository root as-is.
 | `index.html` | The whole site. Exported from the design project (see [DEPLOY.md](DEPLOY.md#editing)) |
 | `thank-you.html` | Confirmation page for the 3-day pass form. Served at `/thank-you` |
 | `message-received.html` | Confirmation page for the contact form. Served at `/message-received` |
+| `42-hard.html` | Landing page for the 42 Hard challenge. Served at `/42-hard` |
 | `support.js` | The runtime `index.html` depends on. Generated; do not edit or rename |
 | `assets/` | Images, favicons, the social-share card, and the vendored React build |
 | `vercel.json` | Rewrites, 301s from the old site, cache headers, and the "no install, no build" settings |
-| `robots.txt`, `sitemap.xml` | Crawl permission and the eight URLs |
+| `robots.txt`, `sitemap.xml` | Crawl permission and the nine indexable URLs |
 | `scripts/serve.js` | Local preview server that mirrors `vercel.json` |
 | `tests/` | The test suite (see below) |
 | `DEPLOY.md` | Deployment, routing and editing notes |
@@ -43,13 +44,21 @@ npm test
 `npm run test:static` runs the checks that need no browser:
 
 - every image `index.html` references exists, and nothing in `assets/` is unused
-- `sitemap.xml` lists exactly the routes defined in `index.html`
+- `sitemap.xml` lists exactly the routes defined in `index.html`, plus the
+  landing pages and nothing else
 - `vercel.json` still rewrites everything to `index.html`, every 301 lands on a
   real route, and Vercel is still told to skip installs
 - the Search Console verification tag, canonical URL, absolute social image
   URLs and the schema.org markup are present
 - the vendored React files are byte-for-byte the builds `support.js` pins
-- each confirmation page is `noindex`, absent from the sitemap, free of leftover bundler payload, keeps its header fix, and links only to routes that exist
+- every standalone page reuses the shared runtime and fonts, carries no leftover
+  bundler payload, never leaves a template hole in a `src` the parser fetches,
+  and links only to paths that exist
+- each confirmation page is `noindex`, absent from the sitemap, keeps its header
+  fix, and is not a dead end
+- each landing page is indexable, in the sitemap, linked to from `index.html`,
+  and carries its own canonical, social card, structured data, registration form
+  and a countdown pinned to the same instant its structured data claims
 - no page has CSS leaking out of a `style` attribute, which is how a bad edit silently drops styling
 
 `npm run test:browser` renders the site in headless Chromium against the
@@ -58,10 +67,15 @@ tag; a non-empty, unique `h1`; no unresolved template holes; no first-party
 request failures or console errors. It also covers client-side navigation and
 back/forward, the LeadConnector form embeds, the unknown-path fallback, an
 old-site redirect, the mobile menu, horizontal overflow at 390px, and the
-file-mode hash router. It also covers both confirmation pages: that each
-renders standalone rather than being swallowed by the app router, loads its
-images, stays out of search, and does not collide or scroll sideways at four
-phone widths. Third-party hosts are never contacted during the run.
+file-mode hash router. It also covers the standalone pages: that each
+renders on its own rather than being swallowed by the app router, loads its
+images, and does not collide, clip or scroll sideways at four phone widths —
+the clipping check measures the content, because the landing page sets
+`overflow-x: hidden` and would otherwise crop a too-wide column in silence. The
+confirmation pages are checked to stay out of search; the 42 Hard page is
+checked to be indexable, to embed its form, to tick its countdown, and to be
+one click from `/6-week-challenge`. Third-party hosts are never contacted
+during the run.
 
 Set `KEEP_SCREENSHOTS=1` to save a screenshot per route into `test-results/`.
 
@@ -82,6 +96,32 @@ UMD builds into `assets/vendor/` with the version in the file name and update
 the two `<script>` tags at the top of `index.html`. The version is in the
 file name so the one-year immutable cache on `/assets/` never serves a stale
 build.
+
+## The 42 Hard landing page
+
+`/42-hard` is the registration page for the named six-week block running
+26 October – 5 December. It is a standalone file for the same reason the
+confirmation pages are — it renders immediately, without the router — but
+unlike them it is public: indexed, in the sitemap, with its own canonical tag,
+social card and schema.org `Event` markup carrying both prices.
+
+It arrived as the same kind of self-extracting export, 584KB of inlined React,
+runtime, fonts, logo and the LeadConnector embed script. All of it was already
+in the repo; the import swapped every piece for the shared file and the page is
+now 25KB. Four things had to change beyond the swap, and each has a test:
+
+| Change | Why |
+|---|---|
+| The registration iframe's `src` holds the real form URL, not `{{ formUrl }}` | The parser fetches a `src` before the runtime can substitute anything |
+| `link.msgsndr.com/js/form_embed.js` is injected at runtime, with the same height listener `index.html` uses | Otherwise the iframe stays at its authored height with empty space under the fields |
+| `const KICKOFF` is an explicit `+10:00` instant | Built from local date parts the countdown was wrong by hours outside Queensland, which has no daylight saving |
+| `minmax(min(100%, 330px), 1fr)` on the two hero grids, and a four-column countdown | At 320px and 360px the columns could not shrink, and the wrapper's `overflow-x: hidden` cropped them without a scrollbar |
+
+To update it as registrations come in, edit `SPOTS_LEFT`, `SPOTS_TOTAL` and
+`CLOSE_LABEL` at the top of the page's script block. When the challenge is over,
+delete `42-hard.html`, its entry in `LANDING_PAGES`, its rewrite and header in
+`vercel.json`, its `<loc>` in `sitemap.xml`, and the paragraph linking to it from
+the 6 Week Challenge section of `index.html`.
 
 ## The confirmation pages
 
