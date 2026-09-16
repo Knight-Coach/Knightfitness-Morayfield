@@ -191,7 +191,7 @@
 
           <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(220 13% 91%);">
             <span style="width: 8px; height: 8px; border-radius: 9999px; background: hsl(43 96% 50%); flex: none; animation: pulseDot 1.8s ease-in-out infinite;"></span>
-            <p style="font-size: 12.5px; line-height: 1.5; color: hsl(220 9% 46%);"><strong style="color: hsl(224 71% 4%);">{{ spotsLeftLabel }} of {{ spotsTotalLabel }} spots left.</strong> Registration closes {{ closeDate }} — or when the spots are gone.</p>
+            <p style="font-size: 12.5px; line-height: 1.5; color: hsl(220 9% 46%);"><strong style="color: hsl(224 71% 4%);">Registration closes {{ closeDate }}.</strong> Spots are limited — once they are gone, they are gone.</p>
           </div>
         </div>
       </div>
@@ -224,7 +224,7 @@
     <div style="position: relative; max-width: 840px; margin: 0 auto; text-align: center;">
       <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(224 71% 4% / 0.28); border: 1px solid hsl(0 0% 100% / 0.35); color: #fff; border-radius: 9999px; padding: 8px 16px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.16em;">
         <span style="width: 7px; height: 7px; border-radius: 9999px; background: #fff; animation: pulseDot 1.8s ease-in-out infinite;"></span>
-        Only {{ spotsLeftLabel }} spots left
+        Limited spots
       </div>
       <h2 style="font-size: clamp(34px, 6.2vw, 62px); font-weight: 800; color: #fff; margin-top: 24px; line-height: 0.98; letter-spacing: -0.04em;">Six weeks from now you've either done it, or you're explaining why you didn't.</h2>
       <p style="font-size: 17.5px; line-height: 1.6; color: hsl(356 100% 93%); margin-top: 20px;">Registration closes {{ closeDate }} — or when the spots are gone. Kickoff is Monday 26 October, 6:00 AM.</p>
@@ -241,7 +241,7 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script="" data-props="{&quot;spotsTotal&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:30,&quot;min&quot;:10,&quot;max&quot;:200,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scarcity&quot;},&quot;spotsLeft&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:18,&quot;min&quot;:0,&quot;max&quot;:200,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scarcity&quot;},&quot;closeDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Wednesday 21 October&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Scarcity&quot;},&quot;showCountdown&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Scarcity&quot;}}">
+<script type="text/x-dc" data-dc-script="" data-props="{&quot;closeDate&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Wednesday 21 October&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Scarcity&quot;},&quot;showCountdown&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Scarcity&quot;}}">
 // Day one, 6:00 AM, at the gym. Queensland does not observe daylight saving, so
 // the kickoff is a fixed UTC+10 instant. Pinning the offset rather than building
 // the date in the visitor's local time keeps the countdown honest for anyone
@@ -251,11 +251,6 @@ const KICKOFF = Date.parse('2026-10-26T06:00:00+10:00');
 // Registration closes when the form stops taking entries, not when the challenge
 // starts. Both are copy on the page, so they live together.
 const CLOSE_LABEL = 'Wednesday 21 October';
-
-// The spots counter. Edit these two numbers as registrations come in; nothing
-// else on the page has to change.
-const SPOTS_TOTAL = 30;
-const SPOTS_LEFT = 18;
 
 class Component extends DCLogic {
   state = { now: Date.now() };
@@ -311,8 +306,6 @@ class Component extends DCLogic {
     const s = Math.floor(diff / 1000) % 60;
     const pad = (n) => String(n).padStart(2, '0');
 
-    const spotsTotal = this.props.spotsTotal ?? SPOTS_TOTAL;
-    const spotsLeft = this.props.spotsLeft ?? SPOTS_LEFT;
     const closeDate = this.props.closeDate ?? CLOSE_LABEL;
 
     const tickerItems = ['Final challenge of the year', '42 days', 'No days off', 'Exclusive challenge shirt', 'Starts Mon 26 Oct', 'Limited spots'];
@@ -321,8 +314,6 @@ class Component extends DCLogic {
       // The countdown is hidden once the challenge has started rather than
       // counting down to a date that has been and gone.
       showCountdown: (this.props.showCountdown ?? true) && diff > 0,
-      spotsLeftLabel: String(spotsLeft),
-      spotsTotalLabel: String(spotsTotal),
       closeDate,
       countdown: [
         { label: 'Days', value: String(d) },

@@ -268,6 +268,16 @@ for (const page of LANDING_PAGES) {
     assert.doesNotMatch(html, /ghl_embed/, 'the inlined LeadConnector embed script survived');
   });
 
+  test(`${page.file} makes no numbered scarcity claim`, async () => {
+    const html = await read(page.file);
+    // "18 of 30 spots left" came with the export as an invented default. A count
+    // nobody is updating is a claim the gym cannot stand behind, and it goes
+    // stale the moment it is wrong. Limited-without-a-number is still true.
+    const counted = [...html.matchAll(/[^\w]\d+\s+(?:of\s+\d+\s+)?(?:spots?|places?|seats?)\b/gi)]
+      .map((m) => m[0].trim());
+    assert.deepEqual(counted, [], 'a hard-coded spot count is back on the page');
+  });
+
   test(`${page.file} pins its countdown to a real, timezone-explicit instant`, async () => {
     const html = await read(page.file);
     // Built from local date parts the countdown is wrong by hours for anyone
