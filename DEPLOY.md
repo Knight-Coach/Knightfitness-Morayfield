@@ -164,11 +164,15 @@ to it from `index.html`. The tests are driven off those lists.
 Morayfield" form in LeadConnector (`F6YrDPqkBDSVHapalvQF`), not to either of the
 forms the rest of the site uses.
 
-The spots counter, the registration close date and the kickoff instant are
-constants at the top of the page's script block: `SPOTS_LEFT`, `SPOTS_TOTAL`,
-`CLOSE_LABEL` and `KICKOFF`. Change `KICKOFF` and the `startDate` in the
-schema.org block together — a test fails if they disagree. The countdown hides
-itself once the kickoff has passed.
+The registration close date and the kickoff instant are constants at the top of
+the page's script block: `CLOSE_LABEL` and `KICKOFF`. Change `KICKOFF` and the
+`startDate` in the schema.org block together — a test fails if they disagree.
+The countdown hides itself once the kickoff has passed.
+
+The page deliberately states no number of spots left. The export shipped an
+invented "18 of 30" counter in two places; both now say the spots are limited
+without counting them, and a test fails if a number in front of "spots" returns.
+If you want a real counter, it has to be a real number somebody updates.
 
 Retiring the page after the challenge means deleting `42-hard.html`, its entry
 in `LANDING_PAGES`, its rewrite and cache header in `vercel.json`, its `<loc>`

@@ -59,6 +59,7 @@ npm test
 - each landing page is indexable, in the sitemap, linked to from `index.html`,
   and carries its own canonical, social card, structured data, registration form
   and a countdown pinned to the same instant its structured data claims
+- no landing page makes a numbered scarcity claim — see below
 - no page has CSS leaking out of a `style` attribute, which is how a bad edit silently drops styling
 
 `npm run test:browser` renders the site in headless Chromium against the
@@ -117,8 +118,12 @@ now 25KB. Four things had to change beyond the swap, and each has a test:
 | `const KICKOFF` is an explicit `+10:00` instant | Built from local date parts the countdown was wrong by hours outside Queensland, which has no daylight saving |
 | `minmax(min(100%, 330px), 1fr)` on the two hero grids, and a four-column countdown | At 320px and 360px the columns could not shrink, and the wrapper's `overflow-x: hidden` cropped them without a scrollbar |
 
-To update it as registrations come in, edit `SPOTS_LEFT`, `SPOTS_TOTAL` and
-`CLOSE_LABEL` at the top of the page's script block. When the challenge is over,
+The export shipped a "18 of 30 spots left" counter, twice, as an invented
+default. Both are gone: the registration card now leads with the close date and
+the red section says "Limited spots". A count nobody is updating is a claim the
+gym cannot stand behind, and a test fails if a number in front of "spots" comes
+back. To change the close date, edit `CLOSE_LABEL` at the top of the page's
+script block. When the challenge is over,
 delete `42-hard.html`, its entry in `LANDING_PAGES`, its rewrite and header in
 `vercel.json`, its `<loc>` in `sitemap.xml`, and the paragraph linking to it from
 the 6 Week Challenge section of `index.html`.
