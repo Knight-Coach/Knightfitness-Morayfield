@@ -8,7 +8,7 @@ folder is served as-is.
 | File | Purpose |
 |---|---|
 | `index.html` | The whole site — all 8 pages live in here |
-| `thank-you.html` | Confirmation page for the 3-day pass form, served at `/thank-you`. Not part of the router |
+| `thank-you.html` | Confirmation page for the 3 free sessions form, served at `/thank-you`. Not part of the router |
 | `message-received.html` | Confirmation page for the contact form, served at `/message-received`. Not part of the router |
 | `42-hard.html` | Landing page for the 42 Hard challenge, served at `/42-hard`. Not part of the router |
 | `support.js` | The runtime `index.html` depends on. Required. Do not rename |
@@ -74,9 +74,9 @@ Real paths, handled client-side and rewritten to `index.html` by Vercel.
 | `/reviews` | Reviews |
 | `/6-week-challenge` | 6 Week Challenge |
 | `/your-first-visit` | Your First Visit |
-| `/get-started` | Claim 3-day pass |
+| `/get-started` | Claim 3 free sessions |
 | `/contact` | Contact |
-| `/thank-you` | Confirmation page after the 3-day pass form. A real file, not a route |
+| `/thank-you` | Confirmation page after the 3 free sessions form. A real file, not a route |
 | `/message-received` | Confirmation page after the contact form. A real file, not a route |
 | `/42-hard` | 42 Hard challenge registration page. A real file, not a route |
 
@@ -88,7 +88,9 @@ Real paths, handled client-side and rewritten to `index.html` by Vercel.
 ## After the first deploy
 
 1. Test the Vercel preview URL on a real phone on mobile data.
-2. Submit both forms and confirm they land in LeadConnector.
+2. Submit both forms (3 free sessions and contact) and confirm each lands in
+   #new-trialists and #morayfieldleads, tags the contact in HighLevel, and goes on to
+   its confirmation page. See [README.md](README.md#the-forms).
 3. Point the domain at Vercel (Settings → Domains).
 4. In Search Console, submit `https://knightfitness-morayfield.com.au/sitemap.xml`.
 5. Use the URL Inspection tool on `/` and one inner page to confirm Google
@@ -99,8 +101,12 @@ Real paths, handled client-side and rewritten to `index.html` by Vercel.
 - **Videos are hotlinked** to `assets.cdn.filesafe.space` — the gym's
   LeadConnector media library, not the old website's host. They keep working as
   long as that account exists. Nine files: one hero, eight testimonials.
-- **Forms are LeadConnector iframes.** They need `link.msgsndr.com/js/form_embed.js`,
-  which `index.html` injects at runtime.
+- **Forms are Knight Admin's iframes** (`knight-agent.vercel.app/form/…`). Knight
+  Admin only lets the addresses in each form's `embed_origins` frame it: this
+  domain with and without `www.`. A preview deployment on a `*.vercel.app`
+  address shows the forms refusing to load; add the preview's address to the
+  form's `embed_origins` through Knight Admin to test there. The 42 Hard page
+  still uses a LeadConnector iframe and injects `link.msgsndr.com/js/form_embed.js`.
 - **Client-rendered.** Google executes JS and will index it, but the HTML
   arrives close to empty. Facebook, LinkedIn and Slack do not execute JS: they
   read the `og:*` tags from the static HTML, which is why `og:image` is an

@@ -7,15 +7,15 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 import { listen } from '../scripts/serve.js';
-import { ROOT, routesFromIndex, CONFIRMATION_PAGES, LANDING_PAGES } from './helpers.mjs';
+import { ROOT, routesFromIndex, CONFIRMATION_PAGES, LANDING_PAGES, FORMS_ORIGIN, SITE_FORMS } from './helpers.mjs';
 
-// Third-party hosts the page talks to: Google Fonts, the LeadConnector form embed
-// and media library, Google Maps. Their availability is not something this
+// Third-party hosts the page talks to: Google Fonts, Knight Admin's forms, the
+// LeadConnector media library and the 42 Hard page's form embed, Google Maps. Their availability is not something this
 // repository controls, so the suite never contacts them: every request to one of
 // these hosts is aborted at the browser and the resulting console noise ignored.
 // That keeps the run hermetic and fast, and it still exercises the page's own
 // handling of a missing font, video or embed script.
-const EXTERNAL = /fonts\.g(oogleapis|static)\.com|msgsndr\.com|leadconnectorhq\.com|filesafe\.space|google\.com\/maps/;
+const EXTERNAL = /fonts\.g(oogleapis|static)\.com|knight-agent\.vercel\.app|msgsndr\.com|leadconnectorhq\.com|filesafe\.space|google\.com\/maps/;
 
 let server, base, browser, routes;
 const shots = process.env.KEEP_SCREENSHOTS ? join(ROOT, 'test-results') : null;
@@ -111,13 +111,94 @@ test('client-side navigation updates the URL, title and content without a reload
   await page.close();
 });
 
-test('the 3-day pass and contact pages embed the LeadConnector forms', async () => {
-  for (const [path, formId] of [['/get-started', 'PvrT5GhwQ2LAS8Q4wsnf'], ['/contact', 'v89V3Ku9h7ZgkCdOXHD4']]) {
-    const { page } = await open(base + path);
-    const src = await page.locator(`iframe[src*="widget/form/${formId}"]`).first().getAttribute('src');
-    assert.ok(src, `form ${formId} not embedded on ${path}`);
+const PATH_OF = { HOME: '/', REVIEWS: '/reviews', 'GET STARTED': '/get-started', CONTACT: '/contact', '6 WEEK CHALLENGE': '/6-week-challenge' };
+
+test("each page embeds its Knight Admin form, framed for Morayfield", async () => {
+  for (const form of SITE_FORMS) {
+    for (const section of form.sections) {
+      const path = PATH_OF[section];
+      assert.ok(path, `no path for the ${section} section`);
+      const { page } = await open(base + path);
+      const src = await page.locator(`iframe[data-kf-form="${form.slug}"]`).first().getAttribute('src');
+      assert.equal(src, `${FORMS_ORIGIN}/form/${form.slug}?embed=1&site=morayfield`, `${form.slug} on ${path}`);
+      await page.close();
+    }
+  }
+});
+
+/**
+ * Knight Admin's form page stood in for by a page that does what the real one
+ * does: post its height, then `submitted: true` once it is sent (the real page
+ * does that from src/forms/agentPage.ts in the Knight-Agent repo).
+ */
+const formStub = (height) => `<!doctype html><body><script>
+  parent.postMessage({ type: 'kf-form', height: ${height} }, '*');
+  window.addEventListener('message', (e) => { if (e.data === 'send') parent.postMessage({ type: 'kf-form', height: ${height}, submitted: true }, '*'); });
+</script></body>`;
+
+async function withStubbedForms(page, height) {
+  // Registered after blockExternal, so it wins for Knight Admin's host only.
+  await page.route((u) => u.origin === FORMS_ORIGIN, (route) => route.fulfill({ status: 200, contentType: 'text/html', body: formStub(height) }));
+}
+
+test("the form's height sizes its iframe, and a sent form goes on to its confirmation page", async () => {
+  for (const [path, slug, done] of [['/get-started', 'free-sessions', '/thank-you'], ['/contact', 'enquiry', '/message-received']]) {
+    const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+    await blockExternal(page);
+    await withStubbedForms(page, 913);
+    await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+    const frame = page.locator(`iframe[data-kf-form="${slug}"]`).first();
+    await frame.waitFor({ state: 'attached', timeout: 15000 });
+    await page.waitForFunction((s) => document.querySelector(`iframe[data-kf-form="${s}"]`).style.height === '913px', slug, { timeout: 10000 });
+    await page.evaluate((s) => document.querySelector(`iframe[data-kf-form="${s}"]`).contentWindow.postMessage('send', '*'), slug);
+    await page.waitForURL(base + done, { timeout: 10000 });
     await page.close();
   }
+});
+
+test('a form that never loads shows the phone number instead of a dead box', async () => {
+  // Knight Admin is blocked here (EXTERNAL), as it would be if it were down.
+  const { page } = await open(base + '/get-started');
+  const fallback = page.locator('iframe[data-kf-form="free-sessions"] + .kf-form-fallback').first();
+  assert.equal(await fallback.isVisible(), false, 'the fallback shows before the form has had its chance');
+  await fallback.waitFor({ state: 'visible', timeout: 15000 });
+  assert.match(await fallback.innerText(), /Call 0435 737 238/);
+  assert.equal(await fallback.locator('a[href="tel:0435737238"]').count(), 1);
+  await page.close();
+});
+
+test('a form that loads keeps the fallback hidden', async () => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await blockExternal(page);
+  await withStubbedForms(page, 640);
+  await page.goto(base + '/contact', { waitUntil: 'domcontentloaded' });
+  const frame = page.locator('iframe[data-kf-form="enquiry"]').first();
+  await frame.waitFor({ state: 'attached', timeout: 15000 });
+  await page.waitForFunction(() => document.querySelector('iframe[data-kf-form="enquiry"]').hasAttribute('data-kf-ready'), null, { timeout: 10000 });
+  await page.waitForTimeout(6000); // past FORM_STALL_MS
+  assert.equal(await page.locator('iframe[data-kf-form="enquiry"] + .kf-form-fallback').first().isVisible(), false);
+  await page.close();
+});
+
+test("a message from anywhere but Knight Admin is ignored", async () => {
+  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await blockExternal(page);
+  await page.route((u) => u.origin === 'https://forms.example.com', (route) => route.fulfill({ status: 200, contentType: 'text/html', body: formStub(1500) }));
+  await page.goto(base + '/get-started', { waitUntil: 'domcontentloaded' });
+  const frame = page.locator('iframe[data-kf-form="free-sessions"]').first();
+  await frame.waitFor({ state: 'attached', timeout: 15000 });
+  const before = await frame.evaluate((f) => f.style.height);
+  await page.evaluate(() => { window.__seen = []; window.addEventListener('message', (e) => window.__seen.push([e.origin, !!(e.data && e.data.submitted)])); });
+  // Point the form's iframe at another site: it says what Knight Admin would, and is not believed.
+  await frame.evaluate((f) => { f.src = 'https://forms.example.com/form'; });
+  await page.waitForTimeout(400);
+  await frame.evaluate((f) => f.contentWindow.postMessage('send', '*'));
+  await page.waitForTimeout(400);
+  // It did speak: the page heard it, and did nothing.
+  assert.deepEqual(await page.evaluate(() => window.__seen), [['https://forms.example.com', false], ['https://forms.example.com', true]]);
+  assert.equal(new URL(page.url()).pathname, '/get-started', 'a foreign frame navigated the page');
+  assert.equal(await frame.evaluate((f) => f.style.height), before, 'a foreign frame resized the form');
+  await page.close();
 });
 
 test('an unknown path falls back to the home page instead of a blank screen', async () => {

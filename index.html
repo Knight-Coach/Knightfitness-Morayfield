@@ -91,6 +91,10 @@
   @keyframes kfScrollL { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 10px)); } }
   @keyframes kfScrollR { from { transform: translateX(calc(-50% - 10px)); } to { transform: translateX(0); } }
   @media (prefers-reduced-motion: reduce) { [data-marquee] { animation: none !important; } }
+  .kf-form-fallback { display: none; margin-top: 12px; padding: 14px 16px; border-radius: 12px; background: hsl(356 72% 51% / 0.08); border: 1px solid hsl(356 72% 51% / 0.25); font-size: 14.5px; line-height: 1.5; color: hsl(224 71% 4%); }
+  .kf-form-fallback a { font-weight: 700; color: hsl(354 74% 38%); }
+  iframe[data-kf-stalled] { display: none !important; }
+  iframe[data-kf-stalled] + .kf-form-fallback { display: block; }
   @keyframes kfUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
   @keyframes kfPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
   @keyframes kfMarquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
@@ -118,7 +122,7 @@
         <sc-if value="{{ showNavPhoneIcon }}" hint-placeholder-val="{{ false }}">
           <a href="tel:0435737238" aria-label="Call Knight Fitness Morayfield" style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; border-radius: 11px; border: 1px solid hsl(220 13% 91%); color: hsl(224 71% 4%); font-size: 17px; margin-left: 6px;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">✆</a>
         </sc-if>
-        <a href="{{ hStart }}" onClick="{{ goStart }}" style="margin-left: 8px; font-size: 13.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 12px 17px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; box-shadow: 0 4px 12px -2px hsl(356 72% 51% / 0.45); transition: opacity .15s, transform .15s;" style-hover="color: #fff; opacity: 0.93;">Claim 3-day pass</a>
+        <a href="{{ hStart }}" onClick="{{ goStart }}" style="margin-left: 8px; font-size: 13.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 12px 17px; border-radius: 10px; white-space: nowrap; flex-shrink: 0; box-shadow: 0 4px 12px -2px hsl(356 72% 51% / 0.45); transition: opacity .15s, transform .15s;" style-hover="color: #fff; opacity: 0.93;">Claim 3 free sessions</a>
         <sc-if value="{{ showMenuButton }}" hint-placeholder-val="{{ false }}">
           <a href="#" onClick="{{ toggleMenu }}" aria-label="Menu" aria-expanded="{{ menuOpen }}" style="width: 46px; height: 46px; flex-shrink: 0; display: grid; place-items: center; border-radius: 11px; border: 1px solid hsl(220 13% 91%); color: hsl(224 71% 4%); font-size: 17px; margin-left: 8px;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">{{ menuLabel }}</a>
         </sc-if>
@@ -168,7 +172,7 @@
             </sc-for>
           </div>
           <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px;">
-            <a href="#book" style="font-size: 16px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 18px 32px; border-radius: 13px; box-shadow: 0 14px 30px -8px hsl(356 72% 51% / 0.6); transition: opacity .15s;" style-hover="color: #fff; opacity: 0.93;">Claim your 3-day pass</a>
+            <a href="#book" style="font-size: 16px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 18px 32px; border-radius: 13px; box-shadow: 0 14px 30px -8px hsl(356 72% 51% / 0.6); transition: opacity .15s;" style-hover="color: #fff; opacity: 0.93;">Claim your 3 free sessions</a>
             <a href="tel:0435737238" style="font-size: 16px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.06); border: 1px solid hsl(0 0% 100% / 0.16); padding: 18px 28px; border-radius: 13px; transition: background .15s;" style-hover="background: hsl(0 0% 100% / 0.12); color: #fff;">Call the studio</a>
           </div>
           <div style="font-size: 12.5px; font-weight: 500; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 16px;">{{ reassure }}</div>
@@ -204,7 +208,7 @@
             <div style="display: flex; align-items: center; gap: 14px;">
               <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 12px; color: hsl(356 72% 51%); letter-spacing: 0.08em;">01</span>
               <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
-              <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Claim your pass</span>
+              <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.16em;">Claim your sessions</span>
             </div>
             <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 46px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">Three coach-led sessions. On us.</h2>
             <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 18px; max-width: 32em;">Fill this in and a coach will call you to lock in a time that suits your week. No card details, no lock-in, and no obligation to join afterwards.</p>
@@ -222,7 +226,8 @@
             <div style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 22px;">Would rather talk first? <a href="tel:0435737238" style="font-weight: 700;">Call 0435 737 238</a></div>
           </div>
           <div style="background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 20px; padding: 24px;">
-            <iframe src="https://api.leadconnectorhq.com/widget/form/PvrT5GhwQ2LAS8Q4wsnf" id="inline-PvrT5GhwQ2LAS8Q4wsnf" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="PvrT5GhwQ2LAS8Q4wsnf" data-height="480" title="Claim your 3 day pass" scrolling="no" style="width: 100%; height: 480px; border: 0; border-radius: 14px; display: block; background: #fff;"></iframe>
+            <iframe src="https://knight-agent.vercel.app/form/free-sessions?embed=1&amp;site=morayfield" id="form-home-free-sessions" data-kf-form="free-sessions" data-done="/thank-you" title="Claim your 3 free sessions" loading="lazy" scrolling="no" style="width: 100%; height: 760px; border: 0; border-radius: 14px; display: block; background: #fff;"></iframe>
+            <div class="kf-form-fallback" role="status">Form not loading? <a href="tel:0435737238">Call 0435 737 238</a> and a coach will book your 3 free sessions over the phone.</div>
             <div style="font-size: 12px; font-weight: 500; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 14px; text-align: center;">{{ reassure }}</div>
           </div>
         </div>
@@ -315,7 +320,7 @@
         </div>
         <div data-reveal="" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: center; justify-content: space-between; margin-top: 32px; background: hsl(0 0% 100% / 0.04); border: 1px solid hsl(0 0% 100% / 0.1); border-radius: 18px; padding: 24px 28px;">
           <p style="font-size: 16px; font-weight: 600; color: #fff; max-width: 34em;">Try the whole system for three sessions — coach-led, free, no lock-in.</p>
-          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 15px 26px; border-radius: 12px; white-space: nowrap;" style-hover="color: #fff; opacity: 0.93;">Claim your pass →</a>
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 15px 26px; border-radius: 12px; white-space: nowrap;" style-hover="color: #fff; opacity: 0.93;">Claim your 3 free sessions →</a>
         </div>
       </div>
     </section>
@@ -585,7 +590,7 @@
         <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.9vw, 52px); line-height: 1.04; letter-spacing: -0.04em; color: #fff; margin-top: 16px;">Three sessions on us. Then decide.</h2>
         <p style="font-size: clamp(16px, 1.3vw, 19px); color: #fff; opacity: 0.9; margin-top: 16px;">Come in, meet the coaches, try the room. No lock-in, no pressure, no judgement.</p>
         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 32px;">
-          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 16px; font-weight: 700; color: hsl(354 74% 38%); background: #fff; padding: 18px 34px; border-radius: 13px; box-shadow: 0 18px 34px -14px rgb(0 0 0 / 0.4);" style-hover="color: hsl(354 74% 38%); opacity: 0.94;">Claim your 3-day pass</a>
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 16px; font-weight: 700; color: hsl(354 74% 38%); background: #fff; padding: 18px 34px; border-radius: 13px; box-shadow: 0 18px 34px -14px rgb(0 0 0 / 0.4);" style-hover="color: hsl(354 74% 38%); opacity: 0.94;">Claim your 3 free sessions</a>
           <a href="tel:0435737238" style="font-size: 16px; font-weight: 600; color: #fff; border: 1px solid hsl(0 0% 100% / 0.5); padding: 18px 28px; border-radius: 13px;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.14);">Or call 0435 737 238</a>
         </div>
         <div style="font-size: 12.5px; font-weight: 500; color: #fff; opacity: 0.7; text-transform: uppercase; letter-spacing: 0.12em; margin-top: 20px;">{{ reassure }}</div>
@@ -696,7 +701,7 @@
         <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(26px, 2.8vw, 38px); letter-spacing: -0.032em;">The best way to understand it is to walk in</h2>
         <p style="font-size: 16.5px; color: hsl(220 9% 46%); margin-top: 12px;">Three coach-led sessions, no cost. Then you decide.</p>
         <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 26px;">
-          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 30px; border-radius: 12px;" style-hover="color: #fff; opacity: 0.93;">Claim your 3-day pass</a>
+          <a href="{{ hStart }}" onClick="{{ goStart }}" style="font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 30px; border-radius: 12px;" style-hover="color: #fff; opacity: 0.93;">Claim your 3 free sessions</a>
           <a href="{{ hFirst }}" onClick="{{ goFirst }}" style="font-size: 15.5px; font-weight: 600; color: hsl(224 71% 4%); background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); padding: 17px 26px; border-radius: 12px;" style-hover="color: hsl(224 71% 4%);">What happens on day one →</a>
         </div>
       </div>
@@ -881,10 +886,11 @@
           </div>
         </div>
         <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.5);">
-          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.025em;">Drop us a message</h3>
-          <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 9px;">A coach will reach out to learn about your goals and find the right program. No pressure, no hard sell.</p>
-          <iframe src="https://api.leadconnectorhq.com/widget/form/v89V3Ku9h7ZgkCdOXHD4" id="inline-reviews-v89V3Ku9h7ZgkCdOXHD4" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="v89V3Ku9h7ZgkCdOXHD4" title="Message Knight Fitness Morayfield" style="width: 100%; height: 560px; border: 0; border-radius: 12px; margin-top: 18px; display: block;"></iframe>
-          <div style="font-size: 12px; font-weight: 500; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 12px; text-align: center;">Secure form · We reply within 1 business day</div>
+          <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 22px; letter-spacing: -0.025em;">Claim your 3 free sessions</h3>
+          <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 9px;">A coach will call to learn about your goals and book your first session. No pressure, no hard sell.</p>
+          <iframe src="https://knight-agent.vercel.app/form/free-sessions?embed=1&amp;site=morayfield" id="form-reviews-free-sessions" data-kf-form="free-sessions" data-done="/thank-you" title="Claim your 3 free sessions" loading="lazy" scrolling="no" style="width: 100%; height: 760px; border: 0; border-radius: 12px; margin-top: 18px; display: block;"></iframe>
+          <div class="kf-form-fallback" role="status">Form not loading? <a href="tel:0435737238">Call 0435 737 238</a> and a coach will book your 3 free sessions over the phone.</div>
+          <div style="font-size: 12px; font-weight: 500; color: hsl(220 9% 46%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 12px; text-align: center;">{{ reassure }}</div>
         </div>
       </div>
     </section>
@@ -897,7 +903,7 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 48px; align-items: start;">
       <div>
         <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 72% 51%); text-transform: uppercase; letter-spacing: 0.16em;">Get started</div>
-        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px;">Claim your 3-day pass</h1>
+        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px;">Claim your 3 free sessions</h1>
         <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(220 9% 46%); margin-top: 20px;">Three coach-led sessions, no cost and no lock-in. Meet the coaches, try the room, and see if Knight Fitness is the right fit for you.</p>
         <div style="display: grid; gap: 13px; margin-top: 30px;">
           <sc-for list="{{ startPoints }}" as="s" hint-placeholder-count="4">
@@ -916,7 +922,8 @@
       <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.35); position: sticky; top: 92px;">
         <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.025em;">Book your first session</h2>
         <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 9px;">Fill this in and we'll be in touch within a few hours.</p>
-        <iframe src="https://api.leadconnectorhq.com/widget/form/PvrT5GhwQ2LAS8Q4wsnf" id="inline-start-PvrT5GhwQ2LAS8Q4wsnf" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="PvrT5GhwQ2LAS8Q4wsnf" data-height="480" title="Claim your 3 day pass" scrolling="no" style="width: 100%; height: 480px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+        <iframe src="https://knight-agent.vercel.app/form/free-sessions?embed=1&amp;site=morayfield" id="form-start-free-sessions" data-kf-form="free-sessions" data-done="/thank-you" title="Claim your 3 free sessions" scrolling="no" style="width: 100%; height: 760px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+        <div class="kf-form-fallback" role="status">Form not loading? <a href="tel:0435737238">Call 0435 737 238</a> and a coach will book your 3 free sessions over the phone.</div>
         <div style="display: flex; flex-wrap: wrap; gap: 14px; margin-top: 10px; font-size: 12.5px; font-weight: 600; color: hsl(220 9% 46%);">
           <span>✔ Beginner friendly</span><span>✔ Coach-led every session</span><span>✔ No pressure</span>
         </div>
@@ -939,7 +946,8 @@
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 40px; margin-top: 44px; align-items: start;">
       <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.3);">
         <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 24px; letter-spacing: -0.025em;">Send us a message</h2>
-        <iframe src="https://api.leadconnectorhq.com/widget/form/v89V3Ku9h7ZgkCdOXHD4" id="inline-v89V3Ku9h7ZgkCdOXHD4" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="v89V3Ku9h7ZgkCdOXHD4" data-height="460" title="Contact Knight Fitness Morayfield" scrolling="no" style="width: 100%; height: 460px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+        <iframe src="https://knight-agent.vercel.app/form/enquiry?embed=1&amp;site=morayfield" id="form-contact-enquiry" data-kf-form="enquiry" data-done="/message-received" title="Contact Knight Fitness Morayfield" scrolling="no" style="width: 100%; height: 720px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+        <div class="kf-form-fallback" role="status">Form not loading? <a href="tel:0435737238">Call 0435 737 238</a> or message us on <a href="https://facebook.com/p/Knight-Fitness-Morayfield-100090367359324/" target="_blank" rel="noopener">Facebook</a>.</div>
       </div>
       <div style="display: grid; gap: 18px;">
         <div style="background: hsl(224 71% 4%); border-radius: 20px; padding: 30px; color: #fff; display: grid; gap: 20px;">
@@ -1049,7 +1057,8 @@
         <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 22px; padding: 28px; box-shadow: 0 24px 48px -26px rgb(0 0 0 / 0.5);">
           <h3 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 23px; letter-spacing: -0.025em;">Send us a message</h3>
           <p style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 9px;">Tell us your goals and we'll reply within a few hours.</p>
-          <iframe src="https://api.leadconnectorhq.com/widget/form/v89V3Ku9h7ZgkCdOXHD4" id="inline-challenge-v89V3Ku9h7ZgkCdOXHD4" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-form-id="v89V3Ku9h7ZgkCdOXHD4" data-height="460" title="Ask about the 6 Week Challenge" scrolling="no" style="width: 100%; height: 460px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+          <iframe src="https://knight-agent.vercel.app/form/enquiry?embed=1&amp;site=morayfield" id="form-challenge-enquiry" data-kf-form="enquiry" data-done="/message-received" title="Ask about the 6 Week Challenge" loading="lazy" scrolling="no" style="width: 100%; height: 720px; border: 0; border-radius: 14px; margin-top: 18px; display: block;"></iframe>
+          <div class="kf-form-fallback" role="status">Form not loading? <a href="tel:0435737238">Call 0435 737 238</a> or message us on <a href="https://facebook.com/p/Knight-Fitness-Morayfield-100090367359324/" target="_blank" rel="noopener">Facebook</a>.</div>
         </div>
       </div>
     </section>
@@ -1294,7 +1303,7 @@ const ROUTES = [
   { page: 'reviews', slug: 'reviews', title: 'Reviews — Knight Fitness Morayfield', desc: 'Read what Morayfield locals say about training at Knight Fitness. Rated 5.0 from 256 Google reviews.' },
   { page: 'challenge', slug: '6-week-challenge', title: '6 Week Challenge — Knight Fitness Morayfield', desc: 'A six-week reset with measurements, nutrition guidance and weekly accountability at Knight Fitness Morayfield.' },
   { page: 'first', slug: 'your-first-visit', title: 'Your First Visit — Knight Fitness Morayfield', desc: 'Exactly what happens on your first visit to Knight Fitness Morayfield, so nothing about walking in is a surprise.' },
-  { page: 'start', slug: 'get-started', title: 'Claim Your 3-Day Pass — Knight Fitness Morayfield', desc: 'Three free coach-led sessions at Knight Fitness Morayfield. No lock-in, no gym experience needed.' },
+  { page: 'start', slug: 'get-started', title: 'Claim 3 Free Sessions — Knight Fitness Morayfield', desc: 'Three free coach-led sessions at Knight Fitness Morayfield. No lock-in, no gym experience needed.' },
   { page: 'contact', slug: 'contact', title: 'Contact — Knight Fitness Morayfield', desc: 'Find Knight Fitness Morayfield at 125 Morayfield Road. Call 0435 737 238 or message a coach.' }
 ];
 
@@ -1327,6 +1336,12 @@ const canonicalFor = (page) => { const r = routeFor(page); return SITE + (r.slug
 // is nothing to rewrite, so fall back to the deployed URL rather than a link
 // that would resolve against the local filesystem.
 const fileHrefFor = (path) => (FILE_MODE ? SITE + path : path);
+
+// Where the site's forms live: Knight Admin, the gym's own forms (the 3 free sessions
+// form and the contact form). Its pages only let this site frame them.
+const FORMS_ORIGIN = 'https://knight-agent.vercel.app';
+// How long a loaded form has to post its first message before the call-us fallback shows.
+const FORM_STALL_MS = 5000;
 
 class Component extends DCLogic {
   state = { page: 'home', reviewCount: 0, lightbox: null, video: null, narrow: false, compactNav: false, menu: false, reviewQuery: '', reviewSort: 'newest', expanded: {}, reviewsShown: 20 };
@@ -1380,30 +1395,38 @@ class Component extends DCLogic {
     this.mountFormResizer();
   }
 
-  // LeadConnector forms post their rendered height to the parent. Without a listener
-  // the iframe stays at its authored height and shows empty space below the fields.
+  // The forms are Knight Admin's (FORMS_ORIGIN/form/<slug>?embed=1). Each posts
+  // {type: 'kf-form', height} as it renders and grows, and `submitted: true` once it is
+  // sent. Without a listener the iframe stays at its authored height. A sent form goes
+  // on to its confirmation page (the iframe's data-done), which is the conversion goal.
+  // Only Knight Admin's origin, and only a frame on this page, is listened to.
   mountFormResizer() {
-    const isFormFrame = (el) => el && el.tagName === 'IFRAME' && /widget\/form/.test(el.src || '');
     this.onFormMessage = (e) => {
-      if (!/msgsndr|leadconnector|gohighlevel/.test(e.origin)) return;
-      let d = e.data;
-      if (typeof d === 'string') { try { d = JSON.parse(d); } catch (_) { return; } }
-      if (!d || typeof d !== 'object') return;
-      const h = parseInt(d.height ?? d.frameHeight ?? (d.payload && d.payload.height), 10);
-      if (!h || h < 120 || h > 4000) return;
-      const frames = Array.from(document.querySelectorAll('iframe')).filter(isFormFrame);
-      const target = frames.find((f) => f.contentWindow === e.source) || frames[0];
-      if (target) target.style.height = h + 'px';
+      if (e.origin !== FORMS_ORIGIN) return;
+      const d = e.data;
+      if (!d || typeof d !== 'object' || d.type !== 'kf-form') return;
+      const frame = Array.from(document.querySelectorAll('iframe[data-kf-form]')).find((f) => f.contentWindow === e.source);
+      if (!frame) return;
+      frame.setAttribute('data-kf-ready', '');
+      frame.removeAttribute('data-kf-stalled');
+      const h = parseInt(d.height, 10);
+      if (h >= 120 && h <= 4000) frame.style.height = h + 'px';
+      const done = frame.getAttribute('data-done');
+      if (d.submitted === true && done) window.location.assign(fileHrefFor(done));
     };
     window.addEventListener('message', this.onFormMessage);
 
-    if (!document.getElementById('lc-form-embed')) {
-      const sc = document.createElement('script');
-      sc.id = 'lc-form-embed';
-      sc.src = 'https://link.msgsndr.com/js/form_embed.js';
-      sc.async = true;
-      document.body.appendChild(sc);
-    }
+    // A form that loads but never says hello (Knight Admin down, the form closed or
+    // renamed, this address not allowed to frame it) would leave a dead box where the
+    // lead should be. Give it FORM_STALL_MS after its load event, then show the phone
+    // number under it instead. Load events don't bubble, so this listens on capture.
+    this.onFormLoad = (e) => {
+      const f = e.target;
+      if (!f || f.tagName !== 'IFRAME' || !f.hasAttribute('data-kf-form')) return;
+      clearTimeout(f.kfStallTimer);
+      f.kfStallTimer = setTimeout(() => { if (!f.hasAttribute('data-kf-ready')) f.setAttribute('data-kf-stalled', ''); }, FORM_STALL_MS);
+    };
+    document.addEventListener('load', this.onFormLoad, true);
   }
 
   componentDidUpdate(prev) { if (prev !== this.props || true) this.reveal(); this.hydrateStoryVideos(); }
@@ -1435,6 +1458,7 @@ class Component extends DCLogic {
     if (this.mqNarrow) this.mqNarrow.removeEventListener('change', this.syncMedia);
     if (this.mqNav) this.mqNav.removeEventListener('change', this.syncMedia);
     if (this.onFormMessage) window.removeEventListener('message', this.onFormMessage);
+    if (this.onFormLoad) document.removeEventListener('load', this.onFormLoad, true);
     if (this.onHash) { window.removeEventListener('popstate', this.onHash); window.removeEventListener('hashchange', this.onHash); }
     if (this.titleObserver) this.titleObserver.disconnect();
   }
@@ -1762,7 +1786,7 @@ class Component extends DCLogic {
       heroStats: [
         { value: '256', label: '5-star reviews' },
         { value: '5.0', label: 'Google rating' },
-        { value: '3 day', label: 'Free trial pass' }
+        { value: '3', label: 'Free sessions' }
       ],
 
       counters: [
@@ -1805,7 +1829,7 @@ class Component extends DCLogic {
       ],
 
       steps: [
-        { num: '01', title: 'Reach out', body: 'Send a message or claim your pass. We talk through where you are, what you want, and answer your questions before you walk in.', img: 'assets/img/coaches-team.jpg', alt: 'The Knight Fitness Morayfield coaching team' },
+        { num: '01', title: 'Reach out', body: 'Send a message or claim your 3 free sessions. We talk through where you are, what you want, and answer your questions before you walk in.', img: 'assets/img/coaches-team.jpg', alt: 'The Knight Fitness Morayfield coaching team' },
         { num: '02', title: 'Your first session', body: "A coach guides you through everything, step by step. You're never thrown into a random class or left wondering what to do.", img: 'assets/img/session-group.jpg', alt: 'A coach-led team training session in progress' },
         { num: '03', title: 'Build momentum', body: 'Coaching, structure and community make it easier to keep showing up. Most members say the hardest part was walking in the first time.', img: 'assets/img/community.jpg', alt: 'Knight Fitness members together after a session' }
       ],
@@ -1829,7 +1853,7 @@ class Component extends DCLogic {
       })),
 
       firstVisitSteps: [
-        { num: '01', title: 'Before you arrive', body: 'Claim your pass or call the studio. We confirm a session time that suits you and answer anything you want to ask first — so nothing is a surprise.' },
+        { num: '01', title: 'Before you arrive', body: 'Claim your 3 free sessions or call the studio. We confirm a session time that suits you and answer anything you want to ask first — so nothing is a surprise.' },
         { num: '02', title: 'What to bring', body: 'Comfortable training clothes, runners, a water bottle and a towel. That is genuinely it. No special gear, no gym experience.' },
         { num: '03', title: 'Getting here', body: 'We are at 125 Morayfield Rd with on-site parking right at the door. Come 10 minutes early and a coach will meet you at the front.' },
         { num: '04', title: 'Your first session', body: 'Forty-five minutes, coach-led start to finish. The coach walks you through every movement and scales anything that needs scaling.' },

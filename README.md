@@ -10,7 +10,7 @@ repository root as-is.
 | Path | What it is |
 |---|---|
 | `index.html` | The whole site. Exported from the design project (see [DEPLOY.md](DEPLOY.md#editing)) |
-| `thank-you.html` | Confirmation page for the 3-day pass form. Served at `/thank-you` |
+| `thank-you.html` | Confirmation page for the 3 free sessions form. Served at `/thank-you` |
 | `message-received.html` | Confirmation page for the contact form. Served at `/message-received` |
 | `42-hard.html` | Landing page for the 42 Hard challenge. Served at `/42-hard` |
 | `support.js` | The runtime `index.html` depends on. Generated; do not edit or rename |
@@ -60,13 +60,18 @@ npm test
   and carries its own canonical, social card, structured data, registration form
   and a countdown pinned to the same instant its structured data claims
 - no landing page makes a numbered scarcity claim — see below
+- every form in `index.html` is Knight Admin's (`free-sessions` or `enquiry`, framed with
+  `?embed=1&site=morayfield`), sits on the pages listed in `SITE_FORMS`, goes on to its own
+  confirmation page, and no LeadConnector form or embed script is left behind
 - no page has CSS leaking out of a `style` attribute, which is how a bad edit silently drops styling
 
 `npm run test:browser` renders the site in headless Chromium against the
 local server and checks, for every route: title, description and canonical
 tag; a non-empty, unique `h1`; no unresolved template holes; no first-party
 request failures or console errors. It also covers client-side navigation and
-back/forward, the LeadConnector form embeds, the unknown-path fallback, an
+back/forward, the form embeds on each page (and, with Knight Admin stood in for by a
+stub page, that a form's height sizes its iframe, that a sent form goes on to its
+confirmation page, and that the same message from any other site is ignored), the unknown-path fallback, an
 old-site redirect, the mobile menu, horizontal overflow at 390px, and the
 file-mode hash router. It also covers the standalone pages: that each
 renders on its own rather than being swallowed by the app router, loads its
@@ -128,14 +133,44 @@ delete `42-hard.html`, its entry in `LANDING_PAGES`, its rewrite and header in
 `vercel.json`, its `<loc>` in `sitemap.xml`, and the paragraph linking to it from
 the 6 Week Challenge section of `index.html`.
 
+## The forms
+
+The site's forms are Knight Admin's own (the `Knight-Coach/Knight-Agent` repo,
+`knight-agent/docs/FORMS.md`), shown in an iframe. Knight Admin only lets this site
+(and the Lawnton site) frame them.
+
+| Form | Address | On | After it's sent |
+|---|---|---|---|
+| Claim 3 free sessions | `https://knight-agent.vercel.app/form/free-sessions?embed=1&site=morayfield` | Home, Reviews, Get started | `/thank-you` |
+| Contact | `https://knight-agent.vercel.app/form/enquiry?embed=1&site=morayfield` | Contact, 6 Week Challenge | `/message-received` |
+
+`embed=1` drops Knight Admin's bar and footer and makes the form post its height
+(`{type: 'kf-form', height}`) and, once sent, `submitted: true`. `site=morayfield`
+files the lead under this gym without asking which gym. `mountFormResizer` in
+`index.html` listens for those messages, from `FORMS_ORIGIN` only and from one of the
+page's own form iframes only: it sizes the iframe to fit, and on `submitted` goes on
+to the iframe's `data-done` page.
+
+What a response does, all in Knight Admin: a card in #new-trialists with a lead card
+under it tagging whoever `lead_routing` names for Morayfield (Keri); a card in
+#morayfieldleads, chased until actioned; the person's HighLevel contact tagged
+(`website-free-sessions` or `website-enquiry`, plus `enquiry-<program>`) with a note
+of their answers; and a lead in the sales pipeline. HighLevel no longer sees a *Form
+Submitted* from this site, so a HighLevel workflow that followed up the old forms has
+to trigger on those tags instead.
+
+The 42 Hard page keeps its own LeadConnector registration form (see above).
+
 ## The confirmation pages
 
-Where the two forms send people after they submit. Each redirect is set on the
-form itself, in LeadConnector.
+Where the two forms go on to once they're sent: the iframe's `data-done`, followed by
+the page (see above). Each fires a `Lead` or `Contact` conversion for Meta and a
+`dataLayer` event, so they are the conversion goals for ads and analytics, once a
+Meta pixel or Google tag is on the site. Neither is yet, so today nothing counts them.
 
-| Form | Send it to |
+| Form | Goes on to |
 |---|---|
-| 3-day pass | `https://knightfitness-morayfield.com.au/thank-you` |
+| 3 free sessions | `https://knightfitness-morayfield.com.au/thank-you` |
 | Contact | `https://knightfitness-morayfield.com.au/message-received` |
 
 They are plain pages rather than routes of the single-page app, so they render

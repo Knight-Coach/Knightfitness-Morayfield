@@ -16,7 +16,8 @@ export const CONFIRMATION_PAGES = [
   {
     file: 'thank-you.html',
     path: '/thank-you',
-    form: '3-day pass',
+    form: '3 free sessions',
+    formSlug: 'free-sessions',
     title: "You're booked in — Knight Fitness Morayfield",
     h1: 'Your 3 free sessions are reserved'
   },
@@ -24,9 +25,23 @@ export const CONFIRMATION_PAGES = [
     file: 'message-received.html',
     path: '/message-received',
     form: 'contact',
+    formSlug: 'enquiry',
     title: 'Message received — Knight Fitness Morayfield',
     h1: 'Got your message'
   }
+];
+
+/** Where the site's forms live: Knight Admin's own forms, shown in an iframe. */
+export const FORMS_ORIGIN = 'https://knight-agent.vercel.app';
+
+/**
+ * The forms index.html embeds, and the page sections (by their banner comment)
+ * each one appears in. A sent form goes on to the confirmation page whose
+ * `formSlug` names it.
+ */
+export const SITE_FORMS = [
+  { slug: 'free-sessions', sections: ['HOME', 'REVIEWS', 'GET STARTED'] },
+  { slug: 'enquiry', sections: ['CONTACT', '6 WEEK CHALLENGE'] }
 ];
 
 /**
