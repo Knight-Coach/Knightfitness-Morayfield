@@ -88,7 +88,7 @@ Real paths, handled client-side and rewritten to `index.html` by Vercel.
 ## After the first deploy
 
 1. Test the Vercel preview URL on a real phone on mobile data.
-2. Submit both forms and confirm they land in LeadConnector.
+2. Submit a form and confirm it lands in Slack (#new-trialists and #morayfieldleads) and on the contact in HighLevel.
 3. Point the domain at Vercel (Settings → Domains).
 4. In Search Console, submit `https://knightfitness-morayfield.com.au/sitemap.xml`.
 5. Use the URL Inspection tool on `/` and one inner page to confirm Google
@@ -99,8 +99,8 @@ Real paths, handled client-side and rewritten to `index.html` by Vercel.
 - **Videos are hotlinked** to `assets.cdn.filesafe.space` — the gym's
   LeadConnector media library, not the old website's host. They keep working as
   long as that account exists. Nine files: one hero, eight testimonials.
-- **Forms are LeadConnector iframes.** They need `link.msgsndr.com/js/form_embed.js`,
-  which `index.html` injects at runtime.
+- **Forms are Knight Admin's enquiry form in an iframe** (README §The forms). It only frames on the live
+  domain, so on a Vercel preview URL the form area is a refused frame.
 - **Client-rendered.** Google executes JS and will index it, but the HTML
   arrives close to empty. Facebook, LinkedIn and Slack do not execute JS: they
   read the `og:*` tags from the static HTML, which is why `og:image` is an
@@ -141,15 +141,15 @@ re-exported, redo these three things, all of which the test suite enforces:
 1. Replace the bundled runtime script with the site's own React, ReactDOM and
    `support.js` tags.
 2. Replace the inlined fonts, logo and photos with the files in `assets/`, and
-   the inlined LeadConnector embed script with the runtime injection in the
-   page's `mountFormResizer`. The exports inline about 1.5MB of duplicates
+   drop any inlined LeadConnector embed script (the page's `mountFormResizer`
+   sizes Knight Admin's form itself). The exports inline about 1.5MB of duplicates
    between them.
 3. Re-apply that page's own fixes. For the confirmation pages that is the header
    fix — `flex-shrink: 0` on the logo anchor plus the `.ty-wordmark` media
    query — without which the wordmark overlaps the phone number on phones. For
    `42-hard.html` it is the four rows in the table in
    [README.md](README.md#the-42-hard-landing-page): the real form URL in the
-   iframe `src`, the injected embed script, the `+10:00` kickoff instant and the
+   iframe `src`, the form height listener, the `+10:00` kickoff instant and the
    shrinkable grids.
 
 Adding a further standalone page means adding one entry to `CONFIRMATION_PAGES`
@@ -160,9 +160,9 @@ to it from `index.html`. The tests are driven off those lists.
 ## The 42 Hard challenge
 
 `/42-hard` takes registrations for the block running 26 October – 5 December
-2026. Registrations go to the "In House 6 Week Challenge Registration Form
-Morayfield" form in LeadConnector (`F6YrDPqkBDSVHapalvQF`), not to either of the
-forms the rest of the site uses.
+2026. Registrations go through Knight Admin's enquiry form with
+`src=morayfield-42-hard`, so they're tagged `from-morayfield-42-hard` in
+HighLevel and say "Morayfield 42 hard" on the Slack cards.
 
 The registration close date and the kickoff instant are constants at the top of
 the page's script block: `CLOSE_LABEL` and `KICKOFF`. Change `KICKOFF` and the

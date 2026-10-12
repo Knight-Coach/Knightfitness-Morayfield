@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import {
   ROOT, SITE, read, routesFromIndex, indexableUrls, knownPaths,
-  ENTRY_POINTS, CONFIRMATION_PAGES, LANDING_PAGES, STANDALONE_PAGES
+  ENTRY_POINTS, CONFIRMATION_PAGES, LANDING_PAGES, STANDALONE_PAGES, FORM_ORIGIN
 } from './helpers.mjs';
 
 const exists = (rel) => access(resolve(ROOT, rel)).then(() => true, () => false);
@@ -259,13 +259,12 @@ for (const page of LANDING_PAGES) {
     );
   });
 
-  test(`${page.file} embeds its registration form with a real URL`, async () => {
+  test(`${page.file} embeds the enquiry form, named for this page, with a real URL`, async () => {
     const html = await read(page.file);
-    assert.match(html, new RegExp(`src="https://api\\.leadconnectorhq\\.com/widget/form/${page.formId}"`));
-    // The embed script that resizes the iframe is injected at runtime, the same
-    // way index.html does it, rather than bundled into the page.
-    assert.match(html, /link\.msgsndr\.com\/js\/form_embed\.js/);
-    assert.doesNotMatch(html, /ghl_embed/, 'the inlined LeadConnector embed script survived');
+    assert.ok(
+      html.includes(`src="${FORM_ORIGIN}/form/enquiry?embed=1&amp;site=morayfield&amp;program=not-sure-yet&amp;fix=program&amp;src=${page.formSource}"`),
+      'the enquiry form is not embedded with this page as its source'
+    );
   });
 
   test(`${page.file} makes no numbered scarcity claim`, async () => {
@@ -290,6 +289,32 @@ for (const page of LANDING_PAGES) {
     assert.equal(Date.parse(kickoff[1]), Date.parse(data.startDate), 'the countdown and the structured data disagree');
   });
 }
+
+test('every form is Knight Admin\'s enquiry form, for Morayfield, with a confirmation page to go to', async () => {
+  const confirmations = new Set(CONFIRMATION_PAGES.map((p) => p.path));
+  const sources = new Set();
+  for (const entry of ENTRY_POINTS) {
+    const html = await read(entry);
+    assert.doesNotMatch(html, /leadconnectorhq\.com\/widget\/form|msgsndr\.com|form_embed\.js/, `${entry} still embeds a HighLevel form`);
+    for (const tag of html.match(/<iframe[^>]*data-kf-form[^>]*>/g) ?? []) {
+      const src = tag.match(/src="([^"]+)"/)[1].replace(/&amp;/g, '&');
+      const url = new URL(src);
+      assert.equal(url.origin + url.pathname, `${FORM_ORIGIN}/form/enquiry`, `${entry}: ${src}`);
+      assert.equal(url.searchParams.get('embed'), '1');
+      assert.equal(url.searchParams.get('site'), 'morayfield');
+      const source = url.searchParams.get('src');
+      assert.match(source ?? '', /^morayfield-[a-z0-9-]+$/, `${entry}: a form without its page named (?src=)`);
+      sources.add(source);
+      const thanks = tag.match(/data-thanks="([^"]+)"/)?.[1];
+      assert.ok(confirmations.has(thanks), `${entry}: ${source} goes to ${thanks}, not a confirmation page`);
+    }
+  }
+  // Home, reviews, get started, contact, the 6 week challenge, 42 Hard: each says which page it was.
+  assert.deepEqual([...sources].sort(), [
+    'morayfield-42-hard', 'morayfield-6-week-challenge', 'morayfield-contact',
+    'morayfield-get-started-3-day-pass', 'morayfield-home-3-day-pass', 'morayfield-reviews'
+  ]);
+});
 
 test('no page has CSS declarations leaking out of a style attribute', async () => {
   // A malformed edit can turn `style="a; b"` into `style="a" b;` which parses as
