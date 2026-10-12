@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 import { join, resolve } from 'node:path';
 import {
   ROOT, SITE, read, routesFromIndex, indexableUrls, knownPaths,
-  ENTRY_POINTS, CONFIRMATION_PAGES, LANDING_PAGES, STANDALONE_PAGES
+  ENTRY_POINTS, CONFIRMATION_PAGES, LANDING_PAGES, STANDALONE_PAGES, FORMS_ORIGIN, SITE_FORMS
 } from './helpers.mjs';
 
 const exists = (rel) => access(resolve(ROOT, rel)).then(() => true, () => false);
@@ -122,6 +122,66 @@ test('index.html does not import JSX modules that would pull Babel from unpkg at
 // self-extracting exports that inline React, the runtime, the fonts and every
 // image, and every one of them has to be stripped back to the shared files.
 // ---------------------------------------------------------------------------
+
+/** index.html cut into its pages, by the banner comment above each one. */
+function sectionsOf(html) {
+  const parts = {};
+  const re = /<!-- =+ ([A-Z0-9 ]+?) =+ -->/g;
+  const marks = [...html.matchAll(re)];
+  marks.forEach((m, i) => { parts[m[1]] = html.slice(m.index, i + 1 < marks.length ? marks[i + 1].index : undefined); });
+  return parts;
+}
+
+const formFrames = (html) => [...html.matchAll(/<iframe\b[^>]*\bdata-kf-form="([^"]+)"[^>]*>/g)].map((m) => ({
+  slug: m[1],
+  tag: m[0],
+  src: (m[0].match(/\ssrc="([^"]+)"/) || [])[1],
+  done: (m[0].match(/\sdata-done="([^"]+)"/) || [])[1]
+}));
+
+test("index.html embeds Knight Admin's forms, framed for Morayfield, and no LeadConnector form", async () => {
+  const html = await read('index.html');
+  assert.doesNotMatch(html, /leadconnectorhq\.com|msgsndr\.com|gohighlevel/, 'a LeadConnector form or its embed script is still in index.html');
+  const frames = formFrames(html);
+  assert.equal(frames.length, SITE_FORMS.reduce((n, f) => n + f.sections.length, 0), 'an unexpected number of form iframes');
+  for (const f of frames) {
+    assert.ok(SITE_FORMS.some((s) => s.slug === f.slug), `unknown form "${f.slug}"`);
+    // embed=1 drops Knight Admin's bar and posts the height; site=morayfield files the lead under this gym.
+    assert.equal(f.src, `${FORMS_ORIGIN}/form/${f.slug}?embed=1&amp;site=morayfield`, `${f.slug} iframe src`);
+    assert.match(f.tag, /\stitle="[^"]{8,}"/, `${f.slug} iframe has no title for screen readers`);
+  }
+  // Each form has the call-us fallback right after it, for when it never loads.
+  const fallbacks = [...html.matchAll(/<iframe\b[^>]*\bdata-kf-form="[^"]+"[^>]*><\/iframe>\s*<div class="kf-form-fallback"[^>]*>[\s\S]*?<\/div>/g)];
+  assert.equal(fallbacks.length, frames.length, 'a form iframe has no .kf-form-fallback straight after it');
+  for (const f of fallbacks) assert.match(f[0], /href="tel:0435737238"/, 'the fallback has no phone link');
+  // Every iframe id is unique, so a resize lands on the frame that sent it.
+  const ids = frames.map((f) => (f.tag.match(/\sid="([^"]+)"/) || [])[1]);
+  assert.equal(new Set(ids).size, ids.length, 'two form iframes share an id');
+});
+
+test('each form is on the pages it belongs to', async () => {
+  const sections = sectionsOf(await read('index.html'));
+  for (const form of SITE_FORMS) {
+    for (const name of form.sections) {
+      assert.ok(sections[name], `no "${name}" section in index.html`);
+      assert.ok(formFrames(sections[name]).some((f) => f.slug === form.slug), `the ${name} page does not embed ${form.slug}`);
+    }
+  }
+});
+
+test("a sent form goes on to its confirmation page, and only Knight Admin's messages are listened to", async () => {
+  const html = await read('index.html');
+  for (const f of formFrames(html)) {
+    const page = CONFIRMATION_PAGES.find((p) => p.formSlug === f.slug);
+    assert.ok(page, `no confirmation page for ${f.slug}`);
+    assert.equal(f.done, page.path, `${f.slug} should go on to ${page.path}`);
+  }
+  assert.ok(html.includes(`const FORMS_ORIGIN = '${FORMS_ORIGIN}';`), 'FORMS_ORIGIN is missing or points somewhere else');
+  // The listener checks who sent the message before it resizes anything or leaves the page.
+  assert.match(html, /if \(e\.origin !== FORMS_ORIGIN\) return;/);
+  assert.match(html, /d\.type !== 'kf-form'/);
+  assert.match(html, /window\.location\.assign\(fileHrefFor\(done\)\)/, 'the redirect must go through fileHrefFor so file mode still works');
+});
 
 for (const page of STANDALONE_PAGES) {
   test(`${page.file} reuses the shared runtime instead of bundling its own`, async () => {
