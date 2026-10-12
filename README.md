@@ -66,7 +66,7 @@ npm test
 local server and checks, for every route: title, description and canonical
 tag; a non-empty, unique `h1`; no unresolved template holes; no first-party
 request failures or console errors. It also covers client-side navigation and
-back/forward, the LeadConnector form embeds, the unknown-path fallback, an
+back/forward, the enquiry form embeds (sized to fit, and a sent enquiry going to its confirmation page), the unknown-path fallback, an
 old-site redirect, the mobile menu, horizontal overflow at 390px, and the
 file-mode hash router. It also covers the standalone pages: that each
 renders on its own rather than being swallowed by the app router, loads its
@@ -114,7 +114,7 @@ now 25KB. Four things had to change beyond the swap, and each has a test:
 | Change | Why |
 |---|---|
 | The registration iframe's `src` holds the real form URL, not `{{ formUrl }}` | The parser fetches a `src` before the runtime can substitute anything |
-| `link.msgsndr.com/js/form_embed.js` is injected at runtime, with the same height listener `index.html` uses | Otherwise the iframe stays at its authored height with empty space under the fields |
+| The page listens for the form's height, with the same listener `index.html` uses | Otherwise the iframe stays at its authored height with empty space under the fields |
 | `const KICKOFF` is an explicit `+10:00` instant | Built from local date parts the countdown was wrong by hours outside Queensland, which has no daylight saving |
 | `minmax(min(100%, 330px), 1fr)` on the two hero grids, and a four-column countdown | At 320px and 360px the columns could not shrink, and the wrapper's `overflow-x: hidden` cropped them without a scrollbar |
 
@@ -130,13 +130,14 @@ the 6 Week Challenge section of `index.html`.
 
 ## The confirmation pages
 
-Where the two forms send people after they submit. Each redirect is set on the
-form itself, in LeadConnector.
+Where the forms send people after they submit. Every form on the site is Knight
+Admin's enquiry form (see [The forms](#the-forms)); its iframe's `data-thanks`
+names the page, and the page's script goes there once the form says it's sent.
 
 | Form | Send it to |
 |---|---|
-| 3-day pass | `https://knightfitness-morayfield.com.au/thank-you` |
-| Contact | `https://knightfitness-morayfield.com.au/message-received` |
+| 3-day pass (home, `/get-started`) | `/thank-you` (fires `Lead`) |
+| Contact, reviews, 6 Week Challenge, 42 Hard | `/message-received` (fires `Contact`) |
 
 They are plain pages rather than routes of the single-page app, so they render
 immediately and do not depend on the router. `vercel.json` maps each path to
@@ -163,3 +164,25 @@ searchers and a corruption of your conversion numbers.
 ## Deploying
 
 See [DEPLOY.md](DEPLOY.md).
+
+## The forms
+
+Every form on the site is Knight Admin's enquiry form (`https://knight-agent.vercel.app/form/enquiry`,
+knight-agent `docs/FORMS.md` §Website enquiries) in an iframe, not a HighLevel form. Each enquiry is posted in
+Slack (#new-trialists, with the lead card tagging whoever `lead_routing` names for Morayfield, and a card in
+#morayfieldleads that's chased until someone acts on it), tagged and noted on the person's contact in the Morayfield
+HighLevel sub-account, and counted on the staff boards' sales pipeline.
+
+```html
+<iframe src="https://knight-agent.vercel.app/form/enquiry?embed=1&amp;site=morayfield&amp;program=not-sure-yet&amp;fix=program&amp;src=morayfield-contact"
+        data-kf-form="enquiry" data-thanks="/message-received" title="…" loading="lazy" style="width: 100%; height: 640px; …"></iframe>
+```
+
+- `site=morayfield` and `program=…&fix=program` answer the gym and program for them, so the form is name, mobile,
+  email and an optional message.
+- `src=` names the page (`morayfield-<page>`): it's on the Slack cards, in the HighLevel note, and a HighLevel tag
+  `from-<src>` that a follow-up workflow can trigger on (*Contact Tag Added*), alongside `website-enquiry`.
+- The page's `mountFormResizer` takes the form's `{type: 'kf-form', height}` messages from `FORM_ORIGIN` only, sizes
+  the frame, and on `submitted: true` goes to `data-thanks`.
+- Knight Admin only lets the sites in the form's `embed_origins` frame it; this site's two addresses are there
+  (knight-agent migration 125). A preview deployment's address isn't, so the form shows a refused frame there.

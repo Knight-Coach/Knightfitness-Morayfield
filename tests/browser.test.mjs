@@ -7,10 +7,10 @@ import { join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 import { listen } from '../scripts/serve.js';
-import { ROOT, routesFromIndex, CONFIRMATION_PAGES, LANDING_PAGES } from './helpers.mjs';
+import { ROOT, routesFromIndex, CONFIRMATION_PAGES, LANDING_PAGES, FORM_ORIGIN } from './helpers.mjs';
 
-// Third-party hosts the page talks to: Google Fonts, the LeadConnector form embed
-// and media library, Google Maps. Their availability is not something this
+// Third-party hosts the page talks to: Google Fonts, the LeadConnector media
+// library, Google Maps. (Knight Admin's enquiry form is stood in for below.) Their availability is not something this
 // repository controls, so the suite never contacts them: every request to one of
 // these hosts is aborted at the browser and the resulting console noise ignored.
 // That keeps the run hermetic and fast, and it still exercises the page's own
@@ -55,7 +55,15 @@ async function open(url, { width = 1280, height = 900, waitFor = ['#dc-root head
 
 async function blockExternal(page) {
   await page.route((u) => EXTERNAL.test(u.href), (route) => route.abort('blockedbyclient'));
+  await page.route(`${FORM_ORIGIN}/**`, (route) => route.fulfill({ contentType: 'text/html', body: FAKE_FORM }));
 }
+
+// Knight Admin's enquiry form, as the site sees it: served from FORM_ORIGIN, it posts its height as it renders and
+// {submitted: true} once sent (knight-agent src/forms/agentPage.ts embedScript). The real one is tested there.
+const FAKE_FORM = `<!doctype html><body><button id="send">Send</button><script>
+  parent.postMessage({ type: 'kf-form', height: 731 }, '*');
+  document.getElementById('send').onclick = () => parent.postMessage({ type: 'kf-form', height: 240, submitted: true }, '*');
+</script></body>`;
 
 function firstParty(list) {
   return list.filter((u) => !EXTERNAL.test(u));
@@ -111,13 +119,27 @@ test('client-side navigation updates the URL, title and content without a reload
   await page.close();
 });
 
-test('the 3-day pass and contact pages embed the LeadConnector forms', async () => {
-  for (const [path, formId] of [['/get-started', 'PvrT5GhwQ2LAS8Q4wsnf'], ['/contact', 'v89V3Ku9h7ZgkCdOXHD4']]) {
-    const { page } = await open(base + path);
-    const src = await page.locator(`iframe[src*="widget/form/${formId}"]`).first().getAttribute('src');
-    assert.ok(src, `form ${formId} not embedded on ${path}`);
+test('the 3-day pass and contact forms are sized to fit and send a sent enquiry to its confirmation page', async () => {
+  for (const [path, source, thanks] of [['/get-started', 'morayfield-get-started-3-day-pass', '/thank-you'], ['/contact', 'morayfield-contact', '/message-received']]) {
+    const { page, errors } = await open(base + path);
+    const frame = page.locator(`iframe[data-kf-form][src*="src=${source}"]`).first();
+    await frame.scrollIntoViewIfNeeded();
+    await page.waitForFunction((s) => document.querySelector(`iframe[src*="src=${s}"]`)?.style.height === '731px', source, { timeout: 5000 });
+    await page.frameLocator(`iframe[src*="src=${source}"]`).locator('#send').click();
+    await page.waitForURL(base + thanks, { timeout: 5000 });
+    assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
     await page.close();
   }
+});
+
+test('a message from any other site is ignored', async () => {
+  const { page } = await open(base + '/contact');
+  const before = await page.locator('iframe[data-kf-form]').first().evaluate((f) => f.style.height);
+  await page.evaluate(() => window.postMessage({ type: 'kf-form', height: 999, submitted: true }, '*'));
+  await page.waitForTimeout(300);
+  assert.equal(new URL(page.url()).pathname, '/contact');
+  assert.equal(await page.locator('iframe[data-kf-form]').first().evaluate((f) => f.style.height), before);
+  await page.close();
 });
 
 test('an unknown path falls back to the home page instead of a blank screen', async () => {
@@ -274,10 +296,12 @@ for (const page of LANDING_PAGES) {
       .filter((i) => !i.complete || i.naturalWidth === 0)
       .map((i) => i.getAttribute('src')));
     assert.deepEqual(broken, [], 'images failed to load');
-    const src = await pg.locator(`iframe[src*="widget/form/${page.formId}"]`).first().getAttribute('src');
-    assert.ok(src, `form ${page.formId} not embedded`);
-    // The embed script is injected rather than bundled, so it has to actually appear.
-    await pg.waitForSelector('script#lc-form-embed', { state: 'attached', timeout: 5000 });
+    const frame = `iframe[data-kf-form][src*="src=${page.formSource}"]`;
+    assert.equal(await pg.locator(frame).count(), 1, `the enquiry form for ${page.formSource} is not embedded`);
+    await pg.locator(frame).scrollIntoViewIfNeeded();
+    await pg.waitForFunction((sel) => document.querySelector(sel)?.style.height === '731px', frame, { timeout: 5000 });
+    await pg.frameLocator(frame).locator('#send').click();
+    await pg.waitForURL(base + '/message-received', { timeout: 5000 });
     await pg.close();
   });
 

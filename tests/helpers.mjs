@@ -40,9 +40,13 @@ export const LANDING_PAGES = [
     path: '/42-hard',
     title: '42 Hard Challenge — Knight Fitness Morayfield',
     h1: '42 HARD',
-    formId: 'F6YrDPqkBDSVHapalvQF'
+    // The page the enquiry form says it was filled in on (?src=), so Knight Admin's card and HighLevel tag name it.
+    formSource: 'morayfield-42-hard'
   }
 ];
+
+/** Knight Admin, which serves the enquiry form every page embeds (/form/enquiry). */
+export const FORM_ORIGIN = 'https://knight-agent.vercel.app';
 
 /** Every page served as its own file rather than rendered by the router. */
 export const STANDALONE_PAGES = [...CONFIRMATION_PAGES, ...LANDING_PAGES];
