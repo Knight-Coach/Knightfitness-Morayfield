@@ -187,7 +187,7 @@
             </div>
           </div>
 
-          <iframe src="https://knight-agent.vercel.app/form/enquiry?embed=1&amp;site=morayfield&amp;program=not-sure-yet&amp;fix=program&amp;src=morayfield-42-hard" data-kf-form="enquiry" data-thanks="/message-received" title="Register for the 42 Hard Challenge" loading="lazy" style="width: 100%; height: 600px; border: 0; border-radius: 12px; margin-top: 16px; display: block;"></iframe>
+          <iframe src="https://api.leadconnectorhq.com/widget/form/F6YrDPqkBDSVHapalvQF" id="inline-F6YrDPqkBDSVHapalvQF" data-layout="{&quot;id&quot;:&quot;INLINE&quot;}" data-trigger-type="alwaysShow" data-activation-type="alwaysActivated" data-deactivation-type="neverDeactivate" data-form-name="In House 6 Week Challenge Registration Form Morayfield" data-height="715" data-layout-iframe-id="inline-F6YrDPqkBDSVHapalvQF" data-form-id="F6YrDPqkBDSVHapalvQF" data-cookie-consent="true" data-cookie-consent-provider="auto" title="In House 6 Week Challenge Registration Form Morayfield" style="width: 100%; height: 760px; border: none; border-radius: 12px; margin-top: 16px; display: block;"></iframe>
 
           <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid hsl(220 13% 91%);">
             <span style="width: 8px; height: 8px; border-radius: 9999px; background: hsl(43 96% 50%); flex: none; animation: pulseDot 1.8s ease-in-out infinite;"></span>
@@ -252,12 +252,6 @@ const KICKOFF = Date.parse('2026-10-26T06:00:00+10:00');
 // starts. Both are copy on the page, so they live together.
 const CLOSE_LABEL = 'Wednesday 21 October';
 
-// Where the registration form comes from: Knight Admin's enquiry form, which posts every enquiry to Slack, HighLevel
-// and the staff boards. Opened as a bare .html file there's no server for the confirmation page's path, so the
-// visitor goes to the live one.
-const FORM_ORIGIN = 'https://knight-agent.vercel.app';
-const formThanksHref = (path) => (window.location.protocol === 'file:' || /\.html?$/i.test(window.location.pathname) ? 'https://knightfitness-morayfield.com.au' + path : path);
-
 class Component extends DCLogic {
   state = { now: Date.now() };
 
@@ -271,22 +265,32 @@ class Component extends DCLogic {
     if (this.onFormMessage) window.removeEventListener('message', this.onFormMessage);
   }
 
-  // The forms are Knight Admin's enquiry form (FORM_ORIGIN/form/enquiry) in an iframe. It posts
-  // {type: 'kf-form', height} as it renders, so the frame is sized to fit, and {submitted: true}
-  // once the enquiry is in, when the visitor goes to the frame's confirmation page (data-thanks),
-  // which fires the Lead / Contact conversion.
+  // LeadConnector forms post their rendered height to the parent. Without a listener
+  // the iframe stays at its authored height and shows empty space below the fields.
+  // The same pair — height listener plus the embed script — is in index.html; this
+  // page is served as its own file, so it cannot borrow that copy.
   mountFormResizer() {
+    const isFormFrame = (el) => el && el.tagName === 'IFRAME' && /widget\/form/.test(el.src || '');
     this.onFormMessage = (e) => {
-      if (e.origin !== FORM_ORIGIN) return;
-      const d = e.data;
-      if (!d || typeof d !== 'object' || d.type !== 'kf-form') return;
-      const frame = Array.from(document.querySelectorAll('iframe[data-kf-form]')).find((f) => f.contentWindow === e.source);
-      if (!frame) return;
-      const h = parseInt(d.height, 10);
-      if (h >= 120 && h <= 4000) frame.style.height = h + 'px';
-      if (d.submitted && frame.dataset.thanks) window.location.assign(formThanksHref(frame.dataset.thanks));
+      if (!/msgsndr|leadconnector|gohighlevel/.test(e.origin)) return;
+      let d = e.data;
+      if (typeof d === 'string') { try { d = JSON.parse(d); } catch (_) { return; } }
+      if (!d || typeof d !== 'object') return;
+      const h = parseInt(d.height ?? d.frameHeight ?? (d.payload && d.payload.height), 10);
+      if (!h || h < 120 || h > 4000) return;
+      const frames = Array.from(document.querySelectorAll('iframe')).filter(isFormFrame);
+      const target = frames.find((f) => f.contentWindow === e.source) || frames[0];
+      if (target) target.style.height = h + 'px';
     };
     window.addEventListener('message', this.onFormMessage);
+
+    if (!document.getElementById('lc-form-embed')) {
+      const sc = document.createElement('script');
+      sc.id = 'lc-form-embed';
+      sc.src = 'https://link.msgsndr.com/js/form_embed.js';
+      sc.async = true;
+      document.body.appendChild(sc);
+    }
   }
 
   scrollTo(id) {

@@ -296,6 +296,12 @@ for (const page of LANDING_PAGES) {
       .filter((i) => !i.complete || i.naturalWidth === 0)
       .map((i) => i.getAttribute('src')));
     assert.deepEqual(broken, [], 'images failed to load');
+    if (page.registrationForm) {
+      // HighLevel's paid registration form: blocked here like every third-party host (EXTERNAL), so only its embed is checked.
+      assert.equal(await pg.locator(`iframe[src*="widget/form/${page.registrationForm}"]`).count(), 1, 'the registration form is not embedded');
+      await pg.close();
+      return;
+    }
     const frame = `iframe[data-kf-form][src*="src=${page.formSource}"]`;
     assert.equal(await pg.locator(frame).count(), 1, `the enquiry form for ${page.formSource} is not embedded`);
     await pg.locator(frame).scrollIntoViewIfNeeded();

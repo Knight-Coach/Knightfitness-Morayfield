@@ -130,14 +130,17 @@ the 6 Week Challenge section of `index.html`.
 
 ## The confirmation pages
 
-Where the forms send people after they submit. Every form on the site is Knight
-Admin's enquiry form (see [The forms](#the-forms)); its iframe's `data-thanks`
-names the page, and the page's script goes there once the form says it's sent.
+Where the forms send people after they submit. Every form on the site but the 42
+Hard registration is Knight Admin's enquiry form (see [The forms](#the-forms)); its
+iframe's `data-thanks` names the page, and the page's script goes there once the
+form says it's sent. The 42 Hard registration is HighLevel's, which goes on to its
+payment on submit.
 
 | Form | Send it to |
 |---|---|
 | 3-day pass (home, `/get-started`) | `/thank-you` (fires `Lead`) |
-| Contact, reviews, 6 Week Challenge, 42 Hard | `/message-received` (fires `Contact`) |
+| Contact, reviews, 6 Week Challenge | `/message-received` (fires `Contact`) |
+| 42 Hard registration (HighLevel) | Its payment, as set in HighLevel |
 
 They are plain pages rather than routes of the single-page app, so they render
 immediately and do not depend on the router. `vercel.json` maps each path to
@@ -167,8 +170,14 @@ See [DEPLOY.md](DEPLOY.md).
 
 ## The forms
 
-Every form on the site is Knight Admin's enquiry form (`https://knight-agent.vercel.app/form/enquiry`,
-knight-agent `docs/FORMS.md` §Website enquiries) in an iframe, not a HighLevel form. Each enquiry is posted in
+Every form on the site but one is Knight Admin's enquiry form (`https://knight-agent.vercel.app/form/enquiry`,
+knight-agent `docs/FORMS.md` §Website enquiries) in an iframe, not a HighLevel form. The exception is the 42 Hard
+registration (`42-hard.html`): it's paid, so it's HighLevel's *In House 6 Week Challenge Registration Form Morayfield*
+(`F6YrDPqkBDSVHapalvQF`), which takes the payment on submit and posts "… just signed up for the 42 Day Hard Challenge
+(Morayfield)" to Slack, where Knight Admin puts them on the challenge's list on the staff boards. That's how Lawnton's 42
+Hard page works too. The enquiry form took no payment, so from 12 to 17 Oct 2026 Morayfield's sign-ups weren't charged
+(Mark, 17 Oct 2026). The tests keep it that way: a HighLevel form on any other page fails, and so does the enquiry form
+on a paid registration page (`registrationForm` in `tests/helpers.mjs`). Each enquiry is posted in
 Slack (#new-trialists, with the lead card tagging whoever `lead_routing` names for Morayfield, and a card in
 #morayfieldleads that's chased until someone acts on it), tagged and noted on the person's contact in the Morayfield
 HighLevel sub-account, and counted on the staff boards' sales pipeline.
