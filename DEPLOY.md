@@ -99,7 +99,8 @@ Real paths, handled client-side and rewritten to `index.html` by Vercel.
 - **Videos are hotlinked** to `assets.cdn.filesafe.space` — the gym's
   LeadConnector media library, not the old website's host. They keep working as
   long as that account exists. Nine files: one hero, eight testimonials.
-- **Forms are Knight Admin's enquiry form in an iframe** (README §The forms). It only frames on the live
+- **Forms are Knight Admin's enquiry form in an iframe** (README §The forms), except the paid 42 Hard registration,
+  which is HighLevel's form. It only frames on the live
   domain, so on a Vercel preview URL the form area is a refused frame.
 - **Client-rendered.** Google executes JS and will index it, but the HTML
   arrives close to empty. Facebook, LinkedIn and Slack do not execute JS: they
@@ -147,7 +148,8 @@ re-exported, redo these three things, all of which the test suite enforces:
 3. Re-apply that page's own fixes. For the confirmation pages that is the header
    fix — `flex-shrink: 0` on the logo anchor plus the `.ty-wordmark` media
    query — without which the wordmark overlaps the phone number on phones. For
-   `42-hard.html` it is the four rows in the table in
+   `42-hard.html` keep its HighLevel registration form and its LeadConnector
+   embed script (it is paid), and the four rows in the table in
    [README.md](README.md#the-42-hard-landing-page): the real form URL in the
    iframe `src`, the form height listener, the `+10:00` kickoff instant and the
    shrinkable grids.
@@ -160,9 +162,10 @@ to it from `index.html`. The tests are driven off those lists.
 ## The 42 Hard challenge
 
 `/42-hard` takes registrations for the block running 26 October – 5 December
-2026. Registrations go through Knight Admin's enquiry form with
-`src=morayfield-42-hard`, so they're tagged `from-morayfield-42-hard` in
-HighLevel and say "Morayfield 42 hard" on the Slack cards.
+2026. Registrations go through HighLevel's registration form
+(`F6YrDPqkBDSVHapalvQF`), which takes the payment on submit and posts the
+sign-up to Slack for the staff boards, as Lawnton's 42 Hard page does. Not
+Knight Admin's enquiry form: that takes no payment (README §The forms).
 
 The registration close date and the kickoff instant are constants at the top of
 the page's script block: `CLOSE_LABEL` and `KICKOFF`. Change `KICKOFF` and the

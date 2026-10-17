@@ -259,8 +259,14 @@ for (const page of LANDING_PAGES) {
     );
   });
 
-  test(`${page.file} embeds the enquiry form, named for this page, with a real URL`, async () => {
+  test(`${page.file} embeds its registration form, or the enquiry form named for this page, with a real URL`, async () => {
     const html = await read(page.file);
+    if (page.registrationForm) {
+      assert.ok(html.includes(`src="https://api.leadconnectorhq.com/widget/form/${page.registrationForm}"`), 'the paid registration form is not embedded');
+      assert.ok(html.includes("sc.src = 'https://link.msgsndr.com/js/form_embed.js';"), 'the registration form has no embed script to size it and run its submit');
+      assert.doesNotMatch(html, /\/form\/enquiry/, 'a paid registration page must not take sign-ups on the enquiry form');
+      return;
+    }
     assert.ok(
       html.includes(`src="${FORM_ORIGIN}/form/enquiry?embed=1&amp;site=morayfield&amp;program=not-sure-yet&amp;fix=program&amp;src=${page.formSource}"`),
       'the enquiry form is not embedded with this page as its source'
@@ -290,12 +296,14 @@ for (const page of LANDING_PAGES) {
   });
 }
 
-test('every form is Knight Admin\'s enquiry form, for Morayfield, with a confirmation page to go to', async () => {
+test('every form but a paid registration is Knight Admin\'s enquiry form, for Morayfield, with a confirmation page to go to', async () => {
   const confirmations = new Set(CONFIRMATION_PAGES.map((p) => p.path));
+  const registrations = new Set(LANDING_PAGES.filter((p) => p.registrationForm).map((p) => p.file));
   const sources = new Set();
   for (const entry of ENTRY_POINTS) {
     const html = await read(entry);
-    assert.doesNotMatch(html, /leadconnectorhq\.com\/widget\/form|msgsndr\.com|form_embed\.js/, `${entry} still embeds a HighLevel form`);
+    // A paid registration (42 Hard) is HighLevel's form, which takes the payment on submit; nothing else is.
+    if (!registrations.has(entry)) assert.doesNotMatch(html, /leadconnectorhq\.com\/widget\/form|msgsndr\.com|form_embed\.js/, `${entry} still embeds a HighLevel form`);
     for (const tag of html.match(/<iframe[^>]*data-kf-form[^>]*>/g) ?? []) {
       const src = tag.match(/src="([^"]+)"/)[1].replace(/&amp;/g, '&');
       const url = new URL(src);
@@ -309,9 +317,9 @@ test('every form is Knight Admin\'s enquiry form, for Morayfield, with a confirm
       assert.ok(confirmations.has(thanks), `${entry}: ${source} goes to ${thanks}, not a confirmation page`);
     }
   }
-  // Home, reviews, get started, contact, the 6 week challenge, 42 Hard: each says which page it was.
+  // Home, reviews, get started, contact, the 6 week challenge: each says which page it was.
   assert.deepEqual([...sources].sort(), [
-    'morayfield-42-hard', 'morayfield-6-week-challenge', 'morayfield-contact',
+    'morayfield-6-week-challenge', 'morayfield-contact',
     'morayfield-get-started-3-day-pass', 'morayfield-home-3-day-pass', 'morayfield-reviews'
   ]);
 });
