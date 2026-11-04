@@ -138,9 +138,17 @@ payment on submit.
 
 | Form | Send it to |
 |---|---|
-| 3-day pass (home, `/get-started`) | `/thank-you` (fires `Lead`) |
-| Contact, reviews, 6 Week Challenge | `/message-received` (fires `Contact`) |
+| 3-day pass (home, `/get-started`) | `/thank-you` (fires GA4 `generate_lead` and Meta `Lead`) |
+| Contact, reviews, 6 Week Challenge | `/message-received` (fires GA4 `generate_lead` and Meta `Lead`) |
 | 42 Hard registration (HighLevel) | Its payment, as set in HighLevel |
+
+Every page loads `assets/kf-tracking.js`, which installs GA4 `G-LPDJZ1128B` and
+Meta Pixel `408666429737807` and sends a PageView when the document loads.
+Moving between pages inside `index.html` sends another Meta PageView. The two confirmation pages call
+`kfTrackLead` from `componentDidMount`, which sends GA4 `generate_lead` and
+Meta `Lead`. A reload or back/forward of that same confirmation page does not
+send the lead again. `/assets` is cached immutable for a year, so the script
+URL carries `?v=` and that query has to match `ASSET_VERSION` in the file.
 
 They are plain pages rather than routes of the single-page app, so they render
 immediately and do not depend on the router. `vercel.json` maps each path to

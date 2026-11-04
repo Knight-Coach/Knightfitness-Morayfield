@@ -324,6 +324,38 @@ test('every form but a paid registration is Knight Admin\'s enquiry form, for Mo
   ]);
 });
 
+test('every page loads the shared GA4 and Meta snippet, cache-busted', async () => {
+  const js = await read('assets/kf-tracking.js');
+  const version = js.match(/var ASSET_VERSION = '(\d+)';/);
+  assert.ok(version, 'ASSET_VERSION missing from assets/kf-tracking.js');
+  assert.match(js, /var GA4_ID = 'G-LPDJZ1128B';/);
+  assert.match(js, /var META_PIXEL_ID = '408666429737807';/);
+  assert.match(js, /gtag\('event', 'generate_lead'/);
+  assert.match(js, /fbq\('track', 'PageView'\)/);
+  assert.match(js, /fbq\('track', 'Lead'/);
+  assert.match(js, /sessionStorage/);
+  const tag = `<script src="./assets/kf-tracking.js?v=${version[1]}"></script>`;
+  for (const entry of ENTRY_POINTS) {
+    const html = await read(entry);
+    assert.ok(html.includes(tag), `${entry} must load ${tag}`);
+    const head = html.slice(0, html.indexOf('</head>'));
+    assert.ok(head.indexOf(tag) !== -1 && head.indexOf(tag) < head.indexOf('src="./support.js"'),
+      `${entry} must load tracking before support.js`);
+  }
+});
+
+test('confirmation pages report the enquiry through kfTrackLead', async () => {
+  const thanks = await read('thank-you.html');
+  const message = await read('message-received.html');
+  assert.match(thanks, /kfTrackLead\(\{ site: 'morayfield', source: 'morayfield-3-day-pass' \}\)/);
+  assert.match(message, /kfTrackLead\(\{ site: 'morayfield', source: 'morayfield-message' \}\)/);
+  for (const page of CONFIRMATION_PAGES) {
+    const html = await read(page.file);
+    assert.doesNotMatch(html, /fbq\('track',\s*'Contact'\)/);
+    assert.doesNotMatch(html, /lead_thank_you|contact_thank_you/);
+  }
+});
+
 test('no page has CSS declarations leaking out of a style attribute', async () => {
   // A malformed edit can turn `style="a; b"` into `style="a" b;` which parses as
   // stray attributes and silently drops the properties.

@@ -134,6 +134,9 @@ after a re-export (the static test suite fails if any is missing):
    paragraph in the 6 Week Challenge hero that links to `42 Hard`. `/42-hard` is
    a file rather than a route, so it cannot go through `hrefFor`; `fileHrefFor`
    is what keeps the link working when `index.html` is opened as a bare file.
+4. The `<script src="./assets/kf-tracking.js?v=…">` tag in `<head>`. It loads
+   GA4 and the Meta Pixel. The query must match `ASSET_VERSION` in
+   `assets/kf-tracking.js` — `/assets` is cached immutable for a year.
 
 `thank-you.html`, `message-received.html` and `42-hard.html` came from separate
 standalone exports and have the same problem in a different form. If any is
@@ -147,12 +150,15 @@ re-exported, redo these three things, all of which the test suite enforces:
    between them.
 3. Re-apply that page's own fixes. For the confirmation pages that is the header
    fix — `flex-shrink: 0` on the logo anchor plus the `.ty-wordmark` media
-   query — without which the wordmark overlaps the phone number on phones. For
-   `42-hard.html` keep its HighLevel registration form and its LeadConnector
-   embed script (it is paid), and the four rows in the table in
+   query — without which the wordmark overlaps the phone number on phones — and
+   the `kfTrackLead` call in `componentDidMount`. For `42-hard.html` keep its
+   HighLevel registration form and its LeadConnector embed script (it is paid),
+   and the four rows in the table in
    [README.md](README.md#the-42-hard-landing-page): the real form URL in the
    iframe `src`, the form height listener, the `+10:00` kickoff instant and the
    shrinkable grids.
+4. Put `<script src="./assets/kf-tracking.js?v=…">` back in `<head>`, with the
+   same `?v=` as `ASSET_VERSION` in `assets/kf-tracking.js`.
 
 Adding a further standalone page means adding one entry to `CONFIRMATION_PAGES`
 or `LANDING_PAGES` in `tests/helpers.mjs`, one rewrite and one cache header in

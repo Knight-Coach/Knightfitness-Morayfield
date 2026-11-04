@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./assets/kf-tracking.js?v=1"></script>
 <!-- React is served from this origin so the site does not depend on unpkg.com at
      page load. support.js skips its CDN fetch when window.React already exists.
      Keep the versions in step with REACT_URL / REACT_DOM_URL inside support.js. -->
@@ -1386,7 +1387,7 @@ class Component extends DCLogic {
   // The forms are Knight Admin's enquiry form (FORM_ORIGIN/form/enquiry) in an iframe. It posts
   // {type: 'kf-form', height} as it renders, so the frame is sized to fit, and {submitted: true}
   // once the enquiry is in, when the visitor goes to the frame's confirmation page (data-thanks),
-  // which fires the Lead / Contact conversion.
+  // which fires the GA4 generate_lead + Meta Lead conversion (assets/kf-tracking.js).
   mountFormResizer() {
     this.onFormMessage = (e) => {
       if (e.origin !== FORM_ORIGIN) return;

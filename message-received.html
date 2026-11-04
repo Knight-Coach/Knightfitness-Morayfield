@@ -2,6 +2,7 @@
 <html><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./assets/kf-tracking.js?v=1"></script>
 <!-- Same runtime and React build as the rest of the site. Serving them from
      this origin keeps the page off any CDN and reuses the browser cache of
      anyone who arrived here from the main site. -->
@@ -134,8 +135,7 @@ const GOOGLE_PROFILE = 'https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolt
 class Component extends DCLogic {
   componentDidMount() {
     try {
-      if (window.dataLayer) window.dataLayer.push({ event: 'contact_thank_you', form: 'contact' });
-      if (window.fbq) window.fbq('track', 'Contact');
+      if (window.kfTrackLead) window.kfTrackLead({ site: 'morayfield', source: 'morayfield-message' }); // GA4 generate_lead + Meta Lead
     } catch (e) { /* analytics must never break the page */ }
   }
 
