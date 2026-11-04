@@ -2,6 +2,7 @@
 <html><head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./assets/kf-tracking.js?v=1"></script>
 <!-- Same runtime and React build as the rest of the site. Serving them from
      this origin keeps the page off any CDN and reuses the browser cache of
      anyone who arrived here from the main site. -->
@@ -160,8 +161,7 @@ class Component extends DCLogic {
     // Fire once per submission so the page can be used as a conversion goal in
     // Google Analytics / Meta without editing the site. Harmless if absent.
     try {
-      if (window.dataLayer) window.dataLayer.push({ event: 'lead_thank_you', form: '3-free-sessions' });
-      if (window.fbq) window.fbq('track', 'Lead');
+      if (window.kfTrackLead) window.kfTrackLead({ site: 'morayfield', source: 'morayfield-3-day-pass' }); // GA4 generate_lead + Meta Lead
     } catch (e) { /* analytics must never break the page */ }
   }
 

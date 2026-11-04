@@ -15,7 +15,7 @@ import { ROOT, routesFromIndex, CONFIRMATION_PAGES, LANDING_PAGES, FORM_ORIGIN }
 // these hosts is aborted at the browser and the resulting console noise ignored.
 // That keeps the run hermetic and fast, and it still exercises the page's own
 // handling of a missing font, video or embed script.
-const EXTERNAL = /fonts\.g(oogleapis|static)\.com|msgsndr\.com|leadconnectorhq\.com|filesafe\.space|google\.com\/maps/;
+const EXTERNAL = /fonts\.g(oogleapis|static)\.com|msgsndr\.com|leadconnectorhq\.com|filesafe\.space|google\.com\/maps|googletagmanager\.com|google-analytics\.com|analytics\.google\.com|doubleclick\.net|facebook\.net|facebook\.com/;
 
 let server, base, browser, routes;
 const shots = process.env.KEEP_SCREENSHOTS ? join(ROOT, 'test-results') : null;
@@ -69,6 +69,29 @@ function firstParty(list) {
   return list.filter((u) => !EXTERNAL.test(u));
 }
 
+// Reads what kf-tracking.js queued. The Google and Meta hosts are blocked with
+// the rest of EXTERNAL, so gtag.js never replaces window.gtag and the pixel
+// never drains fbq.queue — the calls stay where the snippet put them.
+async function trackingCalls(page) {
+  return page.evaluate(() => {
+    const ga = [...(window.dataLayer || [])].map((item) => {
+      try { return Array.from(item); } catch { return []; }
+    });
+    const meta = [...((window.fbq && window.fbq.queue) || [])].map((item) => {
+      try { return Array.from(item); } catch { return []; }
+    });
+    return {
+      gtag: typeof window.gtag === 'function',
+      pixel: typeof window.fbq === 'function',
+      gaConfig: ga.some((args) => args[0] === 'config' && args[1] === 'G-LPDJZ1128B'),
+      gaLeads: ga.filter((args) => args[0] === 'event' && args[1] === 'generate_lead').length,
+      gaPageViews: ga.filter((args) => args[0] === 'event' && args[1] === 'page_view').length,
+      metaLeads: meta.filter((args) => args[0] === 'track' && args[1] === 'Lead').length,
+      metaPageViews: meta.filter((args) => args[0] === 'track' && args[1] === 'PageView').length
+    };
+  });
+}
+
 test('each route renders its own page with the right title, description and canonical', async (t) => {
   for (const r of routes) {
     const path = r.slug ? `/${r.slug}` : '/';
@@ -102,6 +125,34 @@ test('each h1 is unique across routes', async () => {
     seen.set(h1, r.page);
     await page.close();
   }
+});
+
+test('each route loads GA4 and Meta PageView without counting a lead', async () => {
+  const { page } = await open(base + '/contact');
+  const calls = await trackingCalls(page);
+  assert.equal(calls.gtag, true);
+  assert.equal(calls.pixel, true);
+  assert.equal(calls.gaConfig, true, 'GA4 config missing');
+  assert.equal(calls.metaPageViews, 1);
+  assert.equal(calls.gaLeads, 0);
+  assert.equal(calls.metaLeads, 0);
+  await page.close();
+});
+
+test('client-side navigation sends another PageView and still no lead', async () => {
+  const { page } = await open(base + '/');
+  await page.locator('#dc-root header nav a[href="/about"]').first().click();
+  await page.waitForURL(base + '/about');
+  const calls = await trackingCalls(page);
+  // The document load sends one Meta PageView. The route change sends another.
+  // GA4's first page_view is the config call, not a separate event, so a manual
+  // page_view is not added on top (that double-counts when enhanced measurement
+  // is already watching history).
+  assert.equal(calls.metaPageViews, 2);
+  assert.equal(calls.gaPageViews, 0);
+  assert.equal(calls.gaLeads, 0);
+  assert.equal(calls.metaLeads, 0);
+  await page.close();
 });
 
 test('client-side navigation updates the URL, title and content without a reload', async () => {
@@ -191,6 +242,30 @@ test('opened as a bare file it falls back to hash routing (design preview and do
 const STANDALONE = { waitFor: ['#dc-root h1'] };
 
 for (const page of CONFIRMATION_PAGES) {
+  test(`${page.path} fires generate_lead and Lead once, and not again on reload`, async () => {
+    const { page: pg, errors } = await open(base + page.path, STANDALONE);
+    const first = await trackingCalls(pg);
+    assert.equal(first.gaConfig, true);
+    assert.equal(first.metaPageViews, 1);
+    assert.equal(first.gaLeads, 1, `${page.path} did not send GA4 generate_lead`);
+    assert.equal(first.metaLeads, 1, `${page.path} did not send Meta Lead`);
+    const lead = await pg.evaluate(() => {
+      const hit = [...(window.dataLayer || [])].map((item) => Array.from(item))
+        .find((args) => args[0] === 'event' && args[1] === 'generate_lead');
+      return hit && hit[2];
+    });
+    assert.equal(lead.site, 'morayfield');
+    assert.equal(lead.page_path, page.path);
+    await pg.reload({ waitUntil: 'domcontentloaded' });
+    await pg.waitForSelector('#dc-root h1', { timeout: 15000 });
+    const second = await trackingCalls(pg);
+    assert.equal(second.metaPageViews, 1, `${page.path} dropped PageView on reload`);
+    assert.equal(second.gaLeads, 0, `${page.path} counted generate_lead again on reload`);
+    assert.equal(second.metaLeads, 0, `${page.path} counted Lead again on reload`);
+    assert.deepEqual(errors.filter((e) => !EXTERNAL.test(e)), []);
+    await pg.close();
+  });
+
   test(`${page.path} renders the ${page.form} confirmation and stays out of search`, async () => {
     const { page: pg, errors, failed } = await open(base + page.path, STANDALONE);
     assert.equal(await pg.title(), page.title);
@@ -314,15 +389,22 @@ for (const page of LANDING_PAGES) {
   test(`${page.path} counts down to the kickoff and scrolls to the form`, async () => {
     const { page: pg } = await open(base + page.path, STANDALONE);
     // The four counter values are the only tabular-nums text on the page, which
-    // is a sturdier handle than the labels around them.
+    // is a sturdier handle than the labels around them. Once kickoff has passed
+    // the page hides the counter (showCountdown) instead of ticking at zero.
     const readCounter = () => pg.evaluate(() => [...document.querySelectorAll('#dc-root div')]
       .filter((d) => getComputedStyle(d).fontVariantNumeric === 'tabular-nums')
       .map((d) => d.textContent.trim()));
+    const kickoff = Date.parse((await pg.locator('script[type="text/x-dc"]').innerText())
+      .match(/const KICKOFF = Date\.parse\('([^']+)'\)/)[1]);
     const first = await readCounter();
-    assert.equal(first.length, 4, `the countdown should show four units, showed ${first.length}`);
-    assert.ok(first.every((v) => /^\d+$/.test(v)), `countdown values should be numbers, got ${first.join(':')}`);
-    await pg.waitForTimeout(1200);
-    assert.notDeepEqual(await readCounter(), first, 'the countdown is frozen');
+    if (Date.now() >= kickoff) {
+      assert.deepEqual(first, [], 'countdown should be hidden once the challenge has started');
+    } else {
+      assert.equal(first.length, 4, `the countdown should show four units, showed ${first.length}`);
+      assert.ok(first.every((v) => /^\d+$/.test(v)), `countdown values should be numbers, got ${first.join(':')}`);
+      await pg.waitForTimeout(1200);
+      assert.notDeepEqual(await readCounter(), first, 'the countdown is frozen');
+    }
 
     // The header CTA scrolls the registration card up under the sticky header
     // rather than navigating anywhere, so check where the card ends up.
