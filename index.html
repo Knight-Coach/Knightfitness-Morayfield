@@ -3,14 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preload" as="image" href="assets/img/hero-poster.webp" type="image/webp" fetchpriority="high">
-<script defer src="./assets/kf-tracking.js?v=1"></script>
+<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w" imagesizes="100vw" media="(max-width: 760px)">
+<link rel="preload" as="image" type="image/avif" href="assets/img/hero-poster.avif" fetchpriority="high" media="(min-width: 761px)">
+<script>
+(function () {
+  var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
+  if (path === '/') document.documentElement.classList.add('kf-home');
+})();
+</script>
+<script defer fetchpriority="low" src="./assets/kf-tracking.js?v=1"></script>
 <!-- React is served from this origin so the site does not depend on unpkg.com at
      page load. support.js skips its CDN fetch when window.React already exists.
      Keep the versions in step with REACT_URL / REACT_DOM_URL inside support.js. -->
-<script defer src="./assets/vendor/react-18.3.1.production.min.js"></script>
-<script defer src="./assets/vendor/react-dom-18.3.1.production.min.js"></script>
-<script defer src="./support.js"></script>
+<script defer fetchpriority="low" src="./assets/vendor/react-18.3.1.production.min.js"></script>
+<script defer fetchpriority="low" src="./assets/vendor/react-dom-18.3.1.production.min.js"></script>
+<script defer fetchpriority="low" src="./support.js"></script>
 <style>
   x-dc { display: none !important; }
   /* Out of flow from the first paint, so the header stays at the top of the
@@ -27,35 +34,56 @@
        This element stays the visible LCP image in the open band under the text. */
     max-height: none;
     object-fit: cover;
-    object-position: center 28%;
+    object-position: center center;
     pointer-events: none;
-    background: #0b0f19;
+    background-color: #1c1416;
     clip-path: inset(68% 0 12% 0);
   }
+  picture:has(> #kf-lcp) { display: contents; }
+  html.kf-home {
+    background-color: #1c1416;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
+  html.kf-home body { background-color: transparent; }
+  @media (max-width: 760px) {
+    html.kf-home {
+      background-image: image-set(
+        url("assets/img/hero-poster-828.avif") type("image/avif"),
+        url("assets/img/hero-poster-828.webp") type("image/webp")
+      );
+    }
+  }
+  .kf-hero { background-color: #1c1416; }
   @media (min-width: 761px) {
-    #kf-lcp { z-index: 1; clip-path: none; }
+    #kf-lcp { z-index: 1; clip-path: none; object-position: center 28%; }
+    html.kf-home {
+      background-position: center 28%;
+      background-image: image-set(
+        url("assets/img/hero-poster.avif") type("image/avif"),
+        url("assets/img/hero-poster.webp") type("image/webp")
+      );
+    }
   }
 </style>
 </head>
 <body>
-<img id="kf-lcp" src="assets/img/hero-poster.webp" alt="Coach-led training at Knight Fitness Morayfield" width="750" height="534" fetchpriority="high" decoding="async">
+<picture>
+  <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w">
+  <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset="assets/img/hero-poster-480.webp 480w, assets/img/hero-poster-828.webp 828w">
+  <source type="image/avif" srcset="assets/img/hero-poster.avif">
+  <img id="kf-lcp" src="assets/img/hero-poster-480.webp" alt="Coach-led training at Knight Fitness Morayfield" width="480" height="960" fetchpriority="high">
+</picture>
 <script>
 /* The same document serves every route. Drop the homepage poster before paint
    on the other pages so it does not sit above the contact and booking pages. */
 (function () {
   var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
-  if (path === '/') {
-    var root = document.documentElement;
-    root.style.backgroundColor = '#0b0f19';
-    root.style.backgroundImage = "url('assets/img/hero-poster.webp')";
-    root.style.backgroundRepeat = 'no-repeat';
-    root.style.backgroundSize = 'cover';
-    root.style.backgroundPosition = 'center 28%';
-    document.body.style.background = 'transparent';
-    return;
-  }
-  var n = document.getElementById('kf-lcp');
-  if (n) n.remove();
+  if (path === '/') return;
+  var pic = document.getElementById('kf-lcp');
+  if (pic && pic.parentNode && pic.parentNode.tagName === 'PICTURE') pic.parentNode.remove();
+  else if (pic) pic.remove();
 })();
 </script>
 <x-dc>
@@ -309,8 +337,8 @@
         </div>
         <div class="kf-hero-media" style="position: relative; animation: kfUp 0.7s ease-out both;">
           <div style="position: relative; border-radius: 24px; overflow: hidden; border: 1px solid hsl(0 0% 100% / 0.12); box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.8); background: hsl(215 28% 12%); aspect-ratio: 4 / 5;">
-            <img src="assets/img/hero-poster.webp" alt="" width="750" height="534" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;" />
-            <video ref="{{ videoRef }}" data-hero="" poster="assets/img/hero-poster.webp" preload="none" muted="{{ yes }}" loop="{{ yes }}" playsInline="{{ yes }}" disablePictureInPicture="{{ yes }}" tabIndex="-1" aria-hidden="true" style="position: relative; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; background: transparent;"></video>
+            <img data-wide-src="assets/img/hero-poster.avif" alt="" width="1100" height="784" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;" />
+            <video ref="{{ videoRef }}" data-hero="" preload="none" muted="{{ yes }}" loop="{{ yes }}" playsInline="{{ yes }}" disablePictureInPicture="{{ yes }}" tabIndex="-1" aria-hidden="true" style="position: relative; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; background: transparent;"></video>
           </div>
           <div style="position: absolute; bottom: -26px; left: -20px; background: #fff; border-radius: 18px; padding: 18px 22px; box-shadow: 0 20px 40px -16px rgb(0 0 0 / 0.5); display: flex; align-items: center; gap: 14px; max-width: 280px;">
             <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: linear-gradient(135deg, hsl(43 90% 27%), hsl(36 100% 50%)); display: grid; place-items: center; font-size: 19px;">🏆</span>
@@ -1595,6 +1623,11 @@ class Component extends DCLogic {
     clearTimeout(this.heroTimer);
     if (this.state.page !== 'home') this.heroReady = false;
     const wide = window.matchMedia('(min-width: 761px)').matches;
+    if (wide) {
+      document.querySelectorAll('img[data-wide-src]').forEach((img) => {
+        if (!img.getAttribute('src')) img.src = img.getAttribute('data-wide-src');
+      });
+    }
     const net = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
     const slow = !!(net && (net.saveData || /^(slow-2g|2g|3g)$/.test(String(net.effectiveType || ''))));
     if (this.state.page === 'home' && wide && !slow && !this.heroReady) {
@@ -1604,6 +1637,7 @@ class Component extends DCLogic {
         const node = this.videoRef.current;
         if (!node || !node.isConnected) return;
         node.setAttribute('data-src', HERO_VIDEO);
+        node.setAttribute('poster', 'assets/img/hero-poster.avif');
         arm(node);
       };
       const kick = () => { this.heroTimer = setTimeout(start, 1200); };
