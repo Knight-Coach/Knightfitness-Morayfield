@@ -51,6 +51,20 @@
   requestAnimationFrame(wait);
 })();
 </script>
+<script>
+/* The Keri photo is the LCP on /get-started. It lives in the shared document,
+   so the URLs stay inside this script and are only written on that route. */
+(function () {
+  var path = location.protocol === 'file:'
+    ? ((location.hash || '#/').replace(/^#/, '').replace(/\/+$/, '') || '/')
+    : ((location.pathname || '/').replace(/\/+$/, '') || '/');
+  window.__kfGsPhoto = '<picture><source type="image/avif" sizes="(max-width: 760px) 100vw, 560px" srcset="assets/img/keri-coaching-640.avif 640w, assets/img/keri-coaching-1100.avif 1100w"><source type="image/webp" sizes="(max-width: 760px) 100vw, 560px" srcset="assets/img/keri-coaching-640.webp 640w, assets/img/keri-coaching-1100.webp 1100w"><img src="assets/img/keri-coaching-1100.webp" alt="Coach Keri spotting a member on the bench press" width="1100" height="825" fetchpriority="high" style="width:100%;height:825px;object-fit:cover;object-position:center;border-radius:22px;margin-top:30px;display:block;box-shadow:0 24px 48px -24px rgb(0 0 0 / 0.35)"></picture>';
+  if (path !== '/get-started') return;
+  if (!window.matchMedia('(max-width: 760px)').matches) return;
+  document.documentElement.classList.add('kf-start');
+  document.write('<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/keri-coaching-640.avif 640w, assets/img/keri-coaching-1100.avif 1100w" imagesizes="(max-width: 760px) 100vw, 560px">');
+})();
+</script>
 <script defer fetchpriority="low" src="./assets/kf-tracking.js?v=1"></script>
 <!-- React is served from this origin so the site does not depend on unpkg.com at
      page load. support.js skips its CDN fetch when window.React already exists.
@@ -152,6 +166,31 @@
     html.kf-home .kf-early-pad { padding: 8px 14px 0; }
     html.kf-home .kf-early h1 { margin-top: 6px; font-size: 25px; }
   }
+  /* /get-started only. The photo in the app is hidden until JS, so this copy
+     paints with the document and is the LCP image. */
+  .kf-gs { display: none; }
+  @media (max-width: 760px) {
+    html.kf-start .kf-gs {
+      display: block;
+      position: absolute;
+      z-index: 2;
+      top: 0;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+      font-family: Inter, system-ui, sans-serif;
+      color: hsl(224 71% 4%);
+    }
+    html.kf-start .kf-gs-bar { height: 63px; }
+    html.kf-start .kf-gs-main { padding: 64px 24px 0; }
+    html.kf-start .kf-gs-kicker { font-size: 11.5px; font-weight: 700; color: hsl(356 72% 40%); text-transform: uppercase; letter-spacing: 0.16em; }
+    html.kf-start .kf-gs h1 { font-family: "Plus Jakarta Sans", sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1; letter-spacing: -0.04em; margin: 16px 0 0; }
+    html.kf-start .kf-gs p { font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(220 10% 38%); margin: 20px 0 0; }
+    html.kf-start .kf-gs ul { list-style: none; margin: 30px 0 0; padding: 0; display: grid; gap: 13px; }
+    html.kf-start .kf-gs li { display: flex; gap: 13px; align-items: baseline; font-size: 15.5px; font-weight: 500; }
+    html.kf-start .kf-gs li span { color: hsl(160 70% 26%); font-weight: 800; font-size: 12px; }
+    html.kf-start .kf-gs-hide { opacity: 0; }
+  }
   .kf-hero { background-color: #1c1416; }
   @media (min-width: 761px) {
     #kf-lcp { z-index: 1; clip-path: none; object-position: center 28%; }
@@ -176,6 +215,12 @@
   if (path !== '/') return;
   if (window.matchMedia('(max-width: 760px)').matches) return;
   document.write('<picture><source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w"><source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset="assets/img/hero-poster-480.webp 480w, assets/img/hero-poster-828.webp 828w"><source type="image/avif" srcset="assets/img/hero-poster.avif"><img id="kf-lcp" src="assets/img/hero-poster-480.webp" alt="Coach-led training at Knight Fitness Morayfield" width="480" height="960" fetchpriority="high"></picture>');
+})();
+</script>
+<script>
+(function () {
+  if (!document.documentElement.classList.contains('kf-start')) return;
+  document.write('<div class="kf-gs"><div class="kf-gs-bar"></div><div class="kf-gs-main"><div class="kf-gs-kicker">Get started</div><h1>Claim your 3-day pass</h1><p>Three coach-led sessions, no cost and no lock-in. Meet the coaches, try the room, and see if Knight Fitness is the right fit for you.</p><ul><li><span>✓</span>Three coach-led sessions, completely free</li><li><span>✓</span>A chat about your goals before you train</li><li><span>✓</span>Everything scaled to your body and history</li><li><span>✓</span>No lock-in contract and no pressure to join</li></ul>' + window.__kfGsPhoto + '</div></div>');
 })();
 </script>
 <div class="kf-early">
@@ -1166,17 +1211,21 @@
   <main data-screen-label="Get Started" style="max-width: 1200px; margin: 0 auto; padding: 64px 24px 88px;">
     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 48px; align-items: start;">
       <div>
-        <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 72% 40%); text-transform: uppercase; letter-spacing: 0.16em;">Get started</div>
-        <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px;">Claim your 3-day pass</h1>
-        <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(220 10% 38%); margin-top: 20px;">Three coach-led sessions, no cost and no lock-in. Meet the coaches, try the room, and see if Knight Fitness is the right fit for you.</p>
-        <div style="display: grid; gap: 13px; margin-top: 30px;">
+        <div class="kf-gs-hide" style="font-size: 11.5px; font-weight: 700; color: hsl(356 72% 40%); text-transform: uppercase; letter-spacing: 0.16em;">Get started</div>
+        <h1 class="kf-gs-hide" style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px;">Claim your 3-day pass</h1>
+        <p class="kf-gs-hide" style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(220 10% 38%); margin-top: 20px;">Three coach-led sessions, no cost and no lock-in. Meet the coaches, try the room, and see if Knight Fitness is the right fit for you.</p>
+        <div class="kf-gs-hide" style="display: grid; gap: 13px; margin-top: 30px;">
           <sc-for list="{{ startPoints }}" as="s" hint-placeholder-count="4">
             <div style="display: flex; gap: 13px; align-items: baseline; font-size: 15.5px; font-weight: 500;">
               <span style="color: hsl(160 70% 26%); font-weight: 800; font-size: 12px;">✓</span>{{ s }}
             </div>
           </sc-for>
         </div>
-        <img src="assets/img/keri-coaching-43.jpg" alt="Coach Keri spotting a member on the bench press" width="1100" height="825" fetchpriority="high" style="width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 22px; margin-top: 30px; display: block; box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.35);" />
+        <div id="kf-gs-photo" class="kf-gs-hide">
+        <script>
+        if ((location.pathname || '/').replace(/\/+$/, '') === '/get-started' || (location.protocol === 'file:' && ((location.hash || '#/').replace(/^#/, '').replace(/\/+$/, '') || '/') === '/get-started')) document.write(window.__kfGsPhoto);
+        </script>
+        </div>
         <div style="background: hsl(224 71% 4%); border-radius: 20px; padding: 28px; margin-top: 18px; color: #fff;">
           <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 19px; letter-spacing: -0.02em;">Would rather just talk to someone?</h2>
           <p style="font-size: 14.5px; color: hsl(217 10% 68%); margin-top: 9px;">Call the studio and a coach will answer your questions — no sales pitch.</p>
@@ -1841,6 +1890,12 @@ class Component extends DCLogic {
     if (this.state.page === 'home' && window.matchMedia('(max-width: 760px)').matches) {
       document.querySelectorAll('#dc-root .kf-hero h1').forEach((el) => el.setAttribute('aria-hidden', 'true'));
     }
+    var gs = document.getElementById('kf-gs-photo');
+    if (this.state.page === 'start' && gs && !gs.querySelector('img') && window.__kfGsPhoto) gs.insertAdjacentHTML('beforeend', window.__kfGsPhoto);
+    if (this.state.page === 'start' && document.querySelector('.kf-gs')) {
+      document.querySelectorAll('.kf-gs-hide').forEach((el) => el.setAttribute('aria-hidden', 'true'));
+    }
+    if (this.state.page !== 'start') document.documentElement.classList.remove('kf-start');
     const want = routeFor(this.state.page).title;
     if (document.title !== want) {
       const t = document.querySelector('title');
