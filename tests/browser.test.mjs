@@ -220,6 +220,35 @@ test('mobile viewport: nav collapses to a menu button and the page does not scro
   await page.close();
 });
 
+test('homepage hero actions clear the sticky bar on short phones', async () => {
+  for (const [width, height] of [[375, 667], [390, 844], [412, 915]]) {
+    const { page } = await open(base + '/', { width, height });
+    const fit = await page.evaluate(() => {
+      const bar = document.querySelector('.kf-mobile-cta').getBoundingClientRect();
+      const box = (sel) => {
+        const r = document.querySelector(sel).getBoundingClientRect();
+        return { top: Math.round(r.top), bottom: Math.round(r.bottom) };
+      };
+      return {
+        note: box('.kf-hero-note'),
+        actions: [...document.querySelectorAll('.kf-hero-actions a')].map((el) => {
+          const r = el.getBoundingClientRect();
+          return { text: el.innerText.replace(/\s+/g, ' ').trim(), top: Math.round(r.top), bottom: Math.round(r.bottom) };
+        }),
+        barTop: Math.round(bar.top),
+        scroll: document.documentElement.scrollWidth - document.documentElement.clientWidth
+      };
+    });
+    assert.ok(fit.scroll <= 1, `${width}x${height} scrolls sideways by ${fit.scroll}px`);
+    assert.equal(fit.actions.length, 2, `${width}x${height} hero actions: ${JSON.stringify(fit.actions)}`);
+    for (const item of [fit.note, ...fit.actions]) {
+      assert.ok(item.bottom <= fit.barTop + 1, `${width}x${height} ${JSON.stringify(item)} is under the bar at ${fit.barTop}`);
+      assert.ok(item.top >= 0, `${width}x${height} ${JSON.stringify(item)} starts above the viewport`);
+    }
+    await page.close();
+  }
+});
+
 test('mobile header, menu and enquiry form stay inside the phone viewport', async () => {
   for (const [width, height] of [[375, 667], [390, 844], [412, 915]]) {
     const { page } = await open(base + '/get-started', { width, height });
@@ -259,30 +288,37 @@ test('mobile header, menu and enquiry form stay inside the phone viewport', asyn
   }
 });
 
-test('the hero video file is requested only on the homepage, and only after load', async () => {
-  const file = '69abb00bb003fa7788042749.mp4';
-  for (const path of ['/get-started', '/schedule', '/contact']) {
-    const page = await browser.newPage();
+test('the hero video file is requested only on a wide homepage, and only after load', async () => {
+  const cdn = '69abb00bb003fa7788042749.mp4';
+  const local = 'hero-540.mp4';
+  const watch = async (path, viewport) => {
+    const page = await browser.newPage(viewport ? { viewport } : undefined);
     const hits = [];
-    await page.route(`**/*${file}`, (route) => { hits.push(route.request().url()); return route.abort(); });
+    await page.route(`**/*${cdn}`, (route) => { hits.push(cdn); return route.abort(); });
+    await page.route(`**/*${local}`, (route) => { hits.push(local); return route.abort(); });
     await page.goto(base + path, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#dc-root h1', { timeout: 15000 });
-    await page.waitForTimeout(2000);
-    assert.equal(await page.locator('#dc-root video').count(), 0, `${path} still renders a video`);
-    assert.deepEqual(hits, [], `${path} requested the hero video`);
+    await page.waitForTimeout(2200);
     await page.close();
+    return hits;
+  };
+  for (const path of ['/get-started', '/schedule', '/contact']) {
+    assert.deepEqual(await watch(path), [], `${path} requested a hero video`);
   }
-  const page = await browser.newPage();
+  assert.deepEqual(await watch('/', { width: 375, height: 667 }), [], 'a phone homepage requested the hero video');
+  const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
   const hits = [];
-  await page.route(`**/*${file}`, (route) => { hits.push(Date.now()); return route.abort(); });
+  await page.route(`**/*${cdn}`, (route) => { hits.push({ file: cdn, at: Date.now() }); return route.abort(); });
+  await page.route(`**/*${local}`, (route) => { hits.push({ file: local, at: Date.now() }); return route.abort(); });
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('video[data-hero]', { timeout: 15000 });
   const settled = Date.now();
   await page.waitForTimeout(2500);
-  assert.ok(hits.length >= 1, 'homepage never requested the hero video');
-  assert.ok(hits[0] >= settled + 700, 'homepage requested the hero video before the page had settled');
-  const preload = await page.locator('video[data-hero]').getAttribute('preload');
-  assert.equal(preload, 'none');
+  assert.ok(hits.some((h) => h.file === local), 'wide homepage never requested the compressed hero video');
+  assert.ok(hits.every((h) => h.file !== cdn), 'the 16MB CDN file was requested');
+  assert.ok(hits[0].at >= settled + 700, 'homepage requested the hero video before the page had settled');
+  assert.equal(await page.locator('video[data-hero]').getAttribute('preload'), 'none');
+  assert.equal(await page.locator('#kf-lcp').count(), 1, 'the early poster is missing on the homepage');
   await page.close();
 });
 
