@@ -223,6 +223,7 @@ test('mobile viewport: nav collapses to a menu button and the page does not scro
 test('homepage hero actions clear the sticky bar on short phones', async () => {
   for (const [width, height] of [[375, 667], [390, 844], [412, 915]]) {
     const { page } = await open(base + '/', { width, height });
+    await page.waitForFunction(() => getComputedStyle(document.body, '::before').opacity === '1');
     const fit = await page.evaluate(() => {
       const bar = document.querySelector('.kf-mobile-cta').getBoundingClientRect();
       const box = (sel) => {
@@ -231,7 +232,7 @@ test('homepage hero actions clear the sticky bar on short phones', async () => {
       };
       const header = document.querySelector('#dc-root header').getBoundingClientRect();
       const hero = document.querySelector('.kf-hero').getBoundingClientRect();
-      const poster = document.getElementById('kf-lcp').getBoundingClientRect();
+      const layer = getComputedStyle(document.body, '::before');
       const next = document.getElementById('book').getBoundingClientRect();
       return {
         note: box('.kf-hero-note'),
@@ -241,17 +242,22 @@ test('homepage hero actions clear the sticky bar on short phones', async () => {
         }),
         barTop: Math.round(bar.top),
         headerTop: Math.round(header.top),
-        posterTop: Math.round(poster.top),
-        posterPos: getComputedStyle(document.getElementById('kf-lcp')).position,
-        posterCoversHero: poster.top <= hero.top + 2 && poster.bottom >= Math.min(hero.bottom, window.innerHeight) - 2,
+        posterPos: layer.position,
+        posterImage: layer.backgroundImage,
+        posterOpacity: layer.opacity,
+        heroTop: Math.round(hero.top),
         gap: Math.round(next.top - hero.bottom),
-        scroll: document.documentElement.scrollWidth - document.documentElement.clientWidth
+        scroll: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        lcpImage: document.getElementById('kf-lcp') ? 1 : 0
       };
     });
     assert.ok(fit.scroll <= 1, `${width}x${height} scrolls sideways by ${fit.scroll}px`);
     assert.ok(fit.headerTop <= 1, `${width}x${height} header starts at ${fit.headerTop}, below a banner`);
+    assert.equal(fit.lcpImage, 0, `${width}x${height} still has an image poster`);
     assert.equal(fit.posterPos, 'absolute', `${width}x${height} poster is in normal flow`);
-    assert.ok(fit.posterCoversHero, `${width}x${height} poster does not cover the hero (${fit.posterTop})`);
+    assert.ok(fit.posterImage.includes('hero-poster-828'), `${width}x${height} poster image is ${fit.posterImage}`);
+    assert.equal(fit.posterOpacity, '1', `${width}x${height} poster never faded in`);
+    assert.ok(fit.heroTop >= fit.headerTop, `${width}x${height} hero starts above the header`);
     assert.ok(fit.gap <= 2, `${width}x${height} has a ${fit.gap}px gap under the hero`);
     assert.equal(fit.actions.length, 2, `${width}x${height} hero actions: ${JSON.stringify(fit.actions)}`);
     for (const item of [fit.note, ...fit.actions]) {
@@ -335,20 +341,63 @@ test('the hero video file is requested only on a wide homepage, and only after l
   await page.close();
 });
 
-test('the homepage poster is requested only on the homepage', async () => {
+test('the homepage poster is requested only on the homepage, and only after the headline', async () => {
   const poster = 'hero-poster';
-  const watch = async (path) => {
-    const page = await browser.newPage({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 2 });
+  const watch = async (path, options) => {
+    const page = await browser.newPage({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 2, ...options });
+    await page.addInitScript(() => {
+      window.__lcp = [];
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          const el = entry.element;
+          window.__lcp.push(el ? el.tagName + (el.parentElement && el.parentElement.className ? '.' + el.parentElement.className.split(' ')[0] : '') : '');
+        }
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+    });
     const hits = [];
-    page.on('request', (request) => {
-      if (request.url().includes(poster)) hits.push(request.url().split('/').pop().split('?')[0]);
+    await page.route('**/*hero-poster*', (route) => {
+      hits.push(route.request().url().split('/').pop().split('?')[0]);
+      return route.continue();
     });
     await page.goto(base + path, { waitUntil: 'load' });
     await page.waitForSelector('#dc-root h1', { timeout: 15000 });
-    await page.waitForTimeout(500);
+    if (path === '/') {
+      await page.waitForFunction(() => getComputedStyle(document.body, '::before').opacity === '1', null, { timeout: 4000 });
+      await page.waitForFunction(() => {
+        const real = document.querySelector('#dc-root .kf-hero h1');
+        const transform = real && getComputedStyle(real.parentElement).transform;
+        return transform === 'none' || transform === 'matrix(1, 0, 0, 1, 0, 0)';
+      });
+    } else {
+      await page.waitForTimeout(400);
+    }
     const count = await page.locator('#kf-lcp').count();
+    const motion = path === '/'
+      ? await page.evaluate(() => getComputedStyle(document.body, '::before').transitionDuration)
+      : null;
+    const lcp = path === '/'
+      ? await page.evaluate(() => {
+          const entries = performance.getEntriesByType('largest-contentful-paint');
+          const last = entries[entries.length - 1];
+          const el = document.querySelector('.kf-early h1');
+          const real = document.querySelector('#dc-root .kf-hero h1');
+          const box = (node) => node && node.getBoundingClientRect();
+          return {
+            tag: last && last.element ? last.element.tagName : (el && box(el).height ? 'H1' : ''),
+            aligned: el && real && Math.abs(box(el).top - box(real).top) < 1 && Math.abs(box(el).left - box(real).left) < 1,
+            node: (window.__lcp || []).slice(-1)[0] || ''
+          };
+        })
+      : null;
+    const order = path === '/'
+      ? await page.evaluate(() => {
+          const mark = performance.getEntriesByName('kf-headline')[0];
+          const img = performance.getEntriesByType('resource').find((entry) => entry.name.includes('hero-poster'));
+          return { mark: mark && mark.startTime, img: img && img.startTime };
+        })
+      : null;
     await page.close();
-    return { hits, count };
+    return { hits, count, motion, lcp, order };
   };
   for (const path of ['/get-started', '/schedule', '/contact']) {
     const seen = await watch(path);
@@ -356,8 +405,15 @@ test('the homepage poster is requested only on the homepage', async () => {
     assert.equal(seen.count, 0, `${path} still has the homepage poster`);
   }
   const home = await watch('/');
-  assert.equal(home.count, 1);
+  assert.ok(home.order.mark >= 0 && home.order.img >= home.order.mark, `poster started at ${home.order.img} before the headline at ${home.order.mark}`);
+  assert.equal(home.count, 0, 'a phone homepage still has an image poster');
+  assert.equal(home.lcp.aligned, true, 'the early headline is not on top of the real one');
+  assert.equal(home.lcp.node, 'H1.kf-early-pad', `largest paint was ${home.lcp.node}`);
+  assert.equal(home.motion, '0.2s');
   assert.deepEqual([...new Set(home.hits)], ['hero-poster-828.avif'], `homepage poster requests: ${home.hits.join(', ')}`);
+  const quiet = await watch('/', { reducedMotion: 'reduce' });
+  assert.equal(quiet.motion, '0s', `reduced motion still fades the poster (${quiet.motion})`);
+  assert.equal(quiet.count, 0);
 });
 
 test('opened as a bare file it falls back to hash routing (design preview and double-click)', async () => {
