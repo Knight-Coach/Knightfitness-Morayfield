@@ -123,6 +123,8 @@ test('local copy does not publish a stale Google review count or the old suburb'
   assert.doesNotMatch(home.desc, /256/);
   assert.match(html, /Get directions/);
   assert.match(html, /maps\?q=125\+Morayfield\+Road,\+Morayfield\+QLD\+4506&output=embed/);
+  assert.doesNotMatch(html, /<video\b[^>]*\ssrc=/, 'a video src in the HTML is downloaded on every route');
+  assert.match(html, /lang="en-AU"/);
 });
 
 test('index.html keeps the FILE_MODE fallback that makes local double-click preview work', async () => {
@@ -302,6 +304,13 @@ for (const page of LANDING_PAGES) {
 
   test(`${page.file} embeds its registration form, or the enquiry form named for this page, with a real URL`, async () => {
     const html = await read(page.file);
+    if (page.closed) {
+      assert.match(html, /Registrations for this round have closed/);
+      assert.match(html, /href="https:\/\/knightfitness-morayfield\.com\.au\/get-started"/);
+      assert.match(html, /href="tel:0435737238"/);
+      assert.doesNotMatch(html, /leadconnectorhq\.com\/widget\/form|msgsndr\.com|form_embed\.js/);
+      return;
+    }
     if (page.registrationForm) {
       assert.ok(html.includes(`src="https://api.leadconnectorhq.com/widget/form/${page.registrationForm}"`), 'the paid registration form is not embedded');
       assert.ok(html.includes("sc.src = 'https://link.msgsndr.com/js/form_embed.js';"), 'the registration form has no embed script to size it and run its submit');
