@@ -84,6 +84,49 @@ test('index.html keeps the Search Console verification tag and absolute social i
   assert.match(html, /"@type": "HealthClub"/);
 });
 
+test('local copy does not publish a stale Google review count or the old suburb', async () => {
+  const pages = ['index.html', 'thank-you.html', 'message-received.html', '42-hard.html'];
+  for (const file of pages) {
+    const html = await read(file);
+    assert.doesNotMatch(html, /256 Google|256 five-star|256 locals|256 reasons|from 256|value: '256'|target = 256/);
+    assert.doesNotMatch(html, /Caboolture South|\b4510\b/);
+    assert.doesNotMatch(html, /aggregateRating/);
+  }
+  const html = await read('index.html');
+  const block = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  assert.ok(block, 'site-wide structured data is missing');
+  const data = JSON.parse(block[1]);
+  assert.equal(data['@type'], 'HealthClub');
+  assert.equal(data.name, 'Knight Fitness Morayfield');
+  assert.equal(data.url, `${SITE}/`);
+  assert.equal(data.telephone, '+61435737238');
+  assert.equal(data.address.streetAddress, '125 Morayfield Road');
+  assert.equal(data.address.addressLocality, 'Morayfield');
+  assert.equal(data.address.addressRegion, 'QLD');
+  assert.equal(data.address.postalCode, '4506');
+  assert.equal(data.geo['@type'], 'GeoCoordinates');
+  assert.equal(typeof data.geo.latitude, 'number');
+  assert.equal(typeof data.geo.longitude, 'number');
+  assert.ok(data.openingHoursSpecification.length >= 4, 'session hours should be in the structured data');
+  assert.equal(data.parentOrganization.name, 'Knight Fitness');
+  assert.equal(data.parentOrganization.url, 'https://knightfitness.com.au');
+  assert.equal(data.aggregateRating, undefined);
+  assert.equal(data.reviewCount, undefined);
+  assert.ok(data.sameAs.some((url) => url.includes('facebook.com')));
+  assert.ok(data.sameAs.some((url) => url.includes('instagram.com')));
+  assert.ok(data.sameAs.some((url) => url.includes('google.com/maps')));
+  const home = (await routesFromIndex()).find((r) => r.page === 'home');
+  assert.match(home.title, /Gym in Morayfield/);
+  assert.match(home.desc, /Morayfield/);
+  assert.match(home.desc, /Caboolture/);
+  assert.match(home.desc, /Burpengary/);
+  assert.doesNotMatch(home.desc, /256/);
+  assert.match(html, /Get directions/);
+  assert.match(html, /maps\?q=125\+Morayfield\+Road,\+Morayfield\+QLD\+4506&output=embed/);
+  assert.doesNotMatch(html, /<video\b[^>]*\ssrc=/, 'a video src in the HTML is downloaded on every route');
+  assert.match(html, /lang="en-AU"/);
+});
+
 test('index.html keeps the FILE_MODE fallback that makes local double-click preview work', async () => {
   const html = await read('index.html');
   assert.match(html, /const FILE_MODE = window\.location\.protocol === 'file:'/);
@@ -261,6 +304,13 @@ for (const page of LANDING_PAGES) {
 
   test(`${page.file} embeds its registration form, or the enquiry form named for this page, with a real URL`, async () => {
     const html = await read(page.file);
+    if (page.closed) {
+      assert.match(html, /Registrations for this round have closed/);
+      assert.match(html, /href="https:\/\/knightfitness-morayfield\.com\.au\/get-started"/);
+      assert.match(html, /href="tel:0435737238"/);
+      assert.doesNotMatch(html, /leadconnectorhq\.com\/widget\/form|msgsndr\.com|form_embed\.js/);
+      return;
+    }
     if (page.registrationForm) {
       assert.ok(html.includes(`src="https://api.leadconnectorhq.com/widget/form/${page.registrationForm}"`), 'the paid registration form is not embedded');
       assert.ok(html.includes("sc.src = 'https://link.msgsndr.com/js/form_embed.js';"), 'the registration form has no embed script to size it and run its submit');

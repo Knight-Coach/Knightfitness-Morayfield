@@ -6,7 +6,10 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # ubuntu-latest is 26.04. Playwright 1.56.1 cannot install Chromium
+    # dependencies on that image, so the suite never starts. 24.04 is the
+    # newest runner this Playwright version supports.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

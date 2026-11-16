@@ -220,6 +220,45 @@ test('mobile viewport: nav collapses to a menu button and the page does not scro
   await page.close();
 });
 
+test('mobile header, menu and enquiry form stay inside the phone viewport', async () => {
+  for (const [width, height] of [[375, 667], [390, 844], [412, 915]]) {
+    const { page } = await open(base + '/get-started', { width, height });
+    const fit = await page.evaluate(() => {
+      const header = document.querySelector('#dc-root header');
+      const vw = document.documentElement.clientWidth;
+      const off = [...header.querySelectorAll('a')].filter((el) => {
+        const r = el.getBoundingClientRect();
+        return r.width > 0 && (r.right > vw + 1 || r.left < -1);
+      }).map((el) => (el.innerText || el.getAttribute('aria-label') || 'link').trim().slice(0, 24));
+      return {
+        scroll: document.documentElement.scrollWidth - vw,
+        headerScroll: header.scrollWidth,
+        off
+      };
+    });
+    assert.ok(fit.scroll <= 1, `${width}px scrolls by ${fit.scroll}px`);
+    assert.ok(fit.headerScroll <= width + 1, `${width}px header is ${fit.headerScroll}px wide`);
+    assert.deepEqual(fit.off, [], `${width}px header items off screen: ${fit.off.join(', ')}`);
+    await page.locator('#dc-root header a[aria-label="Menu"]').click();
+    const drawer = await page.evaluate(() => {
+      const r = document.querySelector('.kf-drawer').getBoundingClientRect();
+      return { left: r.left, right: r.right, vw: document.documentElement.clientWidth };
+    });
+    assert.ok(drawer.left >= -1 && drawer.right <= drawer.vw + 1, `${width}px drawer is outside the viewport`);
+    const clear = await page.evaluate(() => {
+      const iframe = document.querySelector('iframe[data-kf-form]');
+      const bar = document.querySelector('.kf-mobile-cta');
+      const top = iframe.getBoundingClientRect().bottom + window.scrollY - bar.getBoundingClientRect().top;
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, top);
+      return iframe.getBoundingClientRect().bottom <= bar.getBoundingClientRect().top + 2;
+    });
+    assert.equal(clear, true, `${width}px enquiry form is covered by the bottom bar`);
+    assert.equal(await page.locator('#dc-root video').count(), 0, `${width}px get-started rendered a video`);
+    await page.close();
+  }
+});
+
 test('opened as a bare file it falls back to hash routing (design preview and double-click)', async () => {
   const page = await browser.newPage();
   await blockExternal(page);
@@ -371,6 +410,14 @@ for (const page of LANDING_PAGES) {
       .filter((i) => !i.complete || i.naturalWidth === 0)
       .map((i) => i.getAttribute('src')));
     assert.deepEqual(broken, [], 'images failed to load');
+    if (page.closed) {
+      assert.equal(await pg.locator('iframe[src*="leadconnectorhq"]').count(), 0, 'the closed round still embeds the payment form');
+      assert.match(await pg.locator('#signup').innerText(), /Registrations for this round have closed/);
+      assert.equal(await pg.locator('a[href="tel:0435737238"]').count() > 0, true);
+      assert.equal(await pg.locator('a[href="https://knightfitness-morayfield.com.au/get-started"]').count() > 0, true);
+      await pg.close();
+      return;
+    }
     if (page.registrationForm) {
       // HighLevel's paid registration form: blocked here like every third-party host (EXTERNAL), so only its embed is checked.
       assert.equal(await pg.locator(`iframe[src*="widget/form/${page.registrationForm}"]`).count(), 1, 'the registration form is not embedded');
@@ -406,6 +453,12 @@ for (const page of LANDING_PAGES) {
       assert.notDeepEqual(await readCounter(), first, 'the countdown is frozen');
     }
 
+    if (page.closed) {
+      const href = await pg.locator('#dc-root header a').last().getAttribute('href');
+      assert.equal(href, 'https://knightfitness-morayfield.com.au/get-started');
+      await pg.close();
+      return;
+    }
     // The header CTA scrolls the registration card up under the sticky header
     // rather than navigating anywhere, so check where the card ends up.
     await pg.locator('#dc-root header button').first().click();

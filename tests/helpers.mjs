@@ -40,9 +40,9 @@ export const LANDING_PAGES = [
     path: '/42-hard',
     title: '42 Hard Challenge — Knight Fitness Morayfield',
     h1: '42 HARD',
-    // Registration is paid, so it's HighLevel's own registration form, not the enquiry form: it takes the payment on
-    // submit and posts the sign-up to Slack for the staff boards, as Lawnton's 42 Hard page does (Mark, 17 Oct 2026).
-    registrationForm: 'F6YrDPqkBDSVHapalvQF'
+    // This round's paid registration has closed. The page stays up and points
+    // people at the studio enquiry instead of the HighLevel payment form.
+    closed: true
   }
 ];
 
