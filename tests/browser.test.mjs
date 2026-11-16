@@ -259,6 +259,33 @@ test('mobile header, menu and enquiry form stay inside the phone viewport', asyn
   }
 });
 
+test('the hero video file is requested only on the homepage, and only after load', async () => {
+  const file = '69abb00bb003fa7788042749.mp4';
+  for (const path of ['/get-started', '/schedule', '/contact']) {
+    const page = await browser.newPage();
+    const hits = [];
+    await page.route(`**/*${file}`, (route) => { hits.push(route.request().url()); return route.abort(); });
+    await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#dc-root h1', { timeout: 15000 });
+    await page.waitForTimeout(2000);
+    assert.equal(await page.locator('#dc-root video').count(), 0, `${path} still renders a video`);
+    assert.deepEqual(hits, [], `${path} requested the hero video`);
+    await page.close();
+  }
+  const page = await browser.newPage();
+  const hits = [];
+  await page.route(`**/*${file}`, (route) => { hits.push(Date.now()); return route.abort(); });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.waitForSelector('video[data-hero]', { timeout: 15000 });
+  const settled = Date.now();
+  await page.waitForTimeout(2500);
+  assert.ok(hits.length >= 1, 'homepage never requested the hero video');
+  assert.ok(hits[0] >= settled + 700, 'homepage requested the hero video before the page had settled');
+  const preload = await page.locator('video[data-hero]').getAttribute('preload');
+  assert.equal(preload, 'none');
+  await page.close();
+});
+
 test('opened as a bare file it falls back to hash routing (design preview and double-click)', async () => {
   const page = await browser.newPage();
   await blockExternal(page);
