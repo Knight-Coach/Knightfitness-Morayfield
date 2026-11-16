@@ -3,12 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w" imagesizes="100vw" media="(max-width: 760px)">
-<link rel="preload" as="image" type="image/avif" href="assets/img/hero-poster.avif" fetchpriority="high" media="(min-width: 761px)">
 <script>
+/* The poster preload is homepage-only. Every route shares this document, so a
+   static link would make /schedule and /get-started download it too. */
 (function () {
-  var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
-  if (path === '/') document.documentElement.classList.add('kf-home');
+  var path = location.protocol === 'file:'
+    ? ((location.hash || '#/').replace(/^#/, '').replace(/\/+$/, '') || '/')
+    : ((location.pathname || '/').replace(/\/+$/, '') || '/');
+  if (path !== '/') return;
+  document.documentElement.classList.add('kf-home');
+  if (window.matchMedia('(max-width: 760px)').matches) {
+    document.write('<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w" imagesizes="100vw">');
+  } else {
+    document.write('<link rel="preload" as="image" type="image/avif" href="assets/img/hero-poster.avif" fetchpriority="high">');
+  }
 })();
 </script>
 <script defer fetchpriority="low" src="./assets/kf-tracking.js?v=1"></script>
@@ -69,21 +77,15 @@
 </style>
 </head>
 <body>
-<picture>
-  <source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w">
-  <source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset="assets/img/hero-poster-480.webp 480w, assets/img/hero-poster-828.webp 828w">
-  <source type="image/avif" srcset="assets/img/hero-poster.avif">
-  <img id="kf-lcp" src="assets/img/hero-poster-480.webp" alt="Coach-led training at Knight Fitness Morayfield" width="480" height="960" fetchpriority="high">
-</picture>
 <script>
-/* The same document serves every route. Drop the homepage poster before paint
-   on the other pages so it does not sit above the contact and booking pages. */
+/* Same gate as the preload. The picture is not in the markup for other routes,
+   so the parser never sees a fetchpriority=high poster there. */
 (function () {
-  var path = (location.pathname || '/').replace(/\/+$/, '') || '/';
-  if (path === '/') return;
-  var pic = document.getElementById('kf-lcp');
-  if (pic && pic.parentNode && pic.parentNode.tagName === 'PICTURE') pic.parentNode.remove();
-  else if (pic) pic.remove();
+  var path = location.protocol === 'file:'
+    ? ((location.hash || '#/').replace(/^#/, '').replace(/\/+$/, '') || '/')
+    : ((location.pathname || '/').replace(/\/+$/, '') || '/');
+  if (path !== '/') return;
+  document.write('<picture><source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w"><source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset="assets/img/hero-poster-480.webp 480w, assets/img/hero-poster-828.webp 828w"><source type="image/avif" srcset="assets/img/hero-poster.avif"><img id="kf-lcp" src="assets/img/hero-poster-480.webp" alt="Coach-led training at Knight Fitness Morayfield" width="480" height="960" fetchpriority="high"></picture>');
 })();
 </script>
 <x-dc>

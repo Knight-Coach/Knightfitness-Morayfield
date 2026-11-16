@@ -335,6 +335,31 @@ test('the hero video file is requested only on a wide homepage, and only after l
   await page.close();
 });
 
+test('the homepage poster is requested only on the homepage', async () => {
+  const poster = 'hero-poster';
+  const watch = async (path) => {
+    const page = await browser.newPage({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 2 });
+    const hits = [];
+    page.on('request', (request) => {
+      if (request.url().includes(poster)) hits.push(request.url().split('/').pop().split('?')[0]);
+    });
+    await page.goto(base + path, { waitUntil: 'load' });
+    await page.waitForSelector('#dc-root h1', { timeout: 15000 });
+    await page.waitForTimeout(500);
+    const count = await page.locator('#kf-lcp').count();
+    await page.close();
+    return { hits, count };
+  };
+  for (const path of ['/get-started', '/schedule', '/contact']) {
+    const seen = await watch(path);
+    assert.deepEqual(seen.hits, [], `${path} requested ${seen.hits.join(', ')}`);
+    assert.equal(seen.count, 0, `${path} still has the homepage poster`);
+  }
+  const home = await watch('/');
+  assert.equal(home.count, 1);
+  assert.deepEqual([...new Set(home.hits)], ['hero-poster-828.avif'], `homepage poster requests: ${home.hits.join(', ')}`);
+});
+
 test('opened as a bare file it falls back to hash routing (design preview and double-click)', async () => {
   const page = await browser.newPage();
   await blockExternal(page);
