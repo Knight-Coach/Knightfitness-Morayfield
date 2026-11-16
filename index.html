@@ -4,19 +4,51 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script>
-/* The poster preload is homepage-only. Every route shares this document, so a
-   static link would make /schedule and /get-started download it too. */
+/* Poster hints are homepage-only. Every route shares this document, so a
+   static link would make /schedule and /get-started download it too.
+   On a phone the photo is a CSS background, started only after the headline
+   is visible, so the headline — not the image — is the largest contentful paint. */
 (function () {
   var path = location.protocol === 'file:'
     ? ((location.hash || '#/').replace(/^#/, '').replace(/\/+$/, '') || '/')
     : ((location.pathname || '/').replace(/\/+$/, '') || '/');
   if (path !== '/') return;
   document.documentElement.classList.add('kf-home');
-  if (window.matchMedia('(max-width: 760px)').matches) {
-    document.write('<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w" imagesizes="100vw">');
-  } else {
+  if (!window.matchMedia('(max-width: 760px)').matches) {
     document.write('<link rel="preload" as="image" type="image/avif" href="assets/img/hero-poster.avif" fetchpriority="high">');
+    return;
   }
+  document.write('<style>@font-face{font-family:"Plus Jakarta Sans";font-style:normal;font-weight:800;font-display:swap;src:url("https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_KUn9TR_VMquoRg.woff2") format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}</style>');
+  document.write('<link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/plusjakartasans/v12/LDIbaomQNQcsA88c7O9yZ4KMCoOg4IA6-91aHEjcWuA_KUn9TR_VMquoRg.woff2">');
+  var started = false;
+  var show = function () { document.documentElement.classList.add('kf-poster'); };
+  var load = function () {
+    if (started) return;
+    started = true;
+    var img = new Image();
+    img.decoding = 'async';
+    img.src = 'assets/img/hero-poster-828.avif';
+    if (img.decode) img.decode().then(show, show);
+    else img.onload = img.onerror = show;
+  };
+  var deadline = Date.now() + 2500;
+  var wait = function () {
+    var h1 = document.querySelector('.kf-early h1') || document.querySelector('.kf-hero h1');
+    var hidden = false;
+    var node = h1;
+    while (node && node !== document.documentElement) {
+      if (getComputedStyle(node).opacity === '0') { hidden = true; break; }
+      node = node.parentElement;
+    }
+    if (h1 && !hidden) {
+      if (window.performance && performance.mark) performance.mark('kf-headline');
+      load();
+      return;
+    }
+    if (Date.now() > deadline) { load(); return; }
+    requestAnimationFrame(wait);
+  };
+  requestAnimationFrame(wait);
 })();
 </script>
 <script defer fetchpriority="low" src="./assets/kf-tracking.js?v=1"></script>
@@ -55,13 +87,70 @@
     background-position: center center;
   }
   html.kf-home body { background-color: transparent; }
+  .kf-early { display: none; }
   @media (max-width: 760px) {
-    html.kf-home {
+    /* No image element on phones. This layer fades in after the headline, and a
+       CSS background is not a largest-contentful-paint candidate. */
+    html.kf-home body { position: relative; z-index: 0; }
+    html.kf-home body::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100vh;
+      pointer-events: none;
+      background: center / cover no-repeat;
+      opacity: 0;
+      transition: opacity 200ms ease-out;
+    }
+    html.kf-home.kf-poster body::before {
+      opacity: 1;
       background-image: image-set(
         url("assets/img/hero-poster-828.avif") type("image/avif"),
         url("assets/img/hero-poster-828.webp") type("image/webp")
       );
     }
+    @media (prefers-reduced-motion: reduce) {
+      html.kf-home body::before { transition: none; }
+    }
+    /* The in-app headline stays in the layout but does not paint, so this
+       early copy is the one Chrome records. Each lead word is its own box so
+       the paragraph cannot outgrow the headline. */
+    html.kf-home .kf-early {
+      display: block;
+      position: absolute;
+      z-index: 4;
+      top: 0;
+      left: 0;
+      right: 0;
+      pointer-events: none;
+    }
+    html.kf-home .kf-early-bar { height: 63px; }
+    html.kf-home .kf-early-pad { padding: 16px 16px 0; }
+    html.kf-home .kf-early-badges { height: 70px; }
+    html.kf-home .kf-early h1 {
+      margin: 8px 0 0;
+      font-family: "Plus Jakarta Sans", sans-serif;
+      font-weight: 800;
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: #fff;
+    }
+    html.kf-home .kf-early h1 span {
+      background: linear-gradient(120deg, hsl(356 80% 64%), hsl(32 95% 62%));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    html.kf-home .kf-hero h1 { opacity: 0; }
+    html.kf-home .kf-hero-lead span { display: inline-block; }
+  }
+  @media (max-width: 760px) and (max-height: 700px) {
+    html.kf-home .kf-early-pad { padding: 8px 14px 0; }
+    html.kf-home .kf-early h1 { margin-top: 6px; font-size: 25px; }
   }
   .kf-hero { background-color: #1c1416; }
   @media (min-width: 761px) {
@@ -78,16 +167,24 @@
 </head>
 <body>
 <script>
-/* Same gate as the preload. The picture is not in the markup for other routes,
-   so the parser never sees a fetchpriority=high poster there. */
+/* Same gate as the preload. Phones never get the image element: it would
+   outrank the headline as soon as it painted. Desktop keeps it. */
 (function () {
   var path = location.protocol === 'file:'
     ? ((location.hash || '#/').replace(/^#/, '').replace(/\/+$/, '') || '/')
     : ((location.pathname || '/').replace(/\/+$/, '') || '/');
   if (path !== '/') return;
+  if (window.matchMedia('(max-width: 760px)').matches) return;
   document.write('<picture><source media="(max-width: 760px)" type="image/avif" sizes="100vw" srcset="assets/img/hero-poster-480.avif 480w, assets/img/hero-poster-828.avif 828w"><source media="(max-width: 760px)" type="image/webp" sizes="100vw" srcset="assets/img/hero-poster-480.webp 480w, assets/img/hero-poster-828.webp 828w"><source type="image/avif" srcset="assets/img/hero-poster.avif"><img id="kf-lcp" src="assets/img/hero-poster-480.webp" alt="Coach-led training at Knight Fitness Morayfield" width="480" height="960" fetchpriority="high"></picture>');
 })();
 </script>
+<div class="kf-early">
+  <div class="kf-early-bar"></div>
+  <div class="kf-early-pad">
+    <div class="kf-early-badges"></div>
+    <h1>A coach-led <span>gym in Morayfield</span> for men &amp; women</h1>
+  </div>
+</div>
 <x-dc>
 <helmet>
 <title>Knight Fitness Morayfield — Gym in Morayfield</title>
@@ -313,7 +410,7 @@
             A coach-led <span style="background: linear-gradient(120deg, hsl(356 80% 64%), hsl(32 95% 62%)); -webkit-background-clip: text; background-clip: text; color: transparent;">gym in Morayfield</span> for men &amp; women
           </h1>
           <p class="kf-hero-lead" style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.55; color: hsl(217 10% 72%); margin-top: 22px; max-width: 31em;">
-            Lose weight, build strength and feel confident again — with coach-led sessions, real accountability, and a room full of locals who notice when you're not there.
+            <span>Lose</span> <span>weight,</span> <span>build</span> <span>strength</span> <span>and</span> <span>feel</span> <span>confident</span> <span>again</span> <span>—</span> <span>with</span> <span>coach-led</span> <span>sessions,</span> <span>real</span> <span>accountability,</span> <span>and</span> <span>a</span> <span>room</span> <span>full</span> <span>of</span> <span>locals</span> <span>who</span> <span>notice</span> <span>when</span> <span>you're</span> <span>not</span> <span>there.</span>
           </p>
           <div class="kf-hero-checks" style="display: grid; gap: 11px; margin-top: 28px;">
             <sc-for list="{{ heroChecks }}" as="check" hint-placeholder-count="4">
@@ -1741,6 +1838,9 @@ class Component extends DCLogic {
   componentDidUpdate() {
     const poster = document.getElementById('kf-lcp');
     if (this.state.page !== 'home') { if (poster) poster.remove(); }
+    if (this.state.page === 'home' && window.matchMedia('(max-width: 760px)').matches) {
+      document.querySelectorAll('#dc-root .kf-hero h1').forEach((el) => el.setAttribute('aria-hidden', 'true'));
+    }
     const want = routeFor(this.state.page).title;
     if (document.title !== want) {
       const t = document.querySelector('title');
