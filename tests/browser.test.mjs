@@ -229,6 +229,10 @@ test('homepage hero actions clear the sticky bar on short phones', async () => {
         const r = document.querySelector(sel).getBoundingClientRect();
         return { top: Math.round(r.top), bottom: Math.round(r.bottom) };
       };
+      const header = document.querySelector('#dc-root header').getBoundingClientRect();
+      const hero = document.querySelector('.kf-hero').getBoundingClientRect();
+      const poster = document.getElementById('kf-lcp').getBoundingClientRect();
+      const next = document.getElementById('book').getBoundingClientRect();
       return {
         note: box('.kf-hero-note'),
         actions: [...document.querySelectorAll('.kf-hero-actions a')].map((el) => {
@@ -236,10 +240,19 @@ test('homepage hero actions clear the sticky bar on short phones', async () => {
           return { text: el.innerText.replace(/\s+/g, ' ').trim(), top: Math.round(r.top), bottom: Math.round(r.bottom) };
         }),
         barTop: Math.round(bar.top),
+        headerTop: Math.round(header.top),
+        posterTop: Math.round(poster.top),
+        posterPos: getComputedStyle(document.getElementById('kf-lcp')).position,
+        posterCoversHero: poster.top <= hero.top + 2 && poster.bottom >= Math.min(hero.bottom, window.innerHeight) - 2,
+        gap: Math.round(next.top - hero.bottom),
         scroll: document.documentElement.scrollWidth - document.documentElement.clientWidth
       };
     });
     assert.ok(fit.scroll <= 1, `${width}x${height} scrolls sideways by ${fit.scroll}px`);
+    assert.ok(fit.headerTop <= 1, `${width}x${height} header starts at ${fit.headerTop}, below a banner`);
+    assert.equal(fit.posterPos, 'absolute', `${width}x${height} poster is in normal flow`);
+    assert.ok(fit.posterCoversHero, `${width}x${height} poster does not cover the hero (${fit.posterTop})`);
+    assert.ok(fit.gap <= 2, `${width}x${height} has a ${fit.gap}px gap under the hero`);
     assert.equal(fit.actions.length, 2, `${width}x${height} hero actions: ${JSON.stringify(fit.actions)}`);
     for (const item of [fit.note, ...fit.actions]) {
       assert.ok(item.bottom <= fit.barTop + 1, `${width}x${height} ${JSON.stringify(item)} is under the bar at ${fit.barTop}`);
