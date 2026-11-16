@@ -139,6 +139,8 @@
     .kf-header-bar { padding: 8px 12px !important; gap: 8px !important; }
     .kf-compare-table { display: none !important; }
     .kf-compare-cards { display: grid; gap: 12px; margin-top: 28px; }
+    .kf-drawer { left: 0 !important; right: 0 !important; width: 100% !important; }
+    .kf-drawer-backdrop { background: hsl(224 71% 4%) !important; }
   }
 </style>
 </helmet>
@@ -172,8 +174,11 @@
     </div>
   </header>
   <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
-    <div onClick="{{ closeMenu }}" class="kf-drawer-backdrop" style="position: fixed; inset: 0; z-index: 60; background: rgb(15 23 42 / 0.45);"></div>
-    <div class="kf-drawer" style="position: fixed; top: 0; right: 0; bottom: 0; width: min(100%, 360px); z-index: 70; background: #fff; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 76px 16px calc(24px + env(safe-area-inset-bottom)); box-shadow: -16px 0 40px rgb(0 0 0 / 0.22);">
+    <div onClick="{{ closeMenu }}" class="kf-drawer-backdrop" style="position: fixed; inset: 0; z-index: 60; background: hsl(224 71% 4%);"></div>
+    <div class="kf-drawer" style="position: fixed; top: 0; right: 0; bottom: 0; width: min(100%, 360px); z-index: 70; background: #fff; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 16px 16px calc(24px + env(safe-area-inset-bottom)); box-shadow: -16px 0 40px rgb(0 0 0 / 0.22);">
+      <div style="display: flex; justify-content: flex-end;">
+        <a href="#" onClick="{{ closeMenu }}" aria-label="Close menu" style="min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 700; color: hsl(224 71% 4%);">✕</a>
+      </div>
       <div style="display: grid; gap: 4px;">
         <sc-for list="{{ footerLinks }}" as="item" hint-placeholder-count="8">
           <a href="{{ item.href }}" onClick="{{ item.go }}" style="min-height: 48px; display: flex; align-items: center; font-size: 16px; font-weight: 600; color: hsl(224 71% 4%); padding: 0 12px; border-radius: 10px; border-bottom: 1px solid hsl(220 13% 94%);" style-hover="background: hsl(220 14% 96%); color: hsl(356 72% 40%);">{{ item.label }}</a>
@@ -185,7 +190,7 @@
 
   <!-- ============================= HOME ============================= -->
   <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
-  <main data-screen-label="Home">
+  <main data-screen-label="Home" style="padding-bottom: 88px;">
 
     <section class="kf-hero" style="position: relative; background: hsl(224 71% 4%); overflow: hidden;">
       <div style="position: absolute; top: -220px; right: -160px; width: 760px; height: 760px; border-radius: 9999px; background: radial-gradient(circle, hsl(356 72% 51% / 0.22), transparent 62%); pointer-events: none;"></div>
@@ -214,11 +219,11 @@
               </div>
             </sc-for>
           </div>
-          <div class="kf-hero-actions" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px;">
+          <div class="kf-hero-note" style="font-size: 12.5px; font-weight: 600; color: hsl(210 20% 90%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 16px;">{{ reassure }}</div>
+          <div class="kf-hero-actions" style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 14px;">
             <a href="#book" style="font-size: 16px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 40%), hsl(354 74% 38%)); padding: 18px 32px; border-radius: 13px; box-shadow: 0 14px 30px -8px hsl(356 72% 51% / 0.6); transition: opacity .15s;" style-hover="color: #fff; opacity: 0.93;">Claim your 3-day pass</a>
             <a href="tel:0435737238" style="font-size: 16px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.06); border: 1px solid hsl(0 0% 100% / 0.16); padding: 18px 28px; border-radius: 13px; transition: background .15s;" style-hover="background: hsl(0 0% 100% / 0.12); color: #fff;">Call the studio</a>
           </div>
-          <div style="font-size: 12.5px; font-weight: 500; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 16px;">{{ reassure }}</div>
           <div class="kf-hero-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; margin-top: 40px; padding-top: 30px; border-top: 1px solid hsl(0 0% 100% / 0.1);">
             <sc-for list="{{ heroStats }}" as="stat" hint-placeholder-count="3">
               <div>
@@ -231,10 +236,10 @@
         <div style="position: relative; animation: kfUp 0.7s ease-out both;">
           <div style="position: relative; border-radius: 24px; overflow: hidden; border: 1px solid hsl(0 0% 100% / 0.12); box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.8); background: hsl(215 28% 12%); aspect-ratio: 4 / 5;">
             <img src="assets/img/session-group.jpg" alt="" width="800" height="1000" fetchpriority="high" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block;" />
-            <video ref="{{ videoRef }}" data-src="https://assets.cdn.filesafe.space/zLeKXa3ySYvZybX7yQF8/media/69abb00bb003fa7788042749.mp4" data-hero="" poster="assets/img/session-group.jpg" preload="none" muted="{{ yes }}" loop="{{ yes }}" playsInline="{{ yes }}" disablePictureInPicture="{{ yes }}" tabIndex="-1" aria-hidden="true" style="position: relative; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; background: transparent;"></video>
+            <video ref="{{ videoRef }}" data-hero="" poster="assets/img/session-group.jpg" preload="none" muted="{{ yes }}" loop="{{ yes }}" playsInline="{{ yes }}" disablePictureInPicture="{{ yes }}" tabIndex="-1" aria-hidden="true" style="position: relative; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; background: transparent;"></video>
           </div>
           <div style="position: absolute; bottom: -26px; left: -20px; background: #fff; border-radius: 18px; padding: 18px 22px; box-shadow: 0 20px 40px -16px rgb(0 0 0 / 0.5); display: flex; align-items: center; gap: 14px; max-width: 280px;">
-            <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: linear-gradient(135deg, hsl(45 93% 47%), hsl(36 100% 50%)); display: grid; place-items: center; font-size: 19px;">🏆</span>
+            <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: linear-gradient(135deg, hsl(43 90% 27%), hsl(36 100% 50%)); display: grid; place-items: center; font-size: 19px;">🏆</span>
             <div>
               <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 15px; line-height: 1.2;">Morayfield's highest-rated</div>
               <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-size: 12px; font-weight: 600; color: hsl(356 72% 40%); margin-top: 3px; display: inline-block;" style-hover="color: hsl(354 74% 38%);">Rated 5.0 on Google</a>
@@ -259,12 +264,12 @@
             <div style="display: grid; gap: 12px; margin-top: 26px;">
               <sc-for list="{{ startPoints }}" as="s" hint-placeholder-count="4">
                 <div style="display: flex; gap: 12px; align-items: baseline; font-size: 15px; font-weight: 500;">
-                  <span style="color: hsl(160 84% 39%); font-weight: 800; font-size: 12px;">✓</span>{{ s }}
+                  <span style="color: hsl(160 70% 26%); font-weight: 800; font-size: 12px;">✓</span>{{ s }}
                 </div>
               </sc-for>
             </div>
             <div style="display: flex; align-items: center; gap: 14px; background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 16px; padding: 18px 22px; margin-top: 28px;">
-              <span style="color: hsl(45 93% 47%); font-size: 15px; letter-spacing: 0.08em; flex-shrink: 0;">★★★★★</span>
+              <span style="color: hsl(43 90% 27%); font-size: 15px; letter-spacing: 0.08em; flex-shrink: 0;">★★★★★</span>
               <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-size: 13.5px; font-weight: 700; color: hsl(224 71% 4%); line-height: 1.45;" style-hover="color: hsl(356 72% 40%);">Rated 5.0 on Google</a>
             </div>
             <div style="font-size: 14.5px; color: hsl(220 10% 38%); margin-top: 22px;">Would rather talk first? <a href="tel:0435737238" style="font-weight: 700;">Call 0435 737 238</a></div>
@@ -488,7 +493,7 @@
                   </div>
                 </div>
                 <div style="padding: 13px 15px 15px;">
-                  <div style="color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.1em;">★★★★★</div>
+                  <div style="color: hsl(43 90% 27%); font-size: 11px; letter-spacing: 0.1em;">★★★★★</div>
                   <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700; font-size: 14px; letter-spacing: -0.015em; margin-top: 6px;">{{ s.name }}</div>
                 </div>
               </a>
@@ -509,7 +514,7 @@
           <div style="background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 18px; padding: 20px 26px; display: flex; align-items: center; flex-wrap: wrap; gap: 18px;">
             <div>
               <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 38px; line-height: 1; letter-spacing: -0.04em;">5.0</div>
-              <div style="color: hsl(45 93% 47%); font-size: 13px; letter-spacing: 0.08em; margin-top: 5px;">★★★★★</div>
+              <div style="color: hsl(43 90% 27%); font-size: 13px; letter-spacing: 0.08em; margin-top: 5px;">★★★★★</div>
             </div>
             <div style="width: 1px; height: 46px; background: hsl(220 13% 88%);"></div>
             <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-size: 13px; font-weight: 700; color: hsl(224 71% 4%); line-height: 1.4;" style-hover="color: hsl(356 72% 40%);">Rated 5.0 on Google</a>
@@ -527,7 +532,7 @@
                         <div style="font-size: 13.5px; font-weight: 600;">{{ r.name }}</div>
                         <div style="font-size: 11px; color: hsl(220 10% 38%); margin-top: 1px;">{{ r.ago }}</div>
                       </div>
-                      <span style="margin-left: auto; color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
+                      <span style="margin-left: auto; color: hsl(43 90% 27%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
                     </div>
                     <p style="font-size: 13.5px; line-height: 1.6; color: hsl(224 71% 14%); margin-top: 12px;">{{ r.quote }}</p>
                   </div>
@@ -544,7 +549,7 @@
                         <div style="font-size: 13.5px; font-weight: 600;">{{ r.name }}</div>
                         <div style="font-size: 11px; color: hsl(220 10% 38%); margin-top: 1px;">{{ r.ago }}</div>
                       </div>
-                      <span style="margin-left: auto; color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
+                      <span style="margin-left: auto; color: hsl(43 90% 27%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
                     </div>
                     <p style="font-size: 13.5px; line-height: 1.6; color: hsl(224 71% 14%); margin-top: 12px;">{{ r.quote }}</p>
                   </div>
@@ -561,7 +566,7 @@
                         <div style="font-size: 13.5px; font-weight: 600;">{{ r.name }}</div>
                         <div style="font-size: 11px; color: hsl(220 10% 38%); margin-top: 1px;">{{ r.ago }}</div>
                       </div>
-                      <span style="margin-left: auto; color: hsl(45 93% 47%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
+                      <span style="margin-left: auto; color: hsl(43 90% 27%); font-size: 11px; letter-spacing: 0.08em;">★★★★★</span>
                     </div>
                     <p style="font-size: 13.5px; line-height: 1.6; color: hsl(224 71% 14%); margin-top: 12px;">{{ r.quote }}</p>
                   </div>
@@ -897,7 +902,7 @@
               </div>
             </div>
             <div style="display: flex; align-items: center; gap: 9px; margin-top: 14px;">
-              <span style="color: hsl(45 93% 47%); font-size: 13px; letter-spacing: 0.09em;">★★★★★</span>
+              <span style="color: hsl(43 90% 27%); font-size: 13px; letter-spacing: 0.09em;">★★★★★</span>
               <span style="font-size: 12.5px; color: hsl(220 10% 38%);">{{ r.ago }}</span>
             </div>
             <p style="font-size: 15px; line-height: 1.7; color: hsl(224 30% 16%); margin-top: 13px; white-space: pre-line; text-wrap: pretty;">{{ r.shown }}</p>
@@ -966,7 +971,7 @@
         <div style="display: grid; gap: 13px; margin-top: 30px;">
           <sc-for list="{{ startPoints }}" as="s" hint-placeholder-count="4">
             <div style="display: flex; gap: 13px; align-items: baseline; font-size: 15.5px; font-weight: 500;">
-              <span style="color: hsl(160 84% 39%); font-weight: 800; font-size: 12px;">✓</span>{{ s }}
+              <span style="color: hsl(160 70% 26%); font-weight: 800; font-size: 12px;">✓</span>{{ s }}
             </div>
           </sc-for>
         </div>
@@ -1248,7 +1253,7 @@
 
   <sc-if value="{{ mobileCta }}" hint-placeholder-val="{{ false }}">
     <div class="kf-mobile-cta" style="position: fixed; bottom: 0; left: 0; right: 0; z-index: 60; background: hsl(224 71% 4% / 0.96); border-top: 1px solid hsl(0 0% 100% / 0.1); padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); display: flex; gap: 10px; align-items: center; box-shadow: 0 -8px 24px -12px rgb(0 0 0 / 0.5);">
-      <a href="tel:0435737238" style="min-height: 48px; flex: 1; display: grid; place-items: center; font-size: 14.5px; font-weight: 600; color: #fff; background: hsl(0 0% 100% / 0.08); border: 1px solid hsl(0 0% 100% / 0.16); border-radius: 11px;" style-hover="color: #fff;">Call</a>
+      <a href="tel:0435737238" style="min-height: 48px; flex: 1; display: grid; place-items: center; font-size: 14.5px; font-weight: 600; color: #fff; background: hsl(215 28% 16%); border: 1px solid hsl(215 20% 28%); border-radius: 11px;" style-hover="color: #fff; background: hsl(215 24% 22%);">Call</a>
       <a href="{{ hStart }}" onClick="{{ goStart }}" style="min-height: 48px; flex: 2; display: grid; place-items: center; font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 40%), hsl(354 74% 38%)); border-radius: 11px;" style-hover="color: #fff;">Claim 3 free sessions</a>
     </div>
   </sc-if>
@@ -1266,7 +1271,7 @@ const CYAN = RED;
 const PINK = RED;
 
 const YES = { mark: 'Yes', color: 'hsl(160 84% 50%)' };
-const NO = { mark: 'No', color: 'hsl(217 10% 48%)' };
+const NO = { mark: 'No', color: 'hsl(217 12% 74%)' };
 const cell = (v, hi) => ({ mark: v.mark, color: hi ? 'hsl(160 84% 58%)' : v.color, bg: hi ? 'hsl(356 72% 51% / 0.1)' : 'transparent' });
 const some = (word) => ({ mark: word, color: 'hsl(43 96% 62%)' });
 const pop = (time) => ({ time });
@@ -1277,6 +1282,7 @@ const TRANSFORMS = [
   'assets/img/tf-4.jpg'
 ];
 const GOOGLE_PROFILE = 'https://www.google.com/maps?q=125+Morayfield+Road,+Morayfield+QLD+4506';
+const HERO_VIDEO = 'https://assets.cdn.filesafe.space/zLeKXa3ySYvZybX7yQF8/media/69abb00bb003fa7788042749.mp4';
 
 const MEDIA_CDN = 'https://assets.cdn.filesafe.space/zLeKXa3ySYvZybX7yQF8/media/';
 
@@ -1417,7 +1423,7 @@ const FORM_ORIGIN = 'https://knight-agent.vercel.app';
 
 class Component extends DCLogic {
   state = {
-    page: 'home', lightbox: null, video: null,
+    page: (typeof window === 'undefined') ? 'home' : pageFromSlug(currentLocation()), lightbox: null, video: null,
     narrow: typeof window !== 'undefined' && window.matchMedia('(max-width: 760px)').matches,
     compactNav: typeof window !== 'undefined' && window.matchMedia('(max-width: 1040px)').matches,
     menu: false, reviewQuery: '', reviewSort: 'newest', expanded: {}, reviewsShown: 20
@@ -1498,8 +1504,10 @@ class Component extends DCLogic {
   hydrateStoryVideos() {
     if (typeof document === 'undefined') return;
     const arm = (v) => {
+      if (!v || !v.isConnected) return;
       const url = v.getAttribute('data-src');
       if (!url || url.indexOf('{{') !== -1) return;
+      if (v.hasAttribute('data-hero') && this.state.page !== 'home') return;
       if (v.getAttribute('src') === url) return;
       v.preload = 'none';
       v.setAttribute('src', url);
@@ -1510,6 +1518,21 @@ class Component extends DCLogic {
         if (pr && pr.catch) pr.catch(() => {});
       }
     };
+    clearTimeout(this.heroTimer);
+    if (this.state.page !== 'home') this.heroReady = false;
+    if (this.state.page === 'home' && !this.heroReady) {
+      this.heroReady = true;
+      const start = () => {
+        if (this.state.page !== 'home') return;
+        const node = this.videoRef.current;
+        if (!node || !node.isConnected) return;
+        node.setAttribute('data-src', HERO_VIDEO);
+        arm(node);
+      };
+      const kick = () => { this.heroTimer = setTimeout(start, 1200); };
+      if (document.readyState === 'complete') kick();
+      else window.addEventListener('load', kick, { once: true });
+    }
     if (!this.videoIO && 'IntersectionObserver' in window) {
       this.videoIO = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
@@ -1520,14 +1543,7 @@ class Component extends DCLogic {
       }, { rootMargin: '200px 0px' });
     }
     document.querySelectorAll('#dc-root video[data-src]').forEach((v) => {
-      if (v.hasAttribute('data-hero')) {
-        // The poster image is the LCP. Starting the 16MB file immediately makes
-        // its first frame the LCP instead, so wait until the page has loaded.
-        const start = () => arm(v);
-        if (document.readyState === 'complete') setTimeout(start, 1500);
-        else window.addEventListener('load', () => setTimeout(start, 1200), { once: true });
-        return;
-      }
+      if (v.hasAttribute('data-hero')) return;
       if (v.hasAttribute('data-autoplay')) {
         arm(v);
         return;
@@ -1547,6 +1563,7 @@ class Component extends DCLogic {
     if (this.onHash) { window.removeEventListener('popstate', this.onHash); window.removeEventListener('hashchange', this.onHash); }
     if (this.titleObserver) this.titleObserver.disconnect();
     if (this.videoIO) this.videoIO.disconnect();
+    clearTimeout(this.heroTimer);
   }
 
   // Progressive enhancement: hide only what is off-screen, then fade it in on entry.
