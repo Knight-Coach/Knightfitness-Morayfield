@@ -99,7 +99,7 @@ test('local copy does not publish a stale Google review count or the old suburb'
   assert.equal(data['@type'], 'HealthClub');
   assert.equal(data.name, 'Knight Fitness Morayfield');
   assert.equal(data.url, `${SITE}/`);
-  assert.equal(data.telephone, '+61435737238');
+  assert.equal(data.telephone, '+61482075085');
   assert.equal(data.address.streetAddress, '125 Morayfield Road');
   assert.equal(data.address.addressLocality, 'Morayfield');
   assert.equal(data.address.addressRegion, 'QLD');
@@ -307,7 +307,7 @@ for (const page of LANDING_PAGES) {
     if (page.closed) {
       assert.match(html, /Registrations for this round have closed/);
       assert.match(html, /href="https:\/\/knightfitness-morayfield\.com\.au\/get-started"/);
-      assert.match(html, /href="tel:0435737238"/);
+      assert.match(html, /href="tel:\+61482075085"/);
       assert.doesNotMatch(html, /leadconnectorhq\.com\/widget\/form|msgsndr\.com|form_embed\.js/);
       return;
     }

@@ -489,7 +489,7 @@ for (const page of LANDING_PAGES) {
     if (page.closed) {
       assert.equal(await pg.locator('iframe[src*="leadconnectorhq"]').count(), 0, 'the closed round still embeds the payment form');
       assert.match(await pg.locator('#signup').innerText(), /Registrations for this round have closed/);
-      assert.equal(await pg.locator('a[href="tel:0435737238"]').count() > 0, true);
+      assert.equal(await pg.locator('a[href="tel:+61482075085"]').count() > 0, true);
       assert.equal(await pg.locator('a[href="https://knightfitness-morayfield.com.au/get-started"]').count() > 0, true);
       await pg.close();
       return;
