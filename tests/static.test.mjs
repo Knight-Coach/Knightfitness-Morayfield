@@ -144,7 +144,7 @@ test('vendored React matches the SRI hashes support.js expects from unpkg', asyn
   for (const [urlKey, sriKey, pkg] of pairs) {
     const version = url(urlKey).match(new RegExp(`^${pkg}@([0-9.]+)/`))[1];
     const rel = `assets/vendor/${pkg}-${version}.production.min.js`;
-    assert.match(html, new RegExp(`<script defer src="\\./${rel.replace(/\./g, '\\.')}"></script>`), `${rel} must be loaded before support.js`);
+    assert.match(html, new RegExp(`<script defer(?: fetchpriority="low")? src="\\./${rel.replace(/\./g, '\\.')}"></script>`), `${rel} must be loaded before support.js`);
     const buf = await readFile(resolve(ROOT, rel));
     const hash = 'sha384-' + createHash('sha384').update(buf).digest('base64');
     assert.equal(hash, sri(sriKey), `${rel} is not the same build support.js pins`);
@@ -384,7 +384,7 @@ test('every page loads the shared GA4 and Meta snippet, cache-busted', async () 
   assert.match(js, /fbq\('track', 'PageView'\)/);
   assert.match(js, /fbq\('track', 'Lead'/);
   assert.match(js, /sessionStorage/);
-  const tag = new RegExp(`<script(?: defer)? src="\\./assets/kf-tracking\\.js\\?v=${version[1]}"></script>`);
+  const tag = new RegExp(`<script(?: defer)?(?: fetchpriority="low")? src="\\./assets/kf-tracking\\.js\\?v=${version[1]}"></script>`);
   for (const entry of ENTRY_POINTS) {
     const html = await read(entry);
     assert.match(html, tag, `${entry} must load the shared tracking snippet`);

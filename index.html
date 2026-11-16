@@ -11,13 +11,13 @@
   if (path === '/') document.documentElement.classList.add('kf-home');
 })();
 </script>
-<script defer src="./assets/kf-tracking.js?v=1"></script>
+<script defer fetchpriority="low" src="./assets/kf-tracking.js?v=1"></script>
 <!-- React is served from this origin so the site does not depend on unpkg.com at
      page load. support.js skips its CDN fetch when window.React already exists.
      Keep the versions in step with REACT_URL / REACT_DOM_URL inside support.js. -->
-<script defer src="./assets/vendor/react-18.3.1.production.min.js"></script>
-<script defer src="./assets/vendor/react-dom-18.3.1.production.min.js"></script>
-<script defer src="./support.js"></script>
+<script defer fetchpriority="low" src="./assets/vendor/react-18.3.1.production.min.js"></script>
+<script defer fetchpriority="low" src="./assets/vendor/react-dom-18.3.1.production.min.js"></script>
+<script defer fetchpriority="low" src="./support.js"></script>
 <style>
   x-dc { display: none !important; }
   /* Out of flow from the first paint, so the header stays at the top of the
