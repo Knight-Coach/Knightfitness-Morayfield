@@ -14,16 +14,16 @@
 <body>
 <x-dc>
 <helmet>
-<title>Knight Fitness Morayfield — Coach-led training for men &amp; women</title>
-<meta name="description" content="Coach-led team training in Morayfield for men and women at every fitness level. Rated 5.0 from 256 Google reviews. Start with three free sessions — no lock-in, no gym experience needed." />
+<title>Knight Fitness Morayfield — Gym in Morayfield</title>
+<meta name="description" content="Coach-led gym in Morayfield for men and women, also serving Caboolture and Burpengary. Rated 5.0 on Google. Three free sessions, no lock-in." />
 <link rel="icon" href="assets/favicon-512.png" />
 <link rel="apple-touch-icon" href="assets/favicon-180.png" />
 <meta name="google-site-verification" content="wPEI4AUmJK-R1IlC3kCtrHCOIJxc0Zu-cQ5fQK8vMT0" />
 <meta name="theme-color" content="#0b0f19" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Knight Fitness Morayfield" />
-<meta property="og:title" content="Knight Fitness Morayfield — Coach-led training for men &amp; women" />
-<meta property="og:description" content="Rated 5.0 from 256 Google reviews. Start with three free coach-led sessions — no lock-in, no gym experience needed." />
+<meta property="og:title" content="Knight Fitness Morayfield — Gym in Morayfield" />
+<meta property="og:description" content="Coach-led gym in Morayfield for men and women, also serving Caboolture and Burpengary. Rated 5.0 on Google. Three free sessions, no lock-in." />
 <meta property="og:image" content="https://knightfitness-morayfield.com.au/assets/og-image.jpg" />
 <meta property="og:locale" content="en_AU" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -43,22 +43,42 @@
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "125 Morayfield Road",
-    "addressLocality": "Caboolture South",
+    "addressLocality": "Morayfield",
     "addressRegion": "QLD",
     "postalCode": "4506",
     "addressCountry": "AU"
   },
-  "hasMap": "https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506",
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -27.097507,
+    "longitude": 152.949738
+  },
+  "hasMap": "https://www.google.com/maps?q=125+Morayfield+Road,+Morayfield+QLD+4506",
   "areaServed": [
     { "@type": "City", "name": "Morayfield" },
     { "@type": "City", "name": "Caboolture" },
     { "@type": "City", "name": "Burpengary" },
     { "@type": "City", "name": "Narangba" }
   ],
+  "openingHoursSpecification": [
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "05:00", "closes": "05:45" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], "opens": "06:00", "closes": "06:45" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": "Saturday", "opens": "07:00", "closes": "07:45" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Wednesday", "Friday"], "opens": "09:30", "closes": "10:15" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Wednesday", "Friday"], "opens": "16:30", "closes": "17:15" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"], "opens": "17:20", "closes": "18:05" },
+    { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday"], "opens": "18:10", "closes": "18:55" }
+  ],
   "sameAs": [
     "https://facebook.com/p/Knight-Fitness-Morayfield-100090367359324/",
-    "https://www.instagram.com/knightfitnessmorayfield/"
+    "https://www.instagram.com/knightfitnessmorayfield/",
+    "https://www.google.com/maps?q=125+Morayfield+Road,+Morayfield+QLD+4506"
   ],
+  "parentOrganization": {
+    "@type": "Organization",
+    "name": "Knight Fitness",
+    "url": "https://knightfitness.com.au"
+  },
   "publicAccess": true,
   "isAccessibleForFree": false,
   "availableService": {
@@ -147,15 +167,15 @@
       <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 68px 24px 76px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 56px; align-items: center;">
         <div style="animation: kfUp 0.6s ease-out both;">
           <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.12); color: #fff; padding: 8px 15px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">
-              <span style="letter-spacing: 0.06em; color: hsl(45 93% 55%); font-size: 13px;">★★★★★</span> 256 Google reviews
-            </div>
+            <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 9px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.12); color: #fff; padding: 8px 15px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.14);">
+              <span style="letter-spacing: 0.06em; color: hsl(45 93% 55%); font-size: 13px;">★★★★★</span> Rated 5.0 on Google
+            </a>
             <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: hsl(160 84% 60%);">
               <span style="width: 7px; height: 7px; border-radius: 9999px; background: hsl(160 84% 50%); animation: kfPulse 2.2s ease-in-out infinite;"></span> Taking new members
             </div>
           </div>
           <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(38px, 5vw, 68px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 24px; color: #fff;">
-            The transformation studio for men &amp; women <span style="background: linear-gradient(120deg, hsl(356 80% 64%), hsl(32 95% 62%)); -webkit-background-clip: text; background-clip: text; color: transparent;">in Morayfield</span>
+            A coach-led <span style="background: linear-gradient(120deg, hsl(356 80% 64%), hsl(32 95% 62%)); -webkit-background-clip: text; background-clip: text; color: transparent;">gym in Morayfield</span> for men &amp; women
           </h1>
           <p style="font-size: clamp(16px, 1.25vw, 19px); line-height: 1.55; color: hsl(217 10% 72%); margin-top: 22px; max-width: 31em;">
             Lose weight, build strength and feel confident again — with coach-led sessions, real accountability, and a room full of locals who notice when you're not there.
@@ -190,7 +210,7 @@
             <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 14px; background: linear-gradient(135deg, hsl(45 93% 47%), hsl(36 100% 50%)); display: grid; place-items: center; font-size: 19px;">🏆</span>
             <div>
               <div style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 15px; line-height: 1.2;">Morayfield's highest-rated</div>
-              <div style="font-size: 12px; color: hsl(220 9% 46%); margin-top: 3px;">256 five-star reviews and counting</div>
+              <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-size: 12px; font-weight: 600; color: hsl(356 72% 51%); margin-top: 3px; display: inline-block;" style-hover="color: hsl(354 74% 38%);">Rated 5.0 on Google</a>
             </div>
           </div>
         </div>
@@ -218,7 +238,7 @@
             </div>
             <div style="display: flex; align-items: center; gap: 14px; background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); border-radius: 16px; padding: 18px 22px; margin-top: 28px;">
               <span style="color: hsl(45 93% 47%); font-size: 15px; letter-spacing: 0.08em; flex-shrink: 0;">★★★★★</span>
-              <div style="font-size: 13.5px; font-weight: 600; color: hsl(220 9% 46%); line-height: 1.45;">Rated 5.0 by <strong style="color: hsl(224 71% 4%);">256 locals</strong> on Google</div>
+              <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-size: 13.5px; font-weight: 700; color: hsl(224 71% 4%); line-height: 1.45;" style-hover="color: hsl(356 72% 51%);">Rated 5.0 on Google</a>
             </div>
             <div style="font-size: 14.5px; color: hsl(220 9% 46%); margin-top: 22px;">Would rather talk first? <a href="tel:0435737238" style="font-weight: 700;">Call 0435 737 238</a></div>
           </div>
@@ -449,7 +469,7 @@
               <div style="color: hsl(45 93% 47%); font-size: 13px; letter-spacing: 0.08em; margin-top: 5px;">★★★★★</div>
             </div>
             <div style="width: 1px; height: 46px; background: hsl(220 13% 88%);"></div>
-            <div style="font-size: 13px; font-weight: 600; color: hsl(220 9% 46%); line-height: 1.4;">Based on<br /><strong style="color: hsl(224 71% 4%);">256 Google reviews</strong></div>
+            <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-size: 13px; font-weight: 700; color: hsl(224 71% 4%); line-height: 1.4;" style-hover="color: hsl(356 72% 51%);">Rated 5.0 on Google</a>
             <a href="{{ hReviews }}" onClick="{{ goReviews }}" style="font-size: 13.5px; font-weight: 700; color: hsl(224 71% 4%); background: #fff; border: 1px solid hsl(220 13% 88%); padding: 12px 18px; border-radius: 11px; white-space: nowrap;" style-hover="background: hsl(220 14% 96%); color: hsl(224 71% 4%);">{{ readAllLabel }}</a>
           </div>
         </div>
@@ -532,14 +552,14 @@
               </div>
             </sc-for>
             <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-              <a href="https://www.google.com/maps/dir/?api=1&destination=125+Morayfield+Rd+Caboolture+South+QLD+4506" target="_blank" style="font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; opacity: 0.93;">Get directions</a>
+              <a href="https://www.google.com/maps/dir/?api=1&destination=125+Morayfield+Road,+Morayfield+QLD+4506" target="_blank" rel="noopener" style="font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; opacity: 0.93;">Get directions</a>
               <a href="tel:0435737238" style="font-size: 14.5px; font-weight: 600; color: hsl(224 71% 4%); background: hsl(220 14% 96%); border: 1px solid hsl(220 13% 91%); padding: 14px 22px; border-radius: 11px;" style-hover="color: hsl(224 71% 4%);">Call now</a>
             </div>
           </div>
         </div>
         <div data-reveal="" style="display: grid; gap: 16px;">
           <img src="assets/img/sign.jpg" alt="The Knight Fitness sign above the Morayfield Road entrance" loading="lazy" style="width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 22px; display: block; box-shadow: 0 24px 48px -24px rgb(0 0 0 / 0.35);" />
-          <iframe src="https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506&output=embed" title="Map of Knight Fitness Morayfield" loading="lazy" style="width: 100%; height: 250px; border: 1px solid hsl(220 13% 91%); border-radius: 22px; display: block;"></iframe>
+          <iframe src="https://www.google.com/maps?q=125+Morayfield+Road,+Morayfield+QLD+4506&output=embed" title="Map of Knight Fitness Morayfield" loading="lazy" style="width: 100%; height: 250px; border: 1px solid hsl(220 13% 91%); border-radius: 22px; display: block;"></iframe>
         </div>
       </div>
     </section>
@@ -781,11 +801,11 @@
           <div style="display: inline-flex; align-items: center; gap: 9px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.12); color: #fff; padding: 8px 15px; border-radius: 9999px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;">
             <span style="width: 7px; height: 7px; border-radius: 9999px; background: hsl(160 84% 45%);"></span> Verified Google reviews · Morayfield QLD
           </div>
-          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 18px; color: #fff;">256 reasons to walk through the door</h1>
+          <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 60px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 18px; color: #fff;">What Morayfield locals say</h1>
           <div style="display: flex; align-items: center; gap: 12px; margin-top: 20px;">
             <span style="color: hsl(45 93% 55%); font-size: 19px; letter-spacing: 0.1em;">★★★★★</span>
             <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 19px; color: #fff;">5.0</span>
-            <span style="font-size: 14px; color: hsl(217 10% 64%);">from 256 Google reviews</span>
+            <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-size: 14px; font-weight: 600; color: hsl(217 10% 64%);" style-hover="color: #fff;">Rated 5.0 on Google</a>
           </div>
           <p style="font-size: clamp(16px, 1.3vw, 19px); line-height: 1.6; color: hsl(217 10% 72%); margin-top: 20px;">Every review below is copied straight from our Google profile — real Morayfield locals, no paid testimonials and no actors. Just your neighbours, telling the truth about what training here did for their life.</p>
           <a href="{{ hStart }}" onClick="{{ goStart }}" style="display: inline-block; margin-top: 28px; font-size: 15.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 17px 28px; border-radius: 12px; box-shadow: 0 14px 30px -12px hsl(356 72% 51% / 0.6);" style-hover="color: #fff; opacity: 0.93;">Start with 3 free sessions →</a>
@@ -956,6 +976,15 @@
             </div>
           </sc-for>
           <div>
+            <div style="font-size: 10.5px; font-weight: 700; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.14em;">Session times</div>
+            <div style="display: grid; gap: 6px; margin-top: 8px;">
+              <sc-for list="{{ openingHours }}" as="row" hint-placeholder-count="4">
+                <div style="font-size: 14.5px; font-weight: 600; line-height: 1.45; color: #fff;"><span style="color: hsl(217 10% 72%);">{{ row.day }}:</span> {{ row.times }}</div>
+              </sc-for>
+            </div>
+            <div style="font-size: 13px; color: hsl(217 10% 64%); margin-top: 8px; line-height: 1.45;">Each session runs for 45 minutes. No Sunday sessions.</div>
+          </div>
+          <div>
             <div style="font-size: 10.5px; font-weight: 700; color: hsl(217 10% 60%); text-transform: uppercase; letter-spacing: 0.14em;">Social</div>
             <div style="display: flex; gap: 16px; margin-top: 8px; font-size: 14.5px; font-weight: 600;">
               <a href="https://facebook.com/p/Knight-Fitness-Morayfield-100090367359324/" target="_blank" style="color: hsl(356 80% 66%);">Facebook</a>
@@ -967,7 +996,8 @@
           <img src="assets/img/sign.jpg" alt="The Knight Fitness sign above the Morayfield Road entrance" loading="lazy" style="width: 100%; height: auto; display: block;" />
           <div style="padding: 16px 20px; background: #fff; font-size: 13.5px; font-weight: 600; color: hsl(220 9% 46%);">Look for the red Knight Fitness sign — next to Lumus Imaging, with parking right at the door.</div>
         </div>
-        <iframe src="https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506&output=embed" title="Map of Knight Fitness Morayfield" loading="lazy" style="width: 100%; height: 300px; border: 1px solid hsl(220 13% 91%); border-radius: 22px; display: block;"></iframe>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=125+Morayfield+Road,+Morayfield+QLD+4506" target="_blank" rel="noopener" style="justify-self: start; font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 51%), hsl(354 74% 38%)); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; opacity: 0.93;">Get directions</a>
+        <iframe src="https://www.google.com/maps?q=125+Morayfield+Road,+Morayfield+QLD+4506&output=embed" title="Map of Knight Fitness Morayfield" loading="lazy" style="width: 100%; height: 300px; border: 1px solid hsl(220 13% 91%); border-radius: 22px; display: block;"></iframe>
       </div>
     </div>
   </main>
@@ -1146,7 +1176,17 @@
         <div>
           <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(217 10% 60%);">Find us</div>
           <div style="display: grid; gap: 10px; margin-top: 16px; font-size: 14.5px; color: hsl(217 10% 64%); line-height: 1.5;">
-            <span>125 Morayfield Road,<br />Morayfield QLD 4506</span>
+            <span>Knight Fitness Morayfield, 125 Morayfield Road, Morayfield QLD 4506</span>
+            <div style="margin-top: 8px;">
+              <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(217 10% 60%);">Session times</div>
+              <div style="display: grid; gap: 4px; margin-top: 8px;">
+                <sc-for list="{{ openingHours }}" as="row" hint-placeholder-count="4">
+                  <span><span style="color: #fff;">{{ row.day }}:</span> {{ row.times }}</span>
+                </sc-for>
+              </div>
+              <span style="display: block; margin-top: 6px;">Each session runs for 45 minutes. No Sunday sessions.</span>
+              <a href="{{ hSchedule }}" onClick="{{ goSchedule }}" style="color: #fff; display: flex; align-items: center; min-height: 44px; font-weight: 600;" style-hover="color: hsl(356 78% 62%);">Full timetable</a>
+            </div>
             <a href="tel:0435737238" style="color: #fff; display: flex; align-items: center; min-height: 44px;">0435 737 238</a>
             <a href="mailto:info@knightfitness.com.au" style="color: #fff; display: flex; align-items: center; min-height: 44px; word-break: break-word;">info@knightfitness.com.au</a>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -1193,7 +1233,7 @@ const TRANSFORMS = [
   'assets/img/tf-3.jpg',
   'assets/img/tf-4.jpg'
 ];
-const GOOGLE_PROFILE = 'https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506';
+const GOOGLE_PROFILE = 'https://www.google.com/maps?q=125+Morayfield+Road,+Morayfield+QLD+4506';
 
 const MEDIA_CDN = 'https://assets.cdn.filesafe.space/zLeKXa3ySYvZybX7yQF8/media/';
 
@@ -1289,14 +1329,14 @@ const REVIEWS = [
 ];
 
 const ROUTES = [
-  { page: 'home', slug: '', title: 'Knight Fitness Morayfield — Coach-led training for men & women', desc: 'Coach-led team training in Morayfield for men and women at every fitness level. Rated 5.0 from 256 Google reviews. Start with three free sessions — no lock-in, no gym experience needed.' },
+  { page: 'home', slug: '', title: 'Knight Fitness Morayfield — Gym in Morayfield', desc: 'Coach-led gym in Morayfield for men and women, also serving Caboolture and Burpengary. Rated 5.0 on Google. Three free sessions, no lock-in.' },
   { page: 'about', slug: 'about', title: 'About & Team Training — Knight Fitness Morayfield', desc: 'Meet the coaches and see how team training works at Knight Fitness Morayfield. Coach-led sessions scaled to every fitness level.' },
   { page: 'schedule', slug: 'schedule', title: 'Timetable — Knight Fitness Morayfield', desc: 'Session times at Knight Fitness Morayfield. Coach-led team training mornings, afternoons and Saturdays.' },
-  { page: 'reviews', slug: 'reviews', title: 'Reviews — Knight Fitness Morayfield', desc: 'Read what Morayfield locals say about training at Knight Fitness. Rated 5.0 from 256 Google reviews.' },
+  { page: 'reviews', slug: 'reviews', title: 'Reviews — Knight Fitness Morayfield', desc: 'Read what Morayfield locals say about training at Knight Fitness. Rated 5.0 on Google.' },
   { page: 'challenge', slug: '6-week-challenge', title: '6 Week Challenge — Knight Fitness Morayfield', desc: 'A six-week reset with measurements, nutrition guidance and weekly accountability at Knight Fitness Morayfield.' },
   { page: 'first', slug: 'your-first-visit', title: 'Your First Visit — Knight Fitness Morayfield', desc: 'Exactly what happens on your first visit to Knight Fitness Morayfield, so nothing about walking in is a surprise.' },
   { page: 'start', slug: 'get-started', title: 'Claim Your 3-Day Pass — Knight Fitness Morayfield', desc: 'Three free coach-led sessions at Knight Fitness Morayfield. No lock-in, no gym experience needed.' },
-  { page: 'contact', slug: 'contact', title: 'Contact — Knight Fitness Morayfield', desc: 'Find Knight Fitness Morayfield at 125 Morayfield Road. Call 0435 737 238 or message a coach.' }
+  { page: 'contact', slug: 'contact', title: 'Contact — Knight Fitness Morayfield', desc: 'Knight Fitness Morayfield, 125 Morayfield Road, Morayfield QLD 4506. Call 0435 737 238 or send a message.' }
 ];
 
 const pageFromSlug = (slug) => {
@@ -1333,7 +1373,7 @@ const fileHrefFor = (path) => (FILE_MODE ? SITE + path : path);
 const FORM_ORIGIN = 'https://knight-agent.vercel.app';
 
 class Component extends DCLogic {
-  state = { page: 'home', reviewCount: 0, lightbox: null, video: null, narrow: false, compactNav: false, menu: false, reviewQuery: '', reviewSort: 'newest', expanded: {}, reviewsShown: 20 };
+  state = { page: 'home', lightbox: null, video: null, narrow: false, compactNav: false, menu: false, reviewQuery: '', reviewSort: 'newest', expanded: {}, reviewsShown: 20 };
   videoRef = React.createRef();
   headerRef = React.createRef();
 
@@ -1364,7 +1404,6 @@ class Component extends DCLogic {
     this.hydrateStoryVideos();
     const v = this.videoRef.current;
     if (v) { v.muted = true; v.loop = true; v.playsInline = true; const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); }
-    this.countUp();
     this.onScroll = () => {
       const h = this.headerRef.current;
       if (h) h.style.boxShadow = window.scrollY > 12 ? '0 8px 24px -14px rgb(0 0 0 / 0.35)' : 'none';
@@ -1424,8 +1463,6 @@ class Component extends DCLogic {
   }
 
   componentWillUnmount() {
-    if (this.raf) cancelAnimationFrame(this.raf);
-    if (this.snap) clearTimeout(this.snap);
     if (this.io) this.io.disconnect();
     window.removeEventListener('scroll', this.onScroll);
     if (this.mqNarrow) this.mqNarrow.removeEventListener('change', this.syncMedia);
@@ -1433,18 +1470,6 @@ class Component extends DCLogic {
     if (this.onFormMessage) window.removeEventListener('message', this.onFormMessage);
     if (this.onHash) { window.removeEventListener('popstate', this.onHash); window.removeEventListener('hashchange', this.onHash); }
     if (this.titleObserver) this.titleObserver.disconnect();
-  }
-
-  countUp() {
-    const target = 256;
-    const start = performance.now();
-    this.snap = setTimeout(() => this.setState({ reviewCount: target }), 2200);
-    const tick = () => {
-      const t = Math.min(1, (performance.now() - start) / 1300);
-      this.setState({ reviewCount: Math.round(target * (1 - Math.pow(1 - t, 3))) });
-      if (t < 1) this.raf = requestAnimationFrame(tick);
-    };
-    this.raf = requestAnimationFrame(tick);
   }
 
   // Progressive enhancement: hide only what is off-screen, then fade it in on entry.
@@ -1652,8 +1677,8 @@ class Component extends DCLogic {
       clearSearch: (e) => { if (e) e.preventDefault(); this.setState({ reviewQuery: '' }); },
       sortChips: [chip('newest', 'Newest'), chip('longest', 'Longest'), chip('shortest', 'Shortest')],
       reviewStats: [
-        { value: '5.0', label: 'Average Google rating' },
-        { value: '256', label: 'Five-star reviews' },
+        { value: '5.0', label: 'Rated on Google' },
+        { value: '45 min', label: 'Every coached session' },
         { value: '4 yrs', label: 'Coaching Morayfield locals' },
         { value: '100%', label: 'Sessions led by a coach' }
       ],
@@ -1756,13 +1781,13 @@ class Component extends DCLogic {
       ],
 
       heroStats: [
-        { value: '256', label: '5-star reviews' },
-        { value: '5.0', label: 'Google rating' },
+        { value: '5.0', label: 'Rated on Google' },
+        { value: '45 min', label: 'Coach-led sessions' },
         { value: '3 day', label: 'Free trial pass' }
       ],
 
       counters: [
-        { value: this.state.reviewCount + '+', label: '5-star Google reviews', accent: RED },
+        { value: '5.0', label: 'Rated on Google', accent: RED },
         { value: '100%', label: 'Sessions led by a coach', accent: RED },
         { value: '4 yrs', label: 'Coaching Morayfield locals', accent: RED },
         { value: 'Zero', label: 'Lock-in contracts', accent: RED }
@@ -1827,7 +1852,7 @@ class Component extends DCLogic {
       firstVisitSteps: [
         { num: '01', title: 'Before you arrive', body: 'Claim your pass or call the studio. We confirm a session time that suits you and answer anything you want to ask first — so nothing is a surprise.' },
         { num: '02', title: 'What to bring', body: 'Comfortable training clothes, runners, a water bottle and a towel. That is genuinely it. No special gear, no gym experience.' },
-        { num: '03', title: 'Getting here', body: 'We are at 125 Morayfield Rd with on-site parking right at the door. Come 10 minutes early and a coach will meet you at the front.' },
+        { num: '03', title: 'Getting here', body: 'Knight Fitness Morayfield, 125 Morayfield Road, Morayfield QLD 4506, with on-site parking right at the door. Come 10 minutes early and a coach will meet you at the front.' },
         { num: '04', title: 'Your first session', body: 'Forty-five minutes, coach-led start to finish. The coach walks you through every movement and scales anything that needs scaling.' },
         { num: '05', title: 'Afterwards', body: 'A quick chat about how it felt, what you want to work toward, and which times suit your week. No pressure to sign anything.' }
       ],
@@ -1853,7 +1878,7 @@ class Component extends DCLogic {
       reviewRowC: this.reviewRow(2),
 
       visitFacts: (this.visitFactRows || (this.visitFactRows = [
-        { label: 'Address', value: '125 Morayfield Rd, Caboolture South QLD 4506', href: '' },
+        { label: 'Address', value: 'Knight Fitness Morayfield, 125 Morayfield Road, Morayfield QLD 4506', href: '' },
         { label: 'Phone', value: '0435 737 238', href: 'tel:0435737238' },
         { label: 'Email', value: 'info@knightfitness.com.au', href: 'mailto:info@knightfitness.com.au' },
         { label: 'Parking', value: 'Plenty of on-site parking, right at the door', href: '' }
@@ -1880,6 +1905,15 @@ class Component extends DCLogic {
         { label: 'Session length', value: '45 minutes' },
         { label: 'Training style', value: 'Coach-led small group' },
         { label: 'Designed for', value: 'Getting back into training' }
+      ],
+
+      // Start times match scheduleDays. Each session is 45 minutes, which is what
+      // the timetable says, and what openingHoursSpecification in the page head uses.
+      openingHours: [
+        { day: 'Mon & Wed', times: '5:00am, 6:00am, 9:30am, 4:30pm, 5:20pm, 6:10pm' },
+        { day: 'Tue & Thu', times: '5:00am, 6:00am, 5:20pm, 6:10pm' },
+        { day: 'Friday', times: '5:00am, 6:00am, 9:30am, 4:30pm' },
+        { day: 'Saturday', times: '6:00am, 7:00am' }
       ],
 
       scheduleDays: [

@@ -88,7 +88,7 @@
           <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: 40px; line-height: 1; letter-spacing: -0.04em;">5.0</span>
           <span style="font-size: 17px; letter-spacing: 0.06em; color: hsl(43 96% 48%);">★★★★★</span>
         </div>
-        <div style="font-size: 14.5px; color: hsl(215 16% 47%); margin-top: 10px;">From <strong style="color: hsl(224 71% 4%);">256 Google reviews</strong> — real members, real names.</div>
+        <div style="font-size: 14.5px; color: hsl(215 16% 47%); margin-top: 10px;"><a href="{{ googleProfile }}" target="_blank" rel="noopener" style="font-weight: 700; color: hsl(224 71% 4%);" style-hover="color: hsl(356 72% 51%);">Rated 5.0 on Google</a> — real members, real names.</div>
         <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="display: flex; align-items: center; min-height: 44px; font-size: 14px; font-weight: 700; margin-top: 6px;">Read them on Google →</a>
       </div>
       <div style="display: grid; gap: 12px;">
@@ -109,7 +109,7 @@
         <p style="font-size: 15.5px; line-height: 1.6; color: hsl(217 10% 72%); margin: 12px 0 0; max-width: 28em;">We're on Morayfield Road. If you'd rather see the place before committing to anything, give us a ring and we'll tell you a good time to come by.</p>
       </div>
       <div style="display: grid; gap: 10px;">
-        <a href="{{ googleProfile }}" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 54px; padding: 0 20px; border-radius: 12px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); font-size: 15px; font-weight: 700; color: #fff;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.14);">Get directions<span style="color: hsl(356 78% 62%);">→</span></a>
+        <a href="{{ directions }}" target="_blank" rel="noopener" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 54px; padding: 0 20px; border-radius: 12px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); font-size: 15px; font-weight: 700; color: #fff;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.14);">Get directions<span style="color: hsl(356 78% 62%);">→</span></a>
         <a href="https://knightfitness-morayfield.com.au/6-week-challenge" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 54px; padding: 0 20px; border-radius: 12px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); font-size: 15px; font-weight: 700; color: #fff;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.14);">The 6 Week Challenge<span style="color: hsl(356 78% 62%);">→</span></a>
         <a href="https://knightfitness-morayfield.com.au/about" style="display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 54px; padding: 0 20px; border-radius: 12px; background: hsl(0 0% 100% / 0.07); border: 1px solid hsl(0 0% 100% / 0.16); font-size: 15px; font-weight: 700; color: #fff;" style-hover="color: #fff; background: hsl(0 0% 100% / 0.14);">Meet the coaches<span style="color: hsl(356 78% 62%);">→</span></a>
       </div>
@@ -118,7 +118,7 @@
 
   <footer style="margin-top: auto; background: hsl(224 71% 4%); border-top: 1px solid hsl(0 0% 100% / 0.08); color: hsl(217 10% 64%); padding: 30px 24px;">
     <div style="max-width: 1080px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 14px 26px; justify-content: space-between; align-items: center; font-size: 13.5px;">
-      <span>125 Morayfield Road, Morayfield QLD 4506</span>
+      <span>Knight Fitness Morayfield, 125 Morayfield Road, Morayfield QLD 4506</span>
       <div style="display: flex; flex-wrap: wrap; gap: 4px 20px; align-items: center;">
         <a href="tel:0435737238" style="display: flex; align-items: center; min-height: 44px; color: #fff; font-weight: 600;">0435 737 238</a>
         <a href="mailto:info@knightfitness.com.au" style="display: flex; align-items: center; min-height: 44px; color: #fff; font-weight: 600; word-break: break-word;">info@knightfitness.com.au</a>
@@ -130,7 +130,8 @@
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script="" data-props="{&quot;replyWindow&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;within one business day&quot;,&quot;within a few hours&quot;,&quot;today or tomorrow&quot;,&quot;within 24 hours&quot;],&quot;default&quot;:&quot;within one business day&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Copy&quot;}}">
-const GOOGLE_PROFILE = 'https://www.google.com/maps?q=125+Morayfield+Rd,+Caboolture+South+QLD+4506';
+const GOOGLE_PROFILE = 'https://www.google.com/maps?q=125+Morayfield+Road,+Morayfield+QLD+4506';
+const DIRECTIONS = 'https://www.google.com/maps/dir/?api=1&destination=125+Morayfield+Road,+Morayfield+QLD+4506';
 
 class Component extends DCLogic {
   componentDidMount() {
@@ -142,10 +143,8 @@ class Component extends DCLogic {
   renderVals() {
     return {
       googleProfile: GOOGLE_PROFILE,
+      directions: DIRECTIONS,
       replyWindow: this.props.replyWindow ?? 'within one business day',
-      // Footer/structured data on the main site use Caboolture South for the
-      // postal address; the site's own footer says Morayfield. Kept consistent
-      // with the site footer here — worth reconciling in one pass later.
 
       answers: [
         { q: 'Do I need to be fit to start?', a: "No. Most people who walk in are starting again after a long break. Every session is scaled to whoever is in the room that day — you work at your level, not somebody else's." },
