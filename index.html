@@ -58,11 +58,11 @@
   var path = location.protocol === 'file:'
     ? ((location.hash || '#/').replace(/^#/, '').replace(/\/+$/, '') || '/')
     : ((location.pathname || '/').replace(/\/+$/, '') || '/');
-  window.__kfGsPhoto = '<picture><source type="image/avif" sizes="(max-width: 760px) 100vw, 560px" srcset="assets/img/keri-coaching-640.avif 640w, assets/img/keri-coaching-1100.avif 1100w"><source type="image/webp" sizes="(max-width: 760px) 100vw, 560px" srcset="assets/img/keri-coaching-640.webp 640w, assets/img/keri-coaching-1100.webp 1100w"><img src="assets/img/keri-coaching-1100.webp" alt="Coach Keri spotting a member on the bench press" width="1100" height="825" fetchpriority="high" style="width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:center;border-radius:22px;margin-top:30px;display:block;box-shadow:0 24px 48px -24px rgb(0 0 0 / 0.35)"></picture>';
+  window.__kfGsPhoto = '<picture><source type="image/avif" sizes="(max-width: 760px) calc(100vw - 48px), 552px" srcset="assets/img/keri-coaching-400.avif 400w, assets/img/keri-coaching-600.avif 600w, assets/img/keri-coaching-800.avif 800w, assets/img/keri-coaching-1100.avif 1100w"><source type="image/webp" sizes="(max-width: 760px) calc(100vw - 48px), 552px" srcset="assets/img/keri-coaching-400.webp 400w, assets/img/keri-coaching-600.webp 600w, assets/img/keri-coaching-800.webp 800w, assets/img/keri-coaching-1100.webp 1100w"><img src="assets/img/keri-coaching-800.webp" alt="Coach Keri spotting a member on the bench press" width="1100" height="825" fetchpriority="high" style="width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;object-position:center;border-radius:22px;margin-top:30px;display:block;box-shadow:0 24px 48px -24px rgb(0 0 0 / 0.35)"></picture>';
   if (path !== '/get-started') return;
   if (!window.matchMedia('(max-width: 760px)').matches) return;
   document.documentElement.classList.add('kf-start');
-  document.write('<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/keri-coaching-640.avif 640w, assets/img/keri-coaching-1100.avif 1100w" imagesizes="(max-width: 760px) 100vw, 560px">');
+  document.write('<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/keri-coaching-400.avif 400w, assets/img/keri-coaching-600.avif 600w, assets/img/keri-coaching-800.avif 800w, assets/img/keri-coaching-1100.avif 1100w" imagesizes="(max-width: 760px) calc(100vw - 48px), 552px">');
 })();
 </script>
 <script defer fetchpriority="low" src="./assets/kf-tracking.js?v=2"></script>
