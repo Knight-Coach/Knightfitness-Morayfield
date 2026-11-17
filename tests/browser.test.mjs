@@ -416,6 +416,48 @@ test('the homepage poster is requested only on the homepage, and only after the 
   assert.equal(quiet.count, 0);
 });
 
+test('the get-started photo is requested only on that page', async () => {
+  const watch = async (path) => {
+    const page = await browser.newPage({ viewport: { width: 412, height: 823 }, deviceScaleFactor: 1.75 });
+    const hits = [];
+    page.on('request', (request) => {
+      if (request.url().includes('keri-coaching')) hits.push(request.url().split('/').pop().split('?')[0]);
+    });
+    await page.goto(base + path, { waitUntil: 'load' });
+    await page.waitForSelector('#dc-root h1', { timeout: 15000 });
+    await page.waitForTimeout(300);
+    const early = await page.locator('.kf-gs img').count();
+    const box = path === '/get-started' ? await page.evaluate(() => {
+      const img = document.querySelector('.kf-gs img');
+      const real = document.querySelector('#kf-gs-photo img');
+      const a = img.getBoundingClientRect();
+      const b = real.getBoundingClientRect();
+      return {
+        w: img.getAttribute('width'),
+        h: img.getAttribute('height'),
+        pri: img.getAttribute('fetchpriority'),
+        lazy: img.loading,
+        aligned: Math.abs(a.top - b.top) < 1 && Math.abs(a.left - b.left) < 1 && Math.abs(a.height - b.height) < 1
+      };
+    }) : null;
+    await page.close();
+    return { hits: [...new Set(hits)], early, box };
+  };
+  const start = await watch('/get-started');
+  assert.deepEqual(start.hits, ['keri-coaching-1100.avif'], start.hits.join(', '));
+  assert.equal(start.early, 1);
+  assert.equal(start.box.w, '1100');
+  assert.equal(start.box.h, '825');
+  assert.equal(start.box.pri, 'high');
+  assert.notEqual(start.box.lazy, 'lazy');
+  assert.equal(start.box.aligned, true);
+  for (const path of ['/', '/schedule', '/contact']) {
+    const seen = await watch(path);
+    assert.equal(seen.early, 0, path);
+    assert.deepEqual(seen.hits.filter((file) => file.endsWith('.avif')), [], `${path} requested ${seen.hits.join(', ')}`);
+  }
+});
+
 test('opened as a bare file it falls back to hash routing (design preview and double-click)', async () => {
   const page = await browser.newPage();
   await blockExternal(page);
