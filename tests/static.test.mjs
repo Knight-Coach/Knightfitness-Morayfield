@@ -84,12 +84,12 @@ test('index.html keeps the Search Console verification tag and absolute social i
   assert.match(html, /"@type": "HealthClub"/);
 });
 
-test('local copy does not publish a stale Google review count or the old suburb', async () => {
+test('local copy does not publish a stale Google review count or the old postal suburb', async () => {
   const pages = ['index.html', 'thank-you.html', 'message-received.html', '42-hard.html'];
   for (const file of pages) {
     const html = await read(file);
     assert.doesNotMatch(html, /256 Google|256 five-star|256 locals|256 reasons|from 256|value: '256'|target = 256/);
-    assert.doesNotMatch(html, /Caboolture South|\b4510\b/);
+    assert.doesNotMatch(html, /Morayfield QLD 4506|\b4506\b/);
     assert.doesNotMatch(html, /aggregateRating/);
   }
   const html = await read('index.html');
@@ -101,9 +101,10 @@ test('local copy does not publish a stale Google review count or the old suburb'
   assert.equal(data.url, `${SITE}/`);
   assert.equal(data.telephone, '+61482075085');
   assert.equal(data.address.streetAddress, '125 Morayfield Road');
-  assert.equal(data.address.addressLocality, 'Morayfield');
+  assert.equal(data.address.addressLocality, 'Caboolture South');
   assert.equal(data.address.addressRegion, 'QLD');
-  assert.equal(data.address.postalCode, '4506');
+  assert.equal(data.address.postalCode, '4510');
+  assert.equal(data.address.addressCountry, 'AU');
   assert.equal(data.geo['@type'], 'GeoCoordinates');
   assert.equal(typeof data.geo.latitude, 'number');
   assert.equal(typeof data.geo.longitude, 'number');
@@ -122,7 +123,7 @@ test('local copy does not publish a stale Google review count or the old suburb'
   assert.match(home.desc, /Burpengary/);
   assert.doesNotMatch(home.desc, /256/);
   assert.match(html, /Get directions/);
-  assert.match(html, /maps\?q=125\+Morayfield\+Road,\+Morayfield\+QLD\+4506&output=embed/);
+  assert.match(html, /maps\?q=125\+Morayfield\+Road,\+Caboolture\+South\+QLD\+4510&output=embed/);
   assert.doesNotMatch(html, /<video\b[^>]*\ssrc=/, 'a video src in the HTML is downloaded on every route');
   assert.match(html, /lang="en-AU"/);
 });
