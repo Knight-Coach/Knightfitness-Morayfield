@@ -437,7 +437,9 @@ test('the get-started photo is requested only on that page', async () => {
         h: img.getAttribute('height'),
         pri: img.getAttribute('fetchpriority'),
         lazy: img.loading,
-        aligned: Math.abs(a.top - b.top) < 1 && Math.abs(a.left - b.left) < 1 && Math.abs(a.height - b.height) < 1
+        aligned: Math.abs(a.top - b.top) < 1 && Math.abs(a.left - b.left) < 1 && Math.abs(a.height - b.height) < 1,
+        ratio: Math.abs(a.height - a.width * 0.75) < 1.5,
+        height: Math.round(a.height)
       };
     }) : null;
     await page.close();
@@ -451,6 +453,7 @@ test('the get-started photo is requested only on that page', async () => {
   assert.equal(start.box.pri, 'high');
   assert.notEqual(start.box.lazy, 'lazy');
   assert.equal(start.box.aligned, true);
+  assert.equal(start.box.ratio, true, `photo is ${start.box.height}px tall, not a 4:3 card`);
   for (const path of ['/', '/schedule', '/contact']) {
     const seen = await watch(path);
     assert.equal(seen.early, 0, path);
