@@ -2,7 +2,7 @@
  * Knight Fitness site tracking: GA4 + Meta Pixel, and one lead event per enquiry.
  *
  * Load in <head> on every page:
- *   <script src="./assets/kf-tracking.js?v=1"></script>
+ *   <script src="./assets/kf-tracking.js?v=2"></script>
  * The ?v= query must match ASSET_VERSION. /assets is cached for a year with
  * Cache-Control: immutable, so a changed file at the same URL stays stale.
  * Bump both together when this script changes.
@@ -13,7 +13,7 @@
  * Leave an ID empty ('') to switch that platform off.
  */
 (function () {
-  var ASSET_VERSION = '1';
+  var ASSET_VERSION = '2';
   var GA4_ID = 'G-LPDJZ1128B';
   var META_PIXEL_ID = '408666429737807'; // Mark Knight's Pixel — confirmed by the owner
 
@@ -26,11 +26,22 @@
     } catch (e) {}
   }
 
+  function loadTrackers() {
+    if (GA4_ID && !document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) {
+      var g = document.createElement('script');
+      g.async = true;
+      g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+      document.head.appendChild(g);
+    }
+    if (META_PIXEL_ID && !document.querySelector('script[src*="fbevents.js"]')) {
+      var t = document.createElement('script');
+      t.async = true;
+      t.src = 'https://connect.facebook.net/en_US/fbevents.js';
+      document.head.appendChild(t);
+    }
+  }
+
   if (GA4_ID) {
-    var g = document.createElement('script');
-    g.async = true;
-    g.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
-    document.head.appendChild(g);
     window.dataLayer = window.dataLayer || [];
     window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
     window.gtag('js', new Date());
@@ -41,15 +52,24 @@
   }
 
   if (META_PIXEL_ID) {
-    /* Meta Pixel base code */
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    if (!window.fbq) {
+      var n = window.fbq = function () {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+      };
+      if (!window._fbq) window._fbq = n;
+      n.push = n;
+      n.loaded = true;
+      n.version = '2.0';
+      n.queue = [];
+    }
     window.fbq('init', META_PIXEL_ID);
     window.fbq('track', 'PageView');
   }
+
+  // The stubs above queue the page view immediately. The heavy library files
+  // wait until load so they do not compete with the first paint.
+  if (document.readyState === 'complete') loadTrackers();
+  else window.addEventListener('load', loadTrackers);
 
   // index.html is one document for every route. Meta does not see pushState,
   // so send another PageView when the path changes. GA4 is left to its config
