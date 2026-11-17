@@ -65,12 +65,13 @@
   document.write('<link rel="preload" as="image" type="image/avif" fetchpriority="high" imagesrcset="assets/img/keri-coaching-640.avif 640w, assets/img/keri-coaching-1100.avif 1100w" imagesizes="(max-width: 760px) 100vw, 560px">');
 })();
 </script>
-<script defer fetchpriority="low" src="./assets/kf-tracking.js?v=1"></script>
+<script defer fetchpriority="low" src="./assets/kf-tracking.js?v=2"></script>
 <!-- React is served from this origin so the site does not depend on unpkg.com at
      page load. support.js skips its CDN fetch when window.React already exists.
      Keep the versions in step with REACT_URL / REACT_DOM_URL inside support.js. -->
 <script defer fetchpriority="low" src="./assets/vendor/react-18.3.1.production.min.js"></script>
 <script defer fetchpriority="low" src="./assets/vendor/react-dom-18.3.1.production.min.js"></script>
+<script>window.__resources = window.__resources || {};</script>
 <script defer fetchpriority="low" src="./support.js"></script>
 <style>
   x-dc { display: none !important; }
@@ -265,6 +266,11 @@
     "addressRegion": "QLD",
     "postalCode": "4510",
     "addressCountry": "AU"
+  },
+  "amenityFeature": {
+    "@type": "LocationFeatureSpecification",
+    "name": "Free on-site car parking",
+    "value": true
   },
   "geo": {
     "@type": "GeoCoordinates",
@@ -730,7 +736,7 @@
             <sc-for list="{{ storyLoop }}" as="s" hint-placeholder-count="8">
               <a href="#" onClick="{{ s.open }}" style="display: block; width: 218px; flex-shrink: 0; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 18px; overflow: hidden; background: #fff; color: hsl(224 71% 4%); box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); transition: box-shadow .25s, border-color .25s;" style-hover="box-shadow: 0 20px 40px -22px rgb(0 0 0 / 0.3); border-color: hsl(356 72% 51% / 0.3); color: hsl(224 71% 4%);">
                 <div style="position: relative; aspect-ratio: 4 / 5; background: hsl(224 71% 4%);">
-                  <video data-src="{{ s.video }}" preload="none" poster="assets/img/session-group.jpg" muted="{{ yes }}" playsInline="{{ yes }}" tabIndex="-1" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;"></video>
+                  <video data-src="{{ s.video }}" data-poster="assets/img/session-group.jpg" preload="none" muted="{{ yes }}" playsInline="{{ yes }}" tabIndex="-1" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none;"></video>
 
                   <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 0 0 / 0.05) 0%, rgb(0 0 0 / 0.22) 44%, rgb(0 0 0 / 0.86) 100%); pointer-events: none;"></div>
                   <div style="position: absolute; top: 50%; left: 50%; width: 44px; height: 44px; transform: translate(-50%, -50%); border-radius: 9999px; background: hsl(0 0% 100% / 0.92); color: hsl(356 72% 40%); display: grid; place-items: center; font-size: 14px; padding-left: 3px; box-shadow: 0 8px 20px -6px rgb(0 0 0 / 0.5); pointer-events: none;">▶</div>
@@ -831,8 +837,8 @@
             <span style="width: 34px; height: 1px; background: hsl(220 13% 84%);"></span>
             <span style="font-size: 11.5px; font-weight: 700; color: hsl(220 10% 38%); text-transform: uppercase; letter-spacing: 0.16em;">Visit us</span>
           </div>
-          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">On Morayfield Road, with parking at the door</h2>
-          <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 10% 38%); margin-top: 18px;">Easy to find, easy to park, and built for people who want coaching, accountability and real results.</p>
+          <h2 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(30px, 3.6vw, 50px); line-height: 1.04; letter-spacing: -0.038em; margin-top: 18px;">On Morayfield Road, with free parking at the door</h2>
+          <p style="font-size: clamp(15.5px, 1.2vw, 18px); line-height: 1.6; color: hsl(220 10% 38%); margin-top: 18px;">Easy to find, with plenty of free on-site car parking, and built for people who want coaching, accountability and real results.</p>
           <div style="background: #fff; border: 1px solid hsl(220 13% 91% / 0.7); border-radius: 20px; padding: 28px; margin-top: 28px; box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); display: grid; gap: 20px;">
             <sc-for list="{{ visitFacts }}" as="f" hint-placeholder-count="4">
               <div>
@@ -1248,7 +1254,7 @@
   <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
   <main data-screen-label="Contact" style="max-width: 1200px; margin: 0 auto; padding: 64px 24px 88px;">
     <div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: center;">
-      <img src="assets/img/coach-keri.jpg" alt="Coach Keri" style="width: 132px; height: 132px; flex-shrink: 0; border-radius: 9999px; object-fit: cover; object-position: 50% 20%; display: block; border: 3px solid hsl(356 72% 51% / 0.22); box-shadow: 0 14px 30px -14px rgb(0 0 0 / 0.35);" />
+      <img src="assets/img/coach-keri.jpg" alt="Coach Keri" width="132" height="132" loading="lazy" style="width: 132px; height: 132px; flex-shrink: 0; border-radius: 9999px; object-fit: cover; object-position: 50% 20%; display: block; border: 3px solid hsl(356 72% 51% / 0.22); box-shadow: 0 14px 30px -14px rgb(0 0 0 / 0.35);" />
       <div style="max-width: 40em; min-width: 0;">
         <div style="font-size: 11.5px; font-weight: 700; color: hsl(356 72% 40%); text-transform: uppercase; letter-spacing: 0.16em;">Contact</div>
         <h1 style="font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; font-size: clamp(34px, 4.4vw, 58px); line-height: 1.0; letter-spacing: -0.04em; margin-top: 16px;">Talk to a coach</h1>
@@ -1292,7 +1298,7 @@
         </div>
         <div style="border-radius: 22px; overflow: hidden; border: 1px solid hsl(220 13% 91%); box-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.3);">
           <img src="assets/img/sign.jpg" alt="The Knight Fitness sign above the Morayfield Road entrance" loading="lazy" style="width: 100%; height: auto; display: block;" />
-          <div style="padding: 16px 20px; background: #fff; font-size: 13.5px; font-weight: 600; color: hsl(220 10% 38%);">Look for the red Knight Fitness sign — next to Lumus Imaging, with parking right at the door.</div>
+          <div style="padding: 16px 20px; background: #fff; font-size: 13.5px; font-weight: 600; color: hsl(220 10% 38%);">Look for the red Knight Fitness sign — next to Lumus Imaging, with plenty of free on-site car parking at the door.</div>
         </div>
         <a href="https://www.google.com/maps/dir/?api=1&destination=125+Morayfield+Road,+Caboolture+South+QLD+4510" target="_blank" rel="noopener" style="justify-self: start; font-size: 14.5px; font-weight: 700; color: #fff; background: linear-gradient(135deg, hsl(356 72% 40%), hsl(354 74% 38%)); padding: 14px 22px; border-radius: 11px;" style-hover="color: #fff; opacity: 0.93;">Get directions</a>
         <iframe src="https://www.google.com/maps?q=125+Morayfield+Road,+Caboolture+South+QLD+4510&output=embed" title="Map of Knight Fitness Morayfield" loading="lazy" style="width: 100%; height: 300px; border: 1px solid hsl(220 13% 91%); border-radius: 22px; display: block;"></iframe>
@@ -1452,7 +1458,7 @@
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 44px;">
         <div>
           <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 26px;">
-            <img src="assets/knight-logo-reversed.png" alt="Knight Fitness" style="height: 56px; width: auto; display: block;" />
+            <img src="assets/knight-logo-reversed.png" alt="Knight Fitness" width="218" height="56" style="height: 56px; width: auto; display: block;" />
             <span style="width: 1px; height: 34px; background: hsl(0 0% 100% / 0.2); flex-shrink: 0;"></span>
             <span style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.2em; color: hsl(217 10% 64%); white-space: nowrap;">Morayfield</span>
           </div>
@@ -1475,6 +1481,7 @@
           <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(217 10% 60%);">Find us</div>
           <div style="display: grid; gap: 10px; margin-top: 16px; font-size: 14.5px; color: hsl(217 10% 64%); line-height: 1.5;">
             <span>Knight Fitness Morayfield, 125 Morayfield Road, Caboolture South QLD 4510</span>
+            <span>Plenty of free on-site car parking at the door.</span>
             <div style="margin-top: 8px;">
               <div style="font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: hsl(217 10% 60%);">Session times</div>
               <div style="display: grid; gap: 4px; margin-top: 8px;">
@@ -1753,8 +1760,11 @@ class Component extends DCLogic {
   // straight through unknown elements — so the attribute itself must never hold a hole.
   hydrateStoryVideos() {
     if (typeof document === 'undefined') return;
-    const arm = (v) => {
+      const arm = (v) => {
       if (!v || !v.isConnected) return;
+      if (!v.getAttribute('poster') && v.getAttribute('data-poster') && this.state.page === 'home') {
+        v.setAttribute('poster', v.getAttribute('data-poster'));
+      }
       const url = v.getAttribute('data-src');
       if (!url || url.indexOf('{{') !== -1) return;
       if (v.hasAttribute('data-hero') && this.state.page !== 'home') return;
@@ -2216,7 +2226,7 @@ class Component extends DCLogic {
       firstVisitSteps: [
         { num: '01', title: 'Before you arrive', body: 'Claim your pass or call the studio. We confirm a session time that suits you and answer anything you want to ask first — so nothing is a surprise.' },
         { num: '02', title: 'What to bring', body: 'Comfortable training clothes, runners, a water bottle and a towel. That is genuinely it. No special gear, no gym experience.' },
-        { num: '03', title: 'Getting here', body: 'Knight Fitness Morayfield, 125 Morayfield Road, Caboolture South QLD 4510, with on-site parking right at the door. Come 10 minutes early and a coach will meet you at the front.' },
+        { num: '03', title: 'Getting here', body: 'Knight Fitness Morayfield, 125 Morayfield Road, Caboolture South QLD 4510, with plenty of free on-site car parking at the door. Come 10 minutes early and a coach will meet you at the front.' },
         { num: '04', title: 'Your first session', body: 'Forty-five minutes, coach-led start to finish. The coach walks you through every movement and scales anything that needs scaling.' },
         { num: '05', title: 'Afterwards', body: 'A quick chat about how it felt, what you want to work toward, and which times suit your week. No pressure to sign anything.' }
       ],
@@ -2245,7 +2255,7 @@ class Component extends DCLogic {
         { label: 'Address', value: 'Knight Fitness Morayfield, 125 Morayfield Road, Caboolture South QLD 4510', href: '' },
         { label: 'Phone', value: '0482 075 085', href: 'tel:+61482075085' },
         { label: 'Email', value: 'info@knightfitness.com.au', href: 'mailto:info@knightfitness.com.au' },
-        { label: 'Parking', value: 'Plenty of on-site parking, right at the door', href: '' }
+        { label: 'Parking', value: 'Plenty of free on-site car parking, right at the door', href: '' }
       ])).map((f) => ({ ...f, isLink: !!f.href, isPlain: !f.href })),
 
       aboutImages: [
