@@ -446,7 +446,7 @@ test('the get-started photo is requested only on that page', async () => {
     return { hits: [...new Set(hits)], early, box };
   };
   const start = await watch('/get-started');
-  assert.deepEqual(start.hits, ['keri-coaching-1100.avif'], start.hits.join(', '));
+  assert.deepEqual(start.hits, ['keri-coaching-800.avif'], start.hits.join(', '));
   assert.equal(start.early, 1);
   assert.equal(start.box.w, '1100');
   assert.equal(start.box.h, '825');
